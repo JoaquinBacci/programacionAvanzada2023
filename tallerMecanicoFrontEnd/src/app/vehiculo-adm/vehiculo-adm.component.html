@@ -1,0 +1,130 @@
+<div class="container">
+    <div class="subContainer" >
+        <form [formGroup]="form" style=" width: 100%; border: solid 1px black">
+            <mat-card appearance="outlined" style="border-radius: 10px; padding: 10px;">
+                <mat-card-title>Vehiculos</mat-card-title>
+                <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                    <div class="form" style="width: 100%;">
+                        <mat-card-title>{{modoEdicion? 'Editar Vehiculo' : 'Nuevo Vehiculo'}}</mat-card-title>
+                            <div>   
+                                <mat-form-field appearance="outline">
+                                  <input matInput formControlName="patente" placeholder="Patente"> 
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <input matInput formControlName="kilometraje" placeholder="Kilometros"> 
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <mat-select formControlName="marca">
+                                        <mat-option [value]="null"> Selecione una Marca </mat-option>
+                                        <mat-option *ngFor="let marca of marcas" [value]="marca.id">{{ marca.nombre }}</mat-option>
+                                      </mat-select>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <mat-select formControlName="modelo">
+                                        <mat-option [value]="null"> Selecione un Modelo </mat-option>
+                                        <mat-option *ngFor="let modelo of modelos" [value]="modelo.id">{{ modelo.nombre }}</mat-option>
+                                      </mat-select>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <mat-select formControlName="marca">
+                                        <mat-option [value]="null"> Selecione un Cliente </mat-option>
+                                        <mat-option *ngFor="let cliente of clientes" [value]="cliente.id">{{ cliente.apellido + ', ' + cliente.nombre}}</mat-option>
+                                      </mat-select>
+                                </mat-form-field>
+                                
+                            </div>
+                            <button mat-raised-button (click)="onGuardar()" color="primary" [disabled]="!form.valid">Guardar</button>
+                            <button mat-raised-button (click)="onCancelar()" color="warn" style="margin-left: 10px;">Cancelar</button>
+                    </div>
+                    <div class="tabla" style="width: 100%;">
+                        <mat-card-title>Consultar vehiculos:</mat-card-title>
+                        <!-- <div style="display: flex;">
+                            <button mat-icon-button matTooltip="Buscar" (click)="onConsultar()">
+                              <mat-icon>search</mat-icon>
+                            </button>
+                        </div> -->
+                        <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                            <!-- Columna Nombre -->
+                            <ng-container matColumnDef="Patente">
+                              <mat-header-cell *matHeaderCellDef> 
+                                <mat-form-field appearance="outline" floatLabel="always" >
+                                  <mat-label>Patente</mat-label>
+                                  <input matInput [(ngModel)]="vehiculoConsultar.patente" [ngModelOptions]="{standalone: true}"  (keyup)="onConsultar()"> 
+                                </mat-form-field>  
+                              </mat-header-cell>
+                              <mat-cell *matCellDef="let elemento"> {{ elemento.patente }} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="Marca">
+                              <mat-header-cell *matHeaderCellDef> 
+                                <mat-form-field appearance="outline"floatLabel="always" >
+                                  <mat-label>Marca</mat-label>
+                                  <input matInput  [(ngModel)]="vehiculoConsultar.marca.nombre" [ngModelOptions]="{standalone: true}" (keyup)="onConsultar()"> 
+                                </mat-form-field>  
+                              </mat-header-cell>
+                              <mat-cell *matCellDef="let elemento"> {{ elemento.marca.nombre }} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="Modelo">
+                                <mat-header-cell *matHeaderCellDef> 
+                                  <mat-form-field appearance="outline"floatLabel="always" >
+                                    <mat-label>Modelo</mat-label>
+                                    <input matInput  [(ngModel)]="vehiculoConsultar.modelo.nombre" [ngModelOptions]="{standalone: true}"  (keyup)="onConsultar()"> 
+                                  </mat-form-field>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let elemento"> {{ elemento.modelo.nombre }} </mat-cell>
+                              </ng-container>
+                              <ng-container matColumnDef="Kilometros">
+                                <mat-header-cell *matHeaderCellDef> 
+                                  <mat-form-field appearance="outline"floatLabel="always" >
+                                    <mat-label>Kilometros</mat-label>
+                                    <input matInput  [(ngModel)]="vehiculoConsultar.kilometraje" [ngModelOptions]="{standalone: true}" (keyup)="onConsultar()"> 
+                                  </mat-form-field>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let elemento"> {{ elemento.kilometraje }} </mat-cell>
+                              </ng-container>
+                              <ng-container matColumnDef="Cliente">
+                                <mat-header-cell *matHeaderCellDef> 
+                                  <mat-form-field appearance="outline" floatLabel="always" >
+                                    <mat-label>Cliente</mat-label>
+                                    <input matInput  [(ngModel)]="filtroCliente" [ngModelOptions]="{standalone: true}"  (keyup)="onConsultar()"> 
+                                  </mat-form-field>  
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let elemento"> {{ elemento.cleinte.nombre }} </mat-cell>
+                              </ng-container>
+                          
+                            <!-- Columna Acciones -->
+                            <ng-container matColumnDef="Acciones">
+                              <mat-header-cell *matHeaderCellDef> 
+                                <button mat-icon-button matTooltip="Buscar" (click)="onConsultar()">
+                                  <mat-icon>search</mat-icon>
+                                </button>
+                              </mat-header-cell>
+                              <mat-cell *matCellDef="let elemento">
+                                <button mat-icon-button matTooltip="Editar" (click)="onEditar(elemento)">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button matTooltip="Eliminar" (click)="onEliminar(elemento.id)">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </mat-cell>
+                            </ng-container>
+                          
+                            <!-- Define las columnas de la tabla -->
+                            <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+                          </mat-table>
+                    </div>
+                </div>
+                
+                
+            
+                
+                <div>
+                    
+                    
+                </div>
+                <!-- <button mat-raised-button (click)="onConsultar()" color="primary">consultar</button> -->
+            </mat-card>
+        </form>
+    </div>
+</div>
+

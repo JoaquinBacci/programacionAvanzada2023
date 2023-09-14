@@ -1,0 +1,47 @@
+<div style="display: flex; flex-direction: column; justify-content: flex-start;">
+    <div>
+        <mat-toolbar color="primary">
+            <!-- <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+              <mat-icon>menu</mat-icon>
+            </button> -->
+            <span>Taller Mecanico</span>
+            <span class="example-spacer"></span>
+        
+        
+        
+            <!-- <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+              <mat-icon>favorite</mat-icon>
+            </button>
+            <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+              <mat-icon>share</mat-icon>
+            </button> -->
+          </mat-toolbar>
+    </div>
+    <div style="width: 100% !important; margin-top: 5px;">
+        <button mat-raised-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openClientes()">
+            <mat-icon>people</mat-icon>
+            Clientes
+        </button>
+        <button mat-raised-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openTecnico()">
+            <mat-icon>people</mat-icon>
+            Tecnicos
+          </button>
+          <button mat-raised-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openVehiculo()">
+            <mat-icon>directions_car</mat-icon>
+            Vehiculos
+          </button>
+          <button mat-raised-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openMarca()">
+            <mat-icon>label</mat-icon>
+            Marcas
+          </button>
+          <button mat-raised-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openModelo()">
+            <mat-icon>label</mat-icon>
+            Modelos
+          </button>
+    </div>
+    <div>
+        <router-outlet></router-outlet>
+    </div>
+</div>
+
+

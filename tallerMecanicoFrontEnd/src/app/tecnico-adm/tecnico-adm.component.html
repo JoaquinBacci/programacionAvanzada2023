@@ -1,0 +1,144 @@
+<div class="container">
+    <div class="subContainer" >
+        <form [formGroup]="form" style=" width: 100%; border: solid 1px black">
+            <mat-card appearance="outlined" style="border-radius: 10px; padding: 10px;">
+                <mat-card-title>Modelo</mat-card-title>
+                <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                    <div class="form" style="width: 100%;">
+                        <mat-card-title>{{modoEdicion? 'Editar Tecnico' : 'Nuevo Tecnico'}}</mat-card-title>
+                            <div>   
+                                <mat-form-field appearance="outline">
+                                  <input matInput formControlName="nombre" placeholder="Nombre"> 
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <input matInput formControlName="apellido" placeholder="Apellido"> 
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <input matInput formControlName="dni" placeholder="DNI"> 
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <input matInput formControlName="num_tel" placeholder="Telefono"> 
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <input matInput formControlName="email" placeholder="Email"> 
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <input matInput formControlName="direccion" placeholder="Direccion"> 
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <input matInput formControlName="legajo" placeholder="Legajo"> 
+                                </mat-form-field>
+                            </div>
+                            <button mat-raised-button (click)="onGuardar()" color="primary" [disabled]="!form.valid">Guardar</button>
+                            <button mat-raised-button (click)="onCancelar()" color="warn" style="margin-left: 10px;">Cancelar</button>
+                    </div>
+                    <div class="tabla" style="width: 100%;">
+                        <mat-card-title>Consultar tecnicos:</mat-card-title>
+                        <!-- <div style="display: flex;">
+                            <button mat-icon-button matTooltip="Buscar" (click)="onConsultar()">
+                              <mat-icon>search</mat-icon>
+                            </button>
+                        </div> -->
+                        <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                            <!-- Columna Nombre -->
+                            <ng-container matColumnDef="Nombre">
+                              <mat-header-cell *matHeaderCellDef> 
+                                <mat-form-field appearance="outline" floatLabel="always" >
+                                  <mat-label>Nombre</mat-label>
+                                  <input matInput [(ngModel)]="tecnicoConsultar.nombre" [ngModelOptions]="{standalone: true}"  (keyup)="onConsultar()"> 
+                                </mat-form-field>  
+                              </mat-header-cell>
+                              <mat-cell *matCellDef="let elemento"> {{ elemento.nombre }} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="Apellido">
+                              <mat-header-cell *matHeaderCellDef> 
+                                <mat-form-field appearance="outline"floatLabel="always" >
+                                  <mat-label>Apellido</mat-label>
+                                  <input matInput  [(ngModel)]="tecnicoConsultar.apellido" [ngModelOptions]="{standalone: true}" (keyup)="onConsultar()"> 
+                                </mat-form-field>  
+                              </mat-header-cell>
+                              <mat-cell *matCellDef="let elemento"> {{ elemento.apellido }} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="DNI">
+                                <mat-header-cell *matHeaderCellDef> 
+                                  <mat-form-field appearance="outline"floatLabel="always" >
+                                    <mat-label>DNI</mat-label>
+                                    <input matInput  [(ngModel)]="tecnicoConsultar.dni" [ngModelOptions]="{standalone: true}"  (keyup)="onConsultar()"> 
+                                  </mat-form-field>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let elemento"> {{ elemento.dni }} </mat-cell>
+                              </ng-container>
+                              <ng-container matColumnDef="Telefono">
+                                <mat-header-cell *matHeaderCellDef> 
+                                  <mat-form-field appearance="outline"floatLabel="always" >
+                                    <mat-label>Nro. Tel</mat-label>
+                                    <input matInput  [(ngModel)]="tecnicoConsultar.num_tel" [ngModelOptions]="{standalone: true}" (keyup)="onConsultar()"> 
+                                  </mat-form-field>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let elemento"> {{ elemento.num_tel }} </mat-cell>
+                              </ng-container>
+                              <ng-container matColumnDef="Email">
+                                <mat-header-cell *matHeaderCellDef> 
+                                  <mat-form-field appearance="outline" floatLabel="always" >
+                                    <mat-label>email</mat-label>
+                                    <input matInput  [(ngModel)]="tecnicoConsultar.email" [ngModelOptions]="{standalone: true}"  (keyup)="onConsultar()"> 
+                                  </mat-form-field>  
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let elemento"> {{ elemento.email }} </mat-cell>
+                              </ng-container>
+                              <ng-container matColumnDef="Direccion">
+                                <mat-header-cell *matHeaderCellDef> 
+                                  <mat-form-field appearance="outline" floatLabel="always" >
+                                    <mat-label>Direccion</mat-label>
+                                    <input matInput  [(ngModel)]="tecnicoConsultar.direccion" [ngModelOptions]="{standalone: true}" (keyup)="onConsultar()"> 
+                                  </mat-form-field>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let elemento"> {{ elemento.direccion }} </mat-cell>
+                              </ng-container>
+                              <ng-container matColumnDef="Legajo">
+                                <mat-header-cell *matHeaderCellDef>
+                                  <mat-form-field appearance="outline" floatLabel="always" >
+                                    <mat-label>Legajo</mat-label>
+                                    <input matInput  [(ngModel)]="tecnicoConsultar.legajo" [ngModelOptions]="{standalone: true}"  (keyup)="onConsultar()"> 
+                                  </mat-form-field>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let elemento"> {{ elemento.legajo }} </mat-cell>
+                              </ng-container>
+                          
+                            <!-- Columna Acciones -->
+                            <ng-container matColumnDef="Acciones">
+                              <mat-header-cell *matHeaderCellDef> 
+                                <button mat-icon-button matTooltip="Buscar" (click)="onConsultar()">
+                                  <mat-icon>search</mat-icon>
+                                </button>
+                              </mat-header-cell>
+                              <mat-cell *matCellDef="let elemento">
+                                <button mat-icon-button matTooltip="Editar" (click)="onEditar(elemento)">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button matTooltip="Eliminar" (click)="onEliminar(elemento.id)">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </mat-cell>
+                            </ng-container>
+                          
+                            <!-- Define las columnas de la tabla -->
+                            <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+                          </mat-table>
+                    </div>
+                </div>
+                
+                
+            
+                
+                <div>
+                    
+                    
+                </div>
+                <!-- <button mat-raised-button (click)="onConsultar()" color="primary">consultar</button> -->
+            </mat-card>
+        </form>
+    </div>
+</div>
+
