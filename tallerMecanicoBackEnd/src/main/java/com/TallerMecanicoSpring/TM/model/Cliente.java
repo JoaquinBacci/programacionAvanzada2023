@@ -15,20 +15,19 @@ public class Cliente {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int dni;
-    private int num_tel;
+    private Integer dni;
+    private String num_tel;
     private String nombre;
     private String apellido;
     private String direccion;
     private String email;
     private boolean activo;
-    @OneToMany
-    private List<Vehiculo> vehiculos;
+    
 
     public Cliente() {
     }
 
-    public Cliente(Long id, int dni, int num_tel, String nombre, String apellido, String direccion, String email, boolean activo, List<Vehiculo> vehiculos) {
+    public Cliente(Long id, Integer dni, String num_tel, String nombre, String apellido, String direccion, String email, boolean activo) {
         this.id = id;
         this.dni = dni;
         this.num_tel = num_tel;
@@ -37,7 +36,6 @@ public class Cliente {
         this.direccion = direccion;
         this.email = email;
         this.activo = activo;
-        this.vehiculos = vehiculos;
     }
 
     public Long getId() {
@@ -48,19 +46,19 @@ public class Cliente {
         this.id = id;
     }
 
-    public int getDni() {
+    public Integer getDni() {
         return dni;
     }
 
-    public void setDni(int dni) {
+    public void setDni(Integer dni) {
         this.dni = dni;
     }
 
-    public int getNum_tel() {
+    public String getNum_tel() {
         return num_tel;
     }
 
-    public void setNum_tel(int num_tel) {
+    public void setNum_tel(String num_tel) {
         this.num_tel = num_tel;
     }
 
@@ -103,15 +101,4 @@ public class Cliente {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
-
-    public List<Vehiculo> getVehiculos() {
-        return vehiculos;
-    }
-
-    public void setVehiculos(List<Vehiculo> vehiculos) {
-        this.vehiculos = vehiculos;
-    }
-
-    
-    
 }

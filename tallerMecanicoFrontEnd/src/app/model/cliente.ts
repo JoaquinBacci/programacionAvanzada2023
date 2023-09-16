@@ -3,7 +3,7 @@ import { Vehiculo } from "./vehiculo";
 export class Cliente{
     id: number;
     dni: number;
-    num_tel: number;
+    num_tel: string;
     nombre: string;
     apellido: string;
     direccion: string;

@@ -20,6 +20,7 @@ export class VehiculoAdmComponent {
   modoEdicion: boolean = false;
   columnas: string[] = ['Patente','Marca', 'Modelo','Kilometros','Cliente','Acciones']
   dataSource
+  idMarcaSelect: number = undefined;
   marcas: Marca[] = [];
   modelos: Modelo[] = [];
   clientes: Cliente[];
@@ -34,11 +35,11 @@ export class VehiculoAdmComponent {
     private fb: FormBuilder
   ){
     this.form = this.fb.group({
-      patente: ['',[Validators.required, Validators.pattern('/^[A-Z]{2,3}\d{3}[A-Z]{2}$/')]],
-      marca: ['',[Validators.required]],
-      modelo: ['', [Validators.required] ],
-      kilometraje: ['',[Validators.maxLength(7)]],
-      cliente: ['',[Validators.required, Validators.maxLength(50)]],
+      patente: [''],
+      marca: [''],  //id
+      modelo: ['' ],
+      kilometraje: [''],
+      cliente: [''],
     })
   }
 
@@ -52,7 +53,6 @@ export class VehiculoAdmComponent {
     this.vehiculoConsultar.cliente = new Cliente();
 
     this.marcaService.getAllMarcas().subscribe((data)=> this.marcas = data);
-    this.modeloService.getAllModelo().subscribe((data)=> this.modelos = data);
     this.clienteService.getAll().subscribe((data)=> this.clientes = data);
     
     
@@ -80,8 +80,9 @@ export class VehiculoAdmComponent {
     vehiculoRq.kilometraje = this.form.get('kilometraje').value;
     vehiculoRq.marca = this.marcas.find((m) => m.id = this.form.get('marca').value);
     vehiculoRq.modelo = this.modelos.find((m)=> m.id = this.form.get('modelo').value);
-    vehiculoRq.cliente = this.form.get('cliente').value;
+    vehiculoRq.cliente = this.clientes.find((c)=> c.id = this.form.get('cliente').value);
     
+    console.log('VehiculoRq: ', vehiculoRq);
 
     if(!this.modoEdicion){
       //guardar
@@ -159,6 +160,13 @@ export class VehiculoAdmComponent {
 
   onValidarCampo(campo: string){
 
+  }
+
+  onMarcaSelectionChange(selectedValue: number | null): void {
+    this.idMarcaSelect = selectedValue;
+    if(this.idMarcaSelect!=null){
+      this.modeloService.getByIdMarca(this.idMarcaSelect).subscribe((data)=> this.modelos = data);
+    }
   }
 }
   

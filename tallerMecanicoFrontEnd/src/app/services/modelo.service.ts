@@ -38,4 +38,9 @@ export class ModeloService {
     return this.http.delete(`${this.API_SERVER}/modelo/delete/${id}`)
   }
 
+
+  public getByIdMarca(id: number): Observable<any>{
+    return this.http.get(`${this.API_SERVER}/modelo/modeloXmarca/${id}`)
+  }
+
 }

@@ -146,6 +146,11 @@ public class ClienteService implements ClienteRepository{
     }
     
     public List<Cliente> filtrar(Cliente clienteRq){
+
+        System.out.println("nombre: " + clienteRq.getNombre());
+        System.out.println("apellido: " + clienteRq.getApellido());
+        System.out.println("dni: " + clienteRq.getDni());
+
         List<Cliente> clientesRs = new ArrayList();
         List<Cliente> clientes = new ArrayList();
         clientes = this.findAll();
@@ -155,43 +160,75 @@ public class ClienteService implements ClienteRepository{
            }
         }
         
-        if( (clienteRq.getNombre()!= null) || !(clienteRq.getNombre().trim().equals("") )){
+        if (clienteRq.getNombre() == null || clienteRq.getNombre().trim().isEmpty()) {
+            System.out.println("No se filtra por Nombre");
+        } else {
+            System.out.println("Filtro Nombre");
             clientesRs = clientesRs.stream()
-                .filter(c -> c.getNombre().toLowerCase().contains(clienteRq.getNombre().toLowerCase()))
+                .filter(c -> c.getNombre() != null && c.getNombre().toLowerCase().contains(clienteRq.getNombre().toLowerCase()))
                 .collect(Collectors.toList());
         }
         
-        if((clienteRq.getApellido()!= null) || !(clienteRq.getApellido().trim().equals("") )){
+        if (clienteRq.getApellido() == null || clienteRq.getApellido().trim().isEmpty()) {
+            System.out.println("No se filtra por Apellido");
+        } else {
+            System.out.println("Filtro Apellido");
             clientesRs = clientesRs.stream()
-                .filter(c -> c.getApellido().toLowerCase().contains(clienteRq.getApellido().toLowerCase()))
+                .filter(c -> c.getApellido() != null && c.getApellido().toLowerCase().contains(clienteRq.getApellido().toLowerCase()))
                 .collect(Collectors.toList());
         }
         
-        String dniString = String.valueOf(clienteRq.getDni());
-        if (dniString != null || !dniString.equals("")) {
+        /* String dniString = String.valueOf(clienteRq.getDni());
+        System.out.println("DNIStr: " + dniString); */
+
+        if((clienteRq.getDni() == null)){
+            System.out.println("No se filtra por DNI");
+        } else {
+            System.out.println("Filtro DNI");
+            String dniString = String.valueOf(clienteRq.getDni());
             clientesRs = clientesRs.stream()
-                .filter(c -> String.valueOf(c.getDni()).contains(dniString))
+                .filter(c -> c.getDni() != null && c.getDni().toString().equals(dniString))
+                .collect(Collectors.toList());
+
+        }
+
+
+        /* if (dniString == null || dniString.isEmpty()) {
+            System.out.println("No se filtra por DNI");
+        } else {
+            System.out.println("Filtro DNI");
+            clientesRs = clientesRs.stream()
+                .filter(c -> c.getDni() != null && c.getDni().toString().equals(dniString))
+                .collect(Collectors.toList());
+        } */
+        
+        if (clienteRq.getNum_tel() == null || clienteRq.getNum_tel().trim().isEmpty()) {
+            System.out.println("No se filtra por Teléfono");
+        } else {
+            System.out.println("Filtro Teléfono");
+            clientesRs = clientesRs.stream()
+                .filter(c -> c.getNum_tel().contains(clienteRq.getNum_tel()))
                 .collect(Collectors.toList());
         }
         
-        String telString = String.valueOf(clienteRq.getNum_tel());
-        if (telString != null || !telString.equals("")) {
+        if (clienteRq.getEmail() == null || clienteRq.getEmail().trim().isEmpty()) {
+            System.out.println("No se filtra por Email");
+        } else {
+            System.out.println("Filtro Email");
             clientesRs = clientesRs.stream()
-                .filter(c -> String.valueOf(c.getNum_tel()).contains(telString))
+                .filter(c -> c.getEmail() != null && c.getEmail().toLowerCase().contains(clienteRq.getEmail().toLowerCase()))
                 .collect(Collectors.toList());
         }
         
-        if ( clienteRq.getEmail() != null || !clienteRq.getEmail().trim().equals("")) {
+        if (clienteRq.getDireccion() == null || clienteRq.getDireccion().trim().isEmpty()) {
+            System.out.println("No se filtra por Dirección");
+        } else {
+            System.out.println("Filtro Dirección");
             clientesRs = clientesRs.stream()
-                .filter(c -> c.getEmail().toLowerCase().contains(clienteRq.getEmail().toLowerCase()))
+                .filter(c -> c.getDireccion() != null && c.getDireccion().toLowerCase().contains(clienteRq.getDireccion().toLowerCase()))
                 .collect(Collectors.toList());
         }
         
-        if (clienteRq.getDireccion() != null || !clienteRq.getDireccion().trim().equals("")){
-            clientesRs = clientesRs.stream()
-                .filter(c -> c.getDireccion().toLowerCase().contains(clienteRq.getDireccion().toLowerCase()))
-                .collect(Collectors.toList());
-        }
         
         //TODO: filtro por vehiculos
         
