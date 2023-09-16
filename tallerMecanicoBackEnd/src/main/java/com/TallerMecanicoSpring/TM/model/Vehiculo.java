@@ -16,7 +16,8 @@ public class Vehiculo {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int kilometraje;
+    
+    private Integer kilometraje;
     @NotNull
     private String patente;
     @ManyToOne
@@ -36,7 +37,7 @@ public class Vehiculo {
     public Vehiculo( ) {
     }
 
-    public Vehiculo(Long id, int kilometraje, String patente, Marca marca, Modelo modelo, Cliente cliente, Boolean activo) {
+    public Vehiculo(Long id, Integer kilometraje, String patente, Marca marca, Modelo modelo, Cliente cliente, Boolean activo) {
         this.id = id;
         this.kilometraje = kilometraje;
         this.patente = patente;
@@ -72,11 +73,11 @@ public class Vehiculo {
     
     
 
-    public int getKilometraje() {
+    public Integer getKilometraje() {
         return kilometraje;
     }
 
-    public void setKilometraje(int kilometraje) {
+    public void setKilometraje(Integer kilometraje) {
         this.kilometraje = kilometraje;
     }
 

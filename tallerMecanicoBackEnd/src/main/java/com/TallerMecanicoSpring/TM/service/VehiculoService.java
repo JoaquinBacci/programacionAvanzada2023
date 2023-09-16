@@ -157,6 +157,10 @@ public class VehiculoService implements VehiculoRepository{
         List<Vehiculo> vehiculosRs = new ArrayList();
         
         vehiculos = this.findAll();
+
+        /* System.out.println("marca: " + vehiculoRq.getMarca());
+        System.out.println("modelo: " + vehiculoRq.getModelo());
+        System.out.println("cliente: " + vehiculoRq.getCliente()); */
         
         for(Vehiculo v : vehiculos){
             if(v.isActivo()){
@@ -165,36 +169,56 @@ public class VehiculoService implements VehiculoRepository{
         }
         
         //Kilometraje
-        String kmString = String.valueOf(vehiculoRq.getKilometraje());
-        if (kmString != null || !kmString.equals("")) {
-            vehiculosRs = vehiculosRs.stream()
-                .filter(v -> String.valueOf(v.getKilometraje()).contains(kmString))
-                .collect(Collectors.toList());
+        if((vehiculoRq.getKilometraje() == null) ){
+            System.out.println("No se filtra por Km");
+        } else{
+            String kmString = String.valueOf(vehiculoRq.getKilometraje());
+            if (kmString != null || !kmString.equals("")) {
+                System.out.println("Filtro KM");
+                vehiculosRs = vehiculosRs.stream()
+                    .filter(v -> String.valueOf(v.getKilometraje()).contains(kmString))
+                    .collect(Collectors.toList());
+            }
         }
         
         //patente
-        if (vehiculoRq.getPatente() != null || !vehiculoRq.getPatente().trim().equals("")) {
+        if (vehiculoRq.getPatente() == null || vehiculoRq.getPatente().trim().equals("")) {
+            System.out.println("No se filtra por Patente");
+        } else{
+            System.out.println("Filtro Patente");
             vehiculosRs = vehiculosRs.stream()
                 .filter(v -> v.getPatente().contains(vehiculoRq.getPatente()))
                 .collect(Collectors.toList());
         }
         
         //marca
-        if(vehiculoRq.getMarca() != null){
+        if(vehiculoRq.getMarca().getId() == null){
+            System.out.println("No se filtra por marca");
+            
+        } else{
+            System.out.println("Filtro Marca");
             vehiculosRs = vehiculosRs.stream()
                     .filter(v -> v.getMarca().getId() == vehiculoRq.getMarca().getId())
                     .collect(Collectors.toList());
         }
         
         //modelo
-        if(vehiculoRq.getModelo() != null){
+        if(vehiculoRq.getModelo().getId() == null){
+            System.out.println("No se filtra por Modelo");
+            
+        } else{
+            System.out.println("Fitro Modelo");
             vehiculosRs = vehiculosRs.stream()
                     .filter(v -> v.getModelo().getId() == vehiculoRq.getModelo().getId())
                     .collect(Collectors.toList());
         }
         
         //cliente
-        if(vehiculoRq.getCliente() != null){
+        if(vehiculoRq.getCliente().getId() == null){
+            System.out.println("No se filtra por Cliente");
+            
+        } else {
+            System.out.println("Filtro Cliente");
             String dniClienteStr = String.valueOf(vehiculoRq.getCliente().getDni());
             vehiculosRs = vehiculosRs.stream()
                     .filter(v -> v.getCliente().getNombre().toLowerCase().contains(vehiculoRq.getCliente().getNombre().toLowerCase())
