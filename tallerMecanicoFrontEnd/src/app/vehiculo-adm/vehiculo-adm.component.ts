@@ -35,7 +35,7 @@ export class VehiculoAdmComponent {
     private fb: FormBuilder
   ){
     this.form = this.fb.group({
-      patente: [''],
+      patente: ['',[Validators.required,Validators.pattern(/^(([a-zA-Z]{3})(\d{3}))|(([a-zA-Z]{2})([\d]{3})([a-zA-Z]{2}))$/)]],
       marca: [''],  //id
       modelo: ['' ],
       kilometraje: [''],
