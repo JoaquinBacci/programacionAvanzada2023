@@ -1,0 +1,65 @@
+<div style="width: 50vw; min-height: 30vh; max-height: 80vh;">
+    <div style="display: flex; justify-content: center; align-content: center;">
+        <mat-card style="height: 100%; width: 100%; border-radius: 30px;">
+         
+          <button mat-icon-button matTooltip="cerrar" (click)="onNoClick()" style="float: left;">
+            <mat-icon>close</mat-icon>
+          </button>
+
+          <mat-card-content *ngIf="vehiculos && (vehiculos.length > 0)">
+            <mat-table [dataSource]="vehiculos" class="mat-elevation-z8">
+              <ng-container matColumnDef="NumeroDeFila">
+                <mat-header-cell *matHeaderCellDef>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let i = index">
+                  {{ i +1}}
+                </mat-cell>
+              </ng-container>
+                <ng-container matColumnDef="Patente">
+                  <mat-header-cell *matHeaderCellDef> 
+                    Patente 
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let elemento"> {{ elemento.patente }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Marca">
+                  <mat-header-cell *matHeaderCellDef> 
+                    Marca
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let elemento"> {{ elemento.marca.nombre }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Modelo">
+                    <mat-header-cell *matHeaderCellDef> 
+                      Modelo
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let elemento"> {{ elemento.modelo.nombre }} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="Kilometros">
+                    <mat-header-cell *matHeaderCellDef>
+                        Km.
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let elemento"> {{ elemento.kilometraje }} </mat-cell>
+                  </ng-container>
+                <!-- Define las columnas de la tabla -->
+                <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+              </mat-table>
+            </mat-card-content>
+
+            <mat-card-content *ngIf="!vehiculos || (vehiculos.length == 0)">
+              <div>
+                <div> El cliente seleccionado no tiene vehiculos </div>
+                <button mat-raised-button style="min-width: 20px; max-width: 50px; margin-left: 10px;" (click)="onNuevoVehiculo()" style="float: left;">
+                  <mat-icon>add</mat-icon>
+                  Agregar vehiculo
+                </button>
+              </div>
+             
+              
+            </mat-card-content>
+
+
+
+
+        </mat-card>
+    </div>
+</div>

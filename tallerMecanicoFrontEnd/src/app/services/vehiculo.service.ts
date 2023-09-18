@@ -73,4 +73,12 @@ export class VehiculoService {
   onDelete(id: number): Observable<any>{
     return this.http.delete(`${this.API_REST}/vehiculo/delete/${id}`);
   }
+
+  // @GetMapping("getByClient/{idCliente}")
+  getByCliente(idCliente):Observable<any>{
+    return this.http.get(`${this.API_REST}/vehiculo/getByClient/${idCliente}`);
+  }
+
+
+
 }

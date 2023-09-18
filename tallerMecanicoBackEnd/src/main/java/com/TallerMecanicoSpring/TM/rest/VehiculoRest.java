@@ -33,6 +33,10 @@ public class VehiculoRest {
         return ResponseEntity.ok(this.vehiculoService.findAll());
     }
     //GetByCliente
+    @GetMapping("getByClient/{idCliente}")
+    private ResponseEntity<List<Vehiculo>> getVehiculoPorCliente(@PathVariable("idCliente") Long id){
+        return ResponseEntity.ok(this.vehiculoService.getByClient(id));
+    }
     
     @PostMapping("filtrar/")
     private ResponseEntity<List<Vehiculo>> filrarVehiculos(@RequestBody Vehiculo v){

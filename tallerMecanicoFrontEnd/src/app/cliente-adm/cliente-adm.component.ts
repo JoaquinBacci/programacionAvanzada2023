@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Cliente } from '../model/cliente';
 import { ClienteService } from '../services/cliente.service';
 import { VehiculoService } from '../services/vehiculo.service';
+import { MatDialog } from '@angular/material/dialog';
+import { VehiculoXclienteComponent } from '../dialogs/vehiculoXcliente/vehiculoXcliente.component';
 
 @Component({
   selector: 'app-cliente-adm',
@@ -20,7 +22,7 @@ export class ClienteAdmComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private clienteService: ClienteService,
-    private vehiculoService: VehiculoService,
+    public dialog: MatDialog
   ){
     this.form = this.fb.group({
       dni: ['', [Validators.required,Validators.minLength(8), Validators.maxLength(8)]],
@@ -154,5 +156,9 @@ export class ClienteAdmComponent implements OnInit {
     this.idUpdate = undefined;
   }
 
-  onVisualizarFicha(id: number){}
+  onVerVehiculos(id: number){
+      let dialogRef = this.dialog.open(VehiculoXclienteComponent, {
+        data:  id
+      });
+  }
 }
