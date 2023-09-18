@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MarcaService } from '../services/marca.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Marca } from '../model/marca';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmComponent } from '../dialogs/confirm/confirm.component';
 
 @Component({
   selector: 'app-marca-adm',
@@ -17,7 +19,8 @@ export class MarcaAdmComponent implements OnInit{
   marcaEdit: Marca;
   constructor(
     private marcaService: MarcaService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialog: MatDialog
   ){
     this.form = this.fb.group({
       nuevoNombre: ['', [Validators.required, Validators.maxLength(50)]]
@@ -82,11 +85,12 @@ export class MarcaAdmComponent implements OnInit{
     console.log('ID a eliminar: ', id);
     this.marcaService.deleteMarca(id).subscribe({
       next: (data)=>{
-        console.log('data Delete: ', data);
+        this.onDialogConfirm("normal","Se elimino la marca correctamente");
       }, complete: () =>{
           this.onGetAllMarcas();
       },error: (error)=>{
-          console.log('ERROR ', error)
+          console.log('ERROR ', error);
+          this.onDialogConfirm("error","No se pudo eliminar la marca");
       }
     });
   }
@@ -133,6 +137,12 @@ export class MarcaAdmComponent implements OnInit{
   onCancelar(){
     this.form.reset();
     this.modoEdicion = false;
+  }
+
+  onDialogConfirm(tipo: string, mensaje: string, textoAceptar?: string){
+    let dialogRef = this.dialog.open(ConfirmComponent,{
+      data:{ tipo: tipo, mensaje: mensaje, textoAceptar:textoAceptar}
+    });
   }
 
 }

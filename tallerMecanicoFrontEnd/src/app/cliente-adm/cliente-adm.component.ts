@@ -3,8 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Cliente } from '../model/cliente';
 import { ClienteService } from '../services/cliente.service';
 import { VehiculoService } from '../services/vehiculo.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VehiculoXclienteComponent } from '../dialogs/vehiculoXcliente/vehiculoXcliente.component';
+import { ConfirmComponent } from '../dialogs/confirm/confirm.component';
 
 @Component({
   selector: 'app-cliente-adm',
@@ -85,6 +86,7 @@ export class ClienteAdmComponent implements OnInit {
         next:(data)=>{
           if(data.id){
             console.log('dataOK: ', data);
+            this.onDialogConfirm("normal", "El cliente se ha editado correctamente");
           } else {
             console.log('dataNULL: ', data);
           }
@@ -95,6 +97,7 @@ export class ClienteAdmComponent implements OnInit {
           this.onConsultar();
         }, error: (error) =>{
           console.log('ERROR: ', error);
+          this.onDialogConfirm("error", "Se ha producido un error al editar el cliente");
         }
       })
     }
@@ -160,5 +163,11 @@ export class ClienteAdmComponent implements OnInit {
       let dialogRef = this.dialog.open(VehiculoXclienteComponent, {
         data:  id
       });
+  }
+
+  onDialogConfirm(tipo: string, mensaje: string, textoAceptar?: string){
+    let dialogRef = this.dialog.open(ConfirmComponent,{
+      data:{ tipo: tipo, mensaje: mensaje, textoAceptar:textoAceptar}
+    });
   }
 }

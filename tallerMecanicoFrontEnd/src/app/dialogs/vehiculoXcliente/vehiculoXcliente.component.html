@@ -1,13 +1,13 @@
-<div style="width: 50vw; min-height: 30vh; max-height: 80vh;">
+<div style="width: 50vw; height: fit-content;">
     <div style="display: flex; justify-content: center; align-content: center;">
-        <mat-card style="height: 100%; width: 100%; border-radius: 30px;">
+        <mat-card style="height: 100%; width: 100%;">
          
           <button mat-icon-button matTooltip="cerrar" (click)="onNoClick()" style="float: left;">
             <mat-icon>close</mat-icon>
           </button>
 
           <mat-card-content *ngIf="vehiculos && (vehiculos.length > 0)">
-            <mat-table [dataSource]="vehiculos" class="mat-elevation-z8">
+            <mat-table [dataSource]="vehiculos" class="mat-elevation-z8" style="margin-bottom: 10px;">
               <ng-container matColumnDef="NumeroDeFila">
                 <mat-header-cell *matHeaderCellDef>
                 </mat-header-cell>
@@ -48,10 +48,12 @@
             <mat-card-content *ngIf="!vehiculos || (vehiculos.length == 0)">
               <div>
                 <div> El cliente seleccionado no tiene vehiculos </div>
-                <button mat-raised-button style="min-width: 20px; max-width: 50px; margin-left: 10px;" (click)="onNuevoVehiculo()" style="float: left;">
-                  <mat-icon>add</mat-icon>
-                  Agregar vehiculo
-                </button>
+                <div style="display: flex; justify-content: end;">
+                  <button mat-raised-button color="primary" style="min-width: 20px; max-width: 50px; margin-left: 10px;" (click)="onNuevoVehiculo()" style="float: left;">
+                    <mat-icon>add</mat-icon>
+                    Agregar vehiculo
+                  </button>
+                </div>
               </div>
              
               
