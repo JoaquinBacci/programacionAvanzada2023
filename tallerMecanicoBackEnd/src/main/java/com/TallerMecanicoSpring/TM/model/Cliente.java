@@ -7,6 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+
 import java.util.List;
 
 @Entity
@@ -15,9 +19,13 @@ public class Cliente {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Min(value = 10000000, message = "El DNI debe tener 8 dígitos")
+    @Max(value = 99999999, message = "El DNI debe tener 8 dígitos")
     private Integer dni;
     private String num_tel;
+    @NotBlank(message = "por favor ingresa un nombre")
     private String nombre;
+    @NotBlank(message = "por favor ingresa un apellido")
     private String apellido;
     private String direccion;
     private String email;
