@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name="modelo")
@@ -15,7 +17,9 @@ public class Modelo {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "por favor ingrese un nombre")
     private String nombre;
+    @AssertTrue(message = "La marca debe ser un booleano")
     private boolean activo;
     @ManyToOne
     @JoinColumn(name="id_marca")

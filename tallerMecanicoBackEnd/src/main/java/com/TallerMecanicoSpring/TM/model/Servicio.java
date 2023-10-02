@@ -1,35 +1,36 @@
-
 package com.TallerMecanicoSpring.TM.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.AssertTrue;
-import jakarta.validation.constraints.NotBlank;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
-@Table(name="marca")
-public class Marca {
-    @Id 
-    @GeneratedValue (strategy = GenerationType.IDENTITY) 
+@Table(name = "servicio")
+public class Servicio {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotBlank(message = "por favor ingrese un nombre")
     private String nombre;
+
+    @NotNull //para que no se ingresen nulos
+    @DecimalMin(value = "0.00") //el precio debe ser mayor a este nro
+    @DecimalMax(value = "1000000.0") //el precio no puede ser mayor a este nro
+    private int precio;
+
     @AssertTrue(message = "La marca debe ser un booleano")
     private boolean activo;
 
-    public Marca() {
+    public Servicio() {
     }
 
-    public Marca(Long id, String nombre, boolean activo) {
+    public Servicio(Long id, String nombre, int precio, boolean activo) {
         this.id = id;
         this.nombre = nombre;
+        this.precio = precio;
         this.activo = activo;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -46,6 +47,14 @@ public class Marca {
         this.nombre = nombre;
     }
 
+    public int getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(int precio) {
+        this.precio = precio;
+    }
+
     public boolean isActivo() {
         return activo;
     }
@@ -53,6 +62,4 @@ public class Marca {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
-    
-    
 }
