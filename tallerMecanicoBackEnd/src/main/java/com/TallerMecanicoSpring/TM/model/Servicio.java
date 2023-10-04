@@ -1,5 +1,6 @@
 package com.TallerMecanicoSpring.TM.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -20,6 +21,11 @@ public class Servicio {
 
     @AssertTrue(message = "La marca debe ser un booleano")
     private boolean activo;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "detalle_orden_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public DetalleOrden detalleOrden;
 
     public Servicio() {
     }
