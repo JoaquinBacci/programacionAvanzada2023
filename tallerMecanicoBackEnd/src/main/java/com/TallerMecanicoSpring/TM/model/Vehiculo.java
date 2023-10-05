@@ -1,14 +1,10 @@
 
 package com.TallerMecanicoSpring.TM.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.antlr.v4.runtime.misc.NotNull;
+
+import java.util.List;
 
 @Entity
 @Table(name="vehiculo")
@@ -33,6 +29,9 @@ public class Vehiculo {
     @NotNull
     private Cliente cliente;
     private Boolean activo;
+
+    @OneToMany(mappedBy = "vehiculo",cascade = CascadeType.ALL)
+    private List<Orden> ordenes;
 
     public Vehiculo( ) {
     }
@@ -103,5 +102,17 @@ public class Vehiculo {
 
     public void setModelo(Modelo modelo) {
         this.modelo = modelo;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public List<Orden> getOrdenes() {
+        return ordenes;
+    }
+
+    public void setOrdenes(List<Orden> ordenes) {
+        this.ordenes = ordenes;
     }
 }

@@ -1,5 +1,6 @@
 package com.TallerMecanicoSpring.TM.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -12,6 +13,11 @@ public class DetalleOrden {
     private Long id;
     @OneToMany(mappedBy = "detalleOrden",cascade = CascadeType.ALL)
     private List<Servicio> servicios;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "orden_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Orden orden;
 
     private int cantidad;
 
@@ -46,5 +52,13 @@ public class DetalleOrden {
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public Orden getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Orden orden) {
+        this.orden = orden;
     }
 }

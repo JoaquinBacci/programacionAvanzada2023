@@ -1,15 +1,14 @@
 
 package com.TallerMecanicoSpring.TM.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import org.antlr.v4.runtime.misc.NotNull;
+
+import java.util.List;
 
 @Entity
 @Table(name="tecnico")
@@ -31,6 +30,9 @@ public class Tecnico {
     @NotBlank(message = "por favor ingrese un email")
     private String email;
     private boolean activo;
+
+    @OneToMany(mappedBy = "tecnico",cascade = CascadeType.ALL)
+    private List<Orden> ordenes;
 
     public Tecnico() {
     }
@@ -120,5 +122,12 @@ public class Tecnico {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
-    
+
+    public List<Orden> getOrdenes() {
+        return ordenes;
+    }
+
+    public void setOrdenes(List<Orden> ordenes) {
+        this.ordenes = ordenes;
+    }
 }
