@@ -24,7 +24,7 @@ public class ServicioService{
          return servicioRepository.findAll();
      }
 
-     public Optional<Servicio> findById(Long id){
+     public Optional<Servicio> findByIdServicio(Long id){
          return servicioRepository.findById(id);
      }
 

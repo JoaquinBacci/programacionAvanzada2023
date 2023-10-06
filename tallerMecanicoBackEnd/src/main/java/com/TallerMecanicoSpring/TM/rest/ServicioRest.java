@@ -1,6 +1,6 @@
 package com.TallerMecanicoSpring.TM.rest;
 
-import com.TallerMecanicoSpring.TM.model.Modelo;
+import com.TallerMecanicoSpring.TM.model.Orden;
 import com.TallerMecanicoSpring.TM.model.Servicio;
 import com.TallerMecanicoSpring.TM.service.ServicioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class ServicioRest {
     //Método GET by id
     @GetMapping(path = "/{id}")
     public Optional<Servicio> findById(@PathVariable Long id){
-        return this.servicioService.findById(id);
+        return this.servicioService.findByIdServicio(id);
     }
 
     //Método POST
@@ -38,6 +38,29 @@ public class ServicioRest {
             return ResponseEntity.created(new URI("/servicio/"+servicioGuardado.getId())).body(servicioGuardado);
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+
+    //Método PUT
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarServicio(@RequestBody Servicio servicio, @PathVariable Long id){
+        try{
+            //Buscamos la orden existe con el id
+            Servicio servicioExistente = servicioService.findByIdServicio(id).get();
+            //Actualizamos la orden
+            servicioExistente.setNombre(servicio.getNombre());
+            servicioExistente.setPrecio(servicio.getPrecio());
+            if(servicio.isActivo()){
+                servicioExistente.setActivo(true);
+            }else {
+                servicioExistente.setActivo(false);
+            }
+            //Guardamos la orden actualizada
+            servicioService.saveServicio(servicioExistente);
+            return new ResponseEntity<Orden>(HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
         }
     }
 }

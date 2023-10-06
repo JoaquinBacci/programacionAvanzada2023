@@ -1,7 +1,6 @@
 package com.TallerMecanicoSpring.TM.rest;
 
 import com.TallerMecanicoSpring.TM.model.Orden;
-import com.TallerMecanicoSpring.TM.model.Servicio;
 import com.TallerMecanicoSpring.TM.service.OrdenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,5 +40,20 @@ public class OrdenRest {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarOrden(@RequestBody Orden orden, @PathVariable Long id){
+        try{
+            //Buscamos la orden existe con el id
+            Orden ordenExistente = ordenService.findByIdOrden(id).get();
+            //Actualizamos la orden
+            ordenExistente.setTecnico(orden.getTecnico());
+            ordenExistente.setVehiculo(orden.getVehiculo());
+
+            ordenService.saveOrden(ordenExistente);
+            return new ResponseEntity<Orden>(HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
+        }
+    }
 
 }

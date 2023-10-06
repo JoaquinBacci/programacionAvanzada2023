@@ -1,7 +1,6 @@
 package com.TallerMecanicoSpring.TM.rest;
 
 import com.TallerMecanicoSpring.TM.model.DetalleOrden;
-import com.TallerMecanicoSpring.TM.model.Servicio;
 import com.TallerMecanicoSpring.TM.service.DetalleOrdenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +37,23 @@ public class DetalleOrdenRest {
             return ResponseEntity.created(new URI("/detalleOrden/"+ordenGuardada.getId())).body(ordenGuardada);
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    //Método PUT
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarDetalleOrden(@RequestBody DetalleOrden detalleOrden, @PathVariable Long id){
+        try{
+            //Buscamos la orden existe con el id
+            DetalleOrden detalleOrdenExistente = detalleOrdenService.findById(id).get();
+            //Actualizamos la orden
+            detalleOrdenExistente.setOrden(detalleOrden.getOrden());
+            detalleOrdenExistente.setCantidad(detalleOrden.getCantidad());
+            //Guardamos la orden actualizada
+            detalleOrdenService.saveDetalleOrden(detalleOrdenExistente);
+            return new ResponseEntity<DetalleOrden>(HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<DetalleOrden>(HttpStatus.NOT_FOUND);
         }
     }
 }

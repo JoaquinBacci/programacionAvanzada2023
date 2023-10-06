@@ -30,6 +30,8 @@ public class Cliente {
     private String direccion;
     private String email;
     private boolean activo;
+
+    private String licenciaConducir;
     
 
     public Cliente() {
@@ -108,5 +110,13 @@ public class Cliente {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public String getLicenciaConducir() {
+        return licenciaConducir;
+    }
+
+    public void setLicenciaConducir(String licenciaConducir) {
+        this.licenciaConducir = licenciaConducir;
     }
 }
