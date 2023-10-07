@@ -15,7 +15,7 @@ public class Orden {
     @AssertTrue(message = "La marca debe ser un booleano")
     private boolean activo;
 
-    @OneToMany(mappedBy = "orden",cascade = CascadeType.ALL)
+    @OneToMany(/* mappedBy = "orden" ,*/cascade = CascadeType.ALL)
     private List<DetalleOrden> detallesOrden;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)

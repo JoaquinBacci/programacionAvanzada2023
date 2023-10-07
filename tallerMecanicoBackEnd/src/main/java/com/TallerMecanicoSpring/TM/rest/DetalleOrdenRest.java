@@ -47,10 +47,12 @@ public class DetalleOrdenRest {
             //Buscamos la orden existe con el id
             DetalleOrden detalleOrdenExistente = detalleOrdenService.findById(id).get();
             //Actualizamos la orden
-            detalleOrdenExistente.setOrden(detalleOrden.getOrden());
+            /* detalleOrdenExistente.setOrden(detalleOrden.getOrden()); */
             detalleOrdenExistente.setCantidad(detalleOrden.getCantidad());
+            detalleOrdenExistente.setServicio(detalleOrden.getServicio());
             //Guardamos la orden actualizada
             detalleOrdenService.saveDetalleOrden(detalleOrdenExistente);
+
             return new ResponseEntity<DetalleOrden>(HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<DetalleOrden>(HttpStatus.NOT_FOUND);

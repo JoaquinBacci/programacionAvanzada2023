@@ -1,9 +1,9 @@
 package com.TallerMecanicoSpring.TM.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+/* import com.fasterxml.jackson.annotation.JsonProperty; */
 import jakarta.persistence.*;
 
-import java.util.List;
+/* import java.util.List; */
 
 @Entity
 @Table(name = "detalle_orden")
@@ -11,23 +11,27 @@ public class DetalleOrden {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany(mappedBy = "detalleOrden",cascade = CascadeType.ALL)
-    private List<Servicio> servicios;
+    @ManyToOne
+    @JoinColumn(name="id_servicio")
+    private Servicio servicio;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    private double precioTotal;
+
+    /* @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "orden_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Orden orden;
+    private Orden orden; */
 
     private int cantidad;
 
     public DetalleOrden() {
     }
 
-    public DetalleOrden(Long id, List<Servicio> servicios, int cantidad) {
+    public DetalleOrden(Long id, Servicio servicio, int cantidad) {
         this.id = id;
-        this.servicios = servicios;
+        this.servicio = servicio;
         this.cantidad = cantidad;
+        this.setPrecioTotal();
     }
 
     public Long getId() {
@@ -38,12 +42,12 @@ public class DetalleOrden {
         this.id = id;
     }
 
-    public List<Servicio> getServicios() {
-        return servicios;
+    public Servicio getServicio() {
+        return servicio;
     }
 
-    public void setServicios(List<Servicio> servicios) {
-        this.servicios = servicios;
+    public void setServicio(Servicio servicio) {
+        this.servicio = servicio;
     }
 
     public int getCantidad() {
@@ -54,11 +58,20 @@ public class DetalleOrden {
         this.cantidad = cantidad;
     }
 
-    public Orden getOrden() {
+    public double getPrecioTotal() {
+        precioTotal = (this.servicio.getPrecio() * this.getCantidad());
+        return precioTotal;
+    }
+
+    public void setPrecioTotal() {
+        this.precioTotal = (this.servicio.getPrecio() * this.getCantidad());
+    }
+
+    /* public Orden getOrden() {
         return orden;
     }
 
     public void setOrden(Orden orden) {
         this.orden = orden;
-    }
+    } */
 }
