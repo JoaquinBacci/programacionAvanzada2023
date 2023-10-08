@@ -5,6 +5,7 @@ import { TecnicoAdmComponent } from './tecnico-adm/tecnico-adm.component';
 import { MarcaAdmComponent } from './marca-adm/marca-adm.component';
 import { ModeloAdmComponent } from './modelo-adm/modelo-adm.component';
 import { VehiculoAdmComponent } from './vehiculo-adm/vehiculo-adm.component';
+import { ServicioAdmComponent } from './servicio-adm/servicio-adm/servicio-adm.component';
 
 const routes: Routes = [
   { path: 'cliente', component: ClienteAdmComponent },
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'marca', component: MarcaAdmComponent },
   { path: 'modelo', component: ModeloAdmComponent },
   { path: 'vehiculo', component: VehiculoAdmComponent },
+  { path: 'servicio', component: ServicioAdmComponent}
 ];
 
 @NgModule({

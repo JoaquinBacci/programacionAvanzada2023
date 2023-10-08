@@ -31,6 +31,7 @@ import { TecnicoAdmComponent } from './tecnico-adm/tecnico-adm.component';
 import { HomeComponent } from './components/home/home.component';
 import { VehiculoXclienteComponent } from './dialogs/vehiculoXcliente/vehiculoXcliente.component';
 import { ConfirmComponent } from './dialogs/confirm/confirm.component';
+import { ServicioAdmComponent } from './servicio-adm/servicio-adm/servicio-adm.component';
 
 
 
@@ -47,7 +48,8 @@ import { ConfirmComponent } from './dialogs/confirm/confirm.component';
     TecnicoAdmComponent,
     HomeComponent,
     VehiculoXclienteComponent,
-    ConfirmComponent
+    ConfirmComponent,
+    ServicioAdmComponent
   ],
   imports: [
     BrowserModule,
