@@ -1,4 +1,4 @@
-package com.TallerMecanicoSpring.TM.model;
+ package com.TallerMecanicoSpring.TM.model;
 
 /* import com.fasterxml.jackson.annotation.JsonProperty; */
 import jakarta.persistence.*;

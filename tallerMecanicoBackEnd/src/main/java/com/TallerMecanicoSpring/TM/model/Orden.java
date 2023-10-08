@@ -1,5 +1,6 @@
 package com.TallerMecanicoSpring.TM.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
@@ -28,6 +29,9 @@ public class Orden {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Vehiculo vehiculo;
 
+    /* @JsonIgnore
+    private double precioTotal; */
+
     public Orden() {
     }
 
@@ -37,7 +41,28 @@ public class Orden {
         this.detallesOrden = detallesOrden;
         this.tecnico = tecnico;
         this.vehiculo = vehiculo;
+        /* this.setPrecioTotal(); */
     }
+
+    /* public double getPrecioTotal() {
+        double total = 0.0;
+        if (detallesOrden != null) {
+            for (DetalleOrden detalle : detallesOrden) {
+                total += detalle.getPrecioTotal();
+            }
+        }
+        return total;
+    }
+
+    public void setPrecioTotal() {
+        double total = 0.0;
+        if (detallesOrden != null) {
+            for (DetalleOrden detalle : detallesOrden) {
+                total += detalle.getPrecioTotal();
+            }
+        }
+        this.precioTotal = total;
+    } */
 
     public Long getId() {
         return id;
