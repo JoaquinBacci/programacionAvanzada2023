@@ -1,34 +1,39 @@
 .container{
-    width: 100vw;
-    height: 100vh;
-}
-
-div button {
-    margin-left: 5px;
-}
-
-.side-nav-container {
     display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+    justify-content: center;
 }
 
-.side-nav-container button {
-    margin-bottom: 5px;
-    text-align-last: justify;
+.subContainer{
+    width: 80vw;
+    height: 80vh;
 }
 
-.side-nav-container button mat-icon{
+mat-header-cell{
+    height: 100px;
+}
+
+div mat-form-field{
+    margin-right: 5px;
     width: 100%;
 }
 
-.example-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0
+.mat-card-button {
+    cursor: pointer; /* Cambia el cursor al pasar sobre la tarjeta (botón) */
 }
 
-.mat-toolbar-row, .mat-toolbar-single-row {
-    padding: 0 !important;
+.tarjeta-contenido {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px; /* Ajusta el espaciado según sea necesario */
 }
+
+.columna-titulo {
+    flex: 1; /* Toma el 50% del espacio disponible */
+}
+
+.columna-icono {
+    flex-shrink: 0; /* No se reduce en tamaño */
+    margin-left: 10px; /* Ajusta el espaciado entre el título y el icono */
+}
+  

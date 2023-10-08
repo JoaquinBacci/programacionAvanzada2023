@@ -1,46 +1,25 @@
-<div style="display: flex; flex-direction: column; justify-content: flex-start;">
-      
-  <mat-toolbar color="primary" style="vertical-align: middle;"><button style="margin-right: 5px;" mat-button (click)="toggleSidenav()"><span class="material-symbols-outlined" style="vertical-align: middle;">home</span></button>Taller Mecánico</mat-toolbar>
-  <mat-sidenav-container class="example-container">
-      <mat-sidenav #sidenav mode="side" opened class="example-sidenav"> 
-
-        <div class="side-nav-container" style="margin: 10px">
-            <button mat-flat-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openClientes()">
-              <mat-icon>people</mat-icon>
-              Clientes
-            </button>
-            <button mat-flat-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openTecnico()">
-              <mat-icon>people</mat-icon>
-              Tecnicos
-            </button>
-            <button mat-flat-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openVehiculo()">
-              <mat-icon>directions_car</mat-icon>
-              Vehiculos
-            </button>
-            <button mat-flat-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openMarca()">
-              <mat-icon>label</mat-icon>
-              Marcas
-            </button>
-            <button mat-flat-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openModelo()">
-              <mat-icon>label</mat-icon>
-              Modelos
-            </button>
-            <button mat-flat-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openServicio()">
-              <mat-icon>label</mat-icon>
-              Servicios
-            </button>
-        </div>
-        
-      </mat-sidenav>
-      
-      <mat-sidenav-content>
-        <div>
-          <router-outlet></router-outlet>
-        </div>  
-      </mat-sidenav-content>
-    </mat-sidenav-container>
-
-    <mat-toolbar class="example-footer">Footer</mat-toolbar>
+<div class="container">
+  <div class="subContainer" >
+    <div style="padding: 10px;">
+      <h2>Home</h2>
+      <mat-card (click)="openGestionOrden()" class="mat-card-button" style="width: 50%;">
+        <mat-card-content class="tarjeta-contenido">
+          <!-- Columna del título -->
+          <div class="columna-titulo">
+            <h2>Gestionar ordenes de Trabajo</h2>
+          </div>
+          
+          <!-- Columna del icono -->
+          <div class="columna-icono">
+            <mat-icon style="text-align-last: justify;">fact_check</mat-icon>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
 </div>
+
+
+
 
 

@@ -7,41 +7,10 @@ import { Router } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit{
-  @ViewChild(MatSidenav) sidenav!: MatSidenav;
-  constructor(
-    private router: Router,
-  ) {}
+export class HomeComponent{
+  constructor(private router: Router,) {}
 
-  ngOnInit() {
-    console.log("estoy");
-    this.router.navigate(['/cliente']);
+  openGestionOrden(){
+    this.router.navigate(['/orden']);
   }
- 
-  toggleSidenav() {
-    this.sidenav.toggle();
-  }
-  
-  openClientes() {
-    this.router.navigate(['/cliente']);
-  }
-
-  openModelo() {
-    this.router.navigate(['/modelo']);
-  }
-
-  openVehiculo() {
-    this.router.navigate(['/vehiculo']);
-  }
-  openTecnico() {
-    this.router.navigate(['/tecnico']);
-  }
-  openMarca() {
-    this.router.navigate(['/marca']);
-  }
-
-  openServicio() {
-    this.router.navigate(['/servicio']);
-  }
-  
 }
