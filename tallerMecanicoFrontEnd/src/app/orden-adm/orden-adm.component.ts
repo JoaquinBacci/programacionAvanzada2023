@@ -227,10 +227,11 @@ export class OrdenAdmComponent implements OnInit{
 
   getObjectOrden(){
     // Armar objeto de orden para enviar a servicio de ordenes
-    let object: any = {id: null,activo: null,tecnico: null,vehiculo: null,descripcion: null,fechaIngreso: null,detallesOrden: null};
+    let object: any = {id: null,activo: null,tecnico: {id: null},vehiculo: null,descripcion: null,fechaIngreso: null,detallesOrden: null};
     object.id = null;
     object.activo = true;
-    object.tecnico = this.formularioOrden.get('tecnico').value;
+    let tecnico = this.formularioOrden.get('tecnico').value;
+    object.tecnico.id = tecnico.id; 
     object.vehiculo = this.formularioOrden.get('vehiculo').value;
     object.descripcion = this.formularioOrden.get('descripcion').value;
     object.fechaIngreso = null;
