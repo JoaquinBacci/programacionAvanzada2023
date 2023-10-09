@@ -95,7 +95,6 @@ public class OrdenRest {
                     // Puedes lanzar una excepción, devolver un error, o manejarlo de otra manera según tus requerimientos.
                 }
             }
-
             orden.setDetallesOrden(detallesOrden);
 
 

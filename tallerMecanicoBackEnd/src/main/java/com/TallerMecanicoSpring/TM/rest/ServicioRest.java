@@ -64,10 +64,10 @@ public class ServicioRest {
         }
     }
 
-    @DeleteMapping("delete/{id}")
-    private ResponseEntity<Boolean> deleteById(@PathVariable ("id") Long id){
-        this.servicioService.deleteById(id);
-        return ResponseEntity.ok(servicioService.findById(id) == null);
-    }
+//    @DeleteMapping("delete/{id}")
+//    private ResponseEntity<Boolean> deleteById(@PathVariable ("id") Long id){
+//        this.servicioService.deleteById(id);
+//        return ResponseEntity.ok(servicioService.findById(id) == null);
+//    }
 
 }
