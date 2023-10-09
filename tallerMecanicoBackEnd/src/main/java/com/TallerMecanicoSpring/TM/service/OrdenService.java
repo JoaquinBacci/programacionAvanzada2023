@@ -7,6 +7,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +28,48 @@ public class OrdenService {
 
     @Transactional
     public Orden saveOrden(Orden orden){
-        return ordenRepository.save(orden);
+        if(orden.getId() == null){
+            Date fi = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            orden.setFechaIngreso(format.format(fi));
+            return ordenRepository.save(orden);
+        } else {
+
+            Optional<Orden> ordenExistente = this.findByIdOrden(orden.getId());
+
+            if(ordenExistente.isPresent()){
+                Orden o = ordenExistente.get();
+
+                o.setActivo(orden.isActivo());
+                o.setDescripcion(orden.getDescripcion());
+                o.setDetallesOrden(orden.getDetallesOrden());
+                o.setVehiculo(orden.getVehiculo());
+                o.setTecnico(orden.getTecnico());
+                return ordenRepository.save(o);
+            } else{
+                return null;
+            }
+
+
+            
+        }
+        
+    }
+
+    public Orden updateOrden(Orden o){
+        return this.saveOrden(o);
+    }
+
+    public List<Orden> getByIdCliente(Long id){
+        List<Orden> ordenes = this.findAllOrdenes();
+        List<Orden> ordenesRs = new ArrayList<>();
+
+        for( Orden o : ordenes){
+            if(o.getVehiculo().getCliente().getId() == id){
+                ordenesRs.add(o);
+            }
+        }
+        return ordenesRs;
     }
 
 }

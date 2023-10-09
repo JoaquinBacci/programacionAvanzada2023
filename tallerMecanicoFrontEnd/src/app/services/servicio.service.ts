@@ -27,7 +27,7 @@ export class ServicioService {
   }
 
   public updateServicio( servicio: Servicio): Observable<any> {
-    return this.http.put(`${this.API_SERVER}/servicio/${servicio.id}`,servicio,{ headers: this.headers });
+    return this.http.put(`${this.API_SERVER}/servicio/update/`,servicio,{ headers: this.headers });
   }
 
   public consultarServicio(servicio: Servicio): Observable<any>{
@@ -41,5 +41,9 @@ export class ServicioService {
 
   public getByIdServicio(id: number): Observable<any>{
     return this.http.get(`${this.API_SERVER}/servicio/${id}`)
+  }
+
+  public filterServicio(servicio: Servicio): Observable<any>{
+    return this.http.post(`${this.API_SERVER}/servicio/filtrar/`, servicio, { headers: this.headers })
   }
 }

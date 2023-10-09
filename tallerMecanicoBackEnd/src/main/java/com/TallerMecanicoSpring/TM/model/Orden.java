@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -27,19 +28,41 @@ public class Orden {
     @JoinColumn(name = "vehiculo_id")
     private Vehiculo vehiculo;
 
+    private String fechaIngreso;
+
+    public String getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(String fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    private String descripcion;
+
 
 //    private double precioTotal;
 
     public Orden() {
     }
 
-    public Orden(Long id, boolean activo, List<DetalleOrden> detallesOrden, Tecnico tecnico, Vehiculo vehiculo) {
+    public Orden(Long id, boolean activo, List<DetalleOrden> detallesOrden, Tecnico tecnico, Vehiculo vehiculo, String descripcion) {
         this.id = id;
         this.activo = activo;
         this.detallesOrden = detallesOrden;
         this.tecnico = tecnico;
         this.vehiculo = vehiculo;
+        this.descripcion = descripcion;
         /* this.setPrecioTotal(); */
+        /* this.setFechaIngreso(); */
     }
 
 //    public double getPrecioTotal() {

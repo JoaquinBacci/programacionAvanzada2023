@@ -43,14 +43,15 @@ public class ServicioRest {
 
 
     //Método PUT
-    @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarServicio(@RequestBody Servicio servicio, @PathVariable Long id){
-        try{
+    @PostMapping("/update/")
+    public ResponseEntity<Servicio> actualizarServicio(@RequestBody Servicio servicio){
+        /* try{
             //Buscamos la orden existe con el id
             Servicio servicioExistente = servicioService.findByIdServicio(id).get();
             //Actualizamos la orden
             servicioExistente.setNombre(servicio.getNombre());
             servicioExistente.setPrecio(servicio.getPrecio());
+            servicioExistente.setDescripcion(servicio.getDescripcion());
             if(servicio.isActivo()){
                 servicioExistente.setActivo(true);
             }else {
@@ -61,14 +62,26 @@ public class ServicioRest {
             return new ResponseEntity<Orden>(HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
-        }
+        } */
+
+        return ResponseEntity.ok(this.servicioService.updateServicio(servicio));
+
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     private ResponseEntity<Boolean> deleteById(@PathVariable ("id") Long id){
         this.servicioService.deleteById(id);
         return ResponseEntity.ok(servicioService.findByIdServicio(id) == null);
     }
 
+
+    /**
+     * @param servicio
+     * @return
+     */
+    @PostMapping("/filtrar/")
+    public ResponseEntity<List<Servicio>> filtrarServicios(@RequestBody Servicio servicio){
+        return ResponseEntity.ok(this.servicioService.filtrarServicio(servicio));
+    }
 
 }

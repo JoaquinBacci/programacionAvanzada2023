@@ -25,7 +25,7 @@ export class OrdenService {
   }
 
   updateOrden( orden: Orden): Observable<any> {
-    return this.http.put(`${this.API_SERVER}/orden/${orden.id}`, orden,  { headers: this.headers });
+    return this.http.put(`${this.API_SERVER}/orden/update`, orden,  { headers: this.headers });
   }
 
   consultarOrden(nombre: string): Observable<any>{

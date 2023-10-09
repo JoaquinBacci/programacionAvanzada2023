@@ -42,7 +42,7 @@ export class ServicioAdmComponent {
   ngOnInit(): void {
       this.servicioConsultar = new Servicio();
       this.servicioConsultar.id = null;
-      this.servicioConsultar.activo = false;
+      this.servicioConsultar.activo = true;
       this.servicioConsultar.descripcion = '';
       this.servicioConsultar.nombre = '';
       this.servicioConsultar.precio = 0.00;
@@ -128,7 +128,7 @@ export class ServicioAdmComponent {
   }
 
   onConsultarServicios(){
-    this.servicioService.getAllServicio().subscribe({
+    this.servicioService.filterServicio(this.servicioConsultar).subscribe({
       next: (data)=>{
         console.log('servicios: ', data);
         this.dataSource = data;

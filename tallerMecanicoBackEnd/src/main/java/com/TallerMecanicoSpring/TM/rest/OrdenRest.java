@@ -106,9 +106,9 @@ public class OrdenRest {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarOrden(@RequestBody Orden orden, @PathVariable Long id){
-        try{
+    @PutMapping("/update")
+    public ResponseEntity<?> actualizarOrden(@RequestBody Orden orden){
+        /* try{
             //Buscamos la orden existe con el id
             Orden ordenExistente = ordenService.findByIdOrden(id).get();
             //Actualizamos la orden
@@ -119,7 +119,15 @@ public class OrdenRest {
             return new ResponseEntity<Orden>(HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
-        }
+        } */
+
+        return ResponseEntity.ok(this.ordenService.updateOrden(orden));
+
+    }
+
+    @GetMapping("/getByCLiente/{id}")
+    private ResponseEntity<List<Orden>> getByIdCliente(@PathVariable Long id){
+        return ResponseEntity.ok(this.ordenService.getByIdCliente(id));
     }
 
 }

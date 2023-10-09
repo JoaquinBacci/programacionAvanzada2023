@@ -30,10 +30,20 @@ public class Vehiculo {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Orden> ordenes;
 
+    private Integer anio;
+
+    public Integer getAnio() {
+        return anio;
+    }
+
+    public void setAnio(Integer anio) {
+        this.anio = anio;
+    }
+
     public Vehiculo( ) {
     }
 
-    public Vehiculo(Long id, Integer kilometraje, String patente, Marca marca, Modelo modelo, Cliente cliente, Boolean activo) {
+    public Vehiculo(Long id, Integer kilometraje, String patente, Marca marca, Modelo modelo, Cliente cliente, Boolean activo, Integer anio) {
         this.id = id;
         this.kilometraje = kilometraje;
         this.patente = patente;
@@ -41,6 +51,7 @@ public class Vehiculo {
         this.modelo = modelo;
         this.cliente = cliente;
         this.activo = activo;
+        this.anio = anio;
     }
 
     public Long getId() {
@@ -67,8 +78,6 @@ public class Vehiculo {
         this.activo = activo;
     }
     
-    
-
     public Integer getKilometraje() {
         return kilometraje;
     }

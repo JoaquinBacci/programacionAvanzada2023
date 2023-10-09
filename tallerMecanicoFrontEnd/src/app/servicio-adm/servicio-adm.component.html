@@ -38,11 +38,21 @@
                         </div> -->
                         <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                             <ng-container matColumnDef="descripcion">
-                                <mat-header-cell *matHeaderCellDef> Descripción </mat-header-cell>
+                                <mat-header-cell *matHeaderCellDef> 
+                                  <mat-form-field appearance="outline"floatLabel="always" >
+                                    <mat-label>Descripcion</mat-label>
+                                    <input matInput  [(ngModel)]="servicioConsultar.descripcion" [ngModelOptions]="{standalone: true}" (keyup)="onConsultarServicios()"> 
+                                  </mat-form-field>
+                                </mat-header-cell>
                                 <mat-cell *matCellDef="let elemento"> {{ elemento.descripcion }} </mat-cell>
                             </ng-container>
                             <ng-container matColumnDef="nombre">
-                                <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                              <mat-header-cell *matHeaderCellDef> 
+                                <mat-form-field appearance="outline"floatLabel="always" >
+                                  <mat-label>Nombre</mat-label>
+                                  <input matInput  [(ngModel)]="servicioConsultar.nombre" [ngModelOptions]="{standalone: true}" (keyup)="onConsultarServicios()"> 
+                                </mat-form-field>
+                              </mat-header-cell>
                                 <mat-cell *matCellDef="let elemento"> {{ elemento.nombre }} </mat-cell>
                             </ng-container>
                             <ng-container matColumnDef="precio">
