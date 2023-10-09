@@ -12,6 +12,7 @@ import { VehiculoService } from '../services/vehiculo.service';
 import { Servicio } from '../model/servicio';
 import { ServicioService } from '../services/servicio.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-orden-adm',
@@ -21,7 +22,7 @@ import { MatTableDataSource } from '@angular/material/table';
 export class OrdenAdmComponent implements OnInit{
 
   // Las acciones de esta tabla van a ser: "consultar", "editar"
-  columnasOrdenes = ['cliente', 'vehiculo','acciones'];
+  columnasOrdenes = ['cliente', 'vehiculo','fechaIngreso','tecnico','acciones'];
   dataSourceOrdenes: any[];
 
   // Las acciones de esta tabla van a ser: "remover servicio"
@@ -69,6 +70,7 @@ export class OrdenAdmComponent implements OnInit{
     private tecnicoService: TecnicoService,
     private vehiculoService: VehiculoService,
     private sercicioService: ServicioService,
+    private router: Router,
     private fb: FormBuilder
   ){
     this.formularioOrden = this.fb.group({
@@ -108,6 +110,7 @@ export class OrdenAdmComponent implements OnInit{
       next:(data)=>{
         if(data){
           this.dataSourceOrdenes = data;
+          console.log('Ordenes: ', data);
         } else {
           if(this.debug){console.log('getAllOrdenes() - dataNULL: ', data);}
         }
@@ -264,6 +267,7 @@ export class OrdenAdmComponent implements OnInit{
         // Se actualiza la tabla de ordenes
         this.getAllOrdenes()
         this.formularioOrden.reset();
+        this.router.navigate(['/home']);
       },error: (error) => {
         if(this.debug){console.log('guardarOrdentrabajo() - ERROR: ', error);}
       }

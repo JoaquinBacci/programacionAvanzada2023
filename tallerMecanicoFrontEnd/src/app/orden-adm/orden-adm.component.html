@@ -14,7 +14,7 @@
                     <!-- Columna Nombre -->
                     <ng-container matColumnDef="cliente">
                       <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
-                      <mat-cell *matCellDef="let elemento"> {{ elemento.cliente.apellido + ', ' + elemento.cliente.nombre }} </mat-cell>
+                      <mat-cell *matCellDef="let elemento"> {{ elemento.vehiculo.cliente.apellido + ', ' + elemento.vehiculo.cliente.nombre }} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="vehiculo">
@@ -22,10 +22,15 @@
                         <mat-cell *matCellDef="let elemento"> {{ elemento.vehiculo.patente + ' ' + elemento.vehiculo.marca.nombre + ', ' + elemento.vehiculo.modelo.nombre }} </mat-cell>
                       </ng-container>
 
-                      <!-- <ng-container matColumnDef="fechaIngreso">
-                        <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
+                      <ng-container matColumnDef="fechaIngreso">
+                        <mat-header-cell *matHeaderCellDef> Fecha Ingreso </mat-header-cell>
                         <mat-cell *matCellDef="let elemento"> {{ elemento.fechaIngreso }} </mat-cell>
-                      </ng-container> -->
+                      </ng-container>
+
+                      <ng-container matColumnDef="tecnico">
+                        <mat-header-cell *matHeaderCellDef> Tecnico </mat-header-cell>
+                        <mat-cell *matCellDef="let elemento"> {{ elemento.tecnico.apellido + ', ' + elemento.tecnico.nombre }} </mat-cell>
+                      </ng-container>
                   
                     <!-- Columna Acciones -->
                     <ng-container matColumnDef="acciones">
