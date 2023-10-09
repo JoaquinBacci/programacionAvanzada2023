@@ -24,7 +24,6 @@ public class OrdenService {
 
 
     public Orden saveOrden(Orden orden){
-        System.out.println("PrecioTotal: " + orden.getPrecioTotal());
         return ordenRepository.save(orden);
     }
 

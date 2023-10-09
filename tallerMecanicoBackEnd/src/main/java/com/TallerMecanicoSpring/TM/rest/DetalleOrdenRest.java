@@ -36,6 +36,7 @@ public class DetalleOrdenRest {
             DetalleOrden ordenGuardada = this.detalleOrdenService.saveDetalleOrden(detalleOrden);
             return ResponseEntity.created(new URI("/detalleOrden/"+ordenGuardada.getId())).body(ordenGuardada);
         }catch(Exception e){
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }

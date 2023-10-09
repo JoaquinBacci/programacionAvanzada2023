@@ -1,14 +1,11 @@
 
 package com.TallerMecanicoSpring.TM.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
-import org.antlr.v4.runtime.misc.NotNull;
+
+import java.util.List;
 
 @Entity
 @Table(name="marca")
@@ -20,6 +17,7 @@ public class Marca {
     private String nombre;
     @AssertTrue(message = "La marca debe ser un booleano")
     private boolean activo;
+
 
     public Marca() {
     }
