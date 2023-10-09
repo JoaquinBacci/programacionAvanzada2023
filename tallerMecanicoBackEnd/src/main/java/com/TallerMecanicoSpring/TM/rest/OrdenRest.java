@@ -18,7 +18,9 @@ import java.util.Optional;
 public class OrdenRest {
     @Autowired
     OrdenService ordenService;
-
+    
+    @Autowired
+    TecnicoRepository tecnicoRepository;
     @Autowired
     ServicioRepository servicioRepository;
 
@@ -48,19 +50,27 @@ public class OrdenRest {
     private ResponseEntity<Orden> saveOrden(@RequestBody Orden orden){
         try{
             // Crear una nueva entidad Técnico para solucionar el problema de entidades no relacionadas
-            if(orden.getTecnico()!=null){
-            Tecnico tecnico = new Tecnico();
-            tecnico.setNombre(orden.getTecnico().getNombre());
-            tecnico.setApellido(orden.getTecnico().getApellido());
-            tecnico.setDireccion(orden.getTecnico().getDireccion());
-            tecnico.setDni(orden.getTecnico().getDni());
-            tecnico.setEmail(orden.getTecnico().getEmail());
-            tecnico.setLegajo(orden.getTecnico().getLegajo());
-            tecnico.setNum_tel(orden.getTecnico().getNum_tel());
-            if(orden.getTecnico().isActivo()){
-            tecnico.setActivo(true);
+            if(orden.getTecnico()!=null && orden.getTecnico().getId() != null){
+            Optional<Tecnico> tecnicoExistente = tecnicoRepository.findById(orden.getTecnico().getId());
+            if(tecnicoExistente.isPresent()){
+                orden.setTecnico(tecnicoExistente.get());
+            }else {
+//            Tecnico tecnico = new Tecnico();
+//            tecnico.setNombre(orden.getTecnico().getNombre());
+//            tecnico.setApellido(orden.getTecnico().getApellido());
+//            tecnico.setDireccion(orden.getTecnico().getDireccion());
+//            tecnico.setDni(orden.getTecnico().getDni());
+//            tecnico.setEmail(orden.getTecnico().getEmail());
+//            tecnico.setLegajo(orden.getTecnico().getLegajo());
+//            tecnico.setNum_tel(orden.getTecnico().getNum_tel());
+//            if(orden.getTecnico().isActivo()){
+//            tecnico.setActivo(true);
+//            }
+                // Manejar el caso en que el vehículo no existe en la base de datos
+                System.out.println("El tecnico no existe en la base de datos");
+                // Puedes lanzar una excepción o manejarlo de otra manera según tus requerimientos.
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Por ejemplo, devolver una respuesta de error.
             }
-            orden.setTecnico(tecnico);
             }
 
             if (orden.getVehiculo() != null && orden.getVehiculo().getId() != null) {
