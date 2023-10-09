@@ -18,19 +18,20 @@ export class ServicioService {
   ) { }
   
   public getAllServicio(): Observable<any>{
-    return this.http.get(`${this.API_SERVER}/modelo/`)
+    return this.http.get(`${this.API_SERVER}/servicio`,{ headers: this.headers })
   }
 
   public newServicio(servicio: Servicio): Observable<any>{
     console.log(`${this.API_SERVER}`+"/servicio/save", servicio, { headers: this.headers })
-    return this.http.post(`${this.API_SERVER}`+"/servicio/save/", servicio, { headers: this.headers })
+    return this.http.post(`${this.API_SERVER}`+"/servicio/save", servicio, { headers: this.headers })
   }
 
   public updateServicio( servicio: Servicio): Observable<any> {
-    return this.http.put(`${this.API_SERVER}/servicio/update/`, servicio,  { headers: this.headers });
+    return this.http.put(`${this.API_SERVER}/servicio/${servicio.id}`,servicio,{ headers: this.headers });
   }
 
   public consultarServicio(servicio: Servicio): Observable<any>{
+    // TODO: no esta implementado el rest
     return this.http.post(`${this.API_SERVER}/servicio/buscar/`, servicio, { headers: this.headers })
   }
 
@@ -38,8 +39,7 @@ export class ServicioService {
     return this.http.delete(`${this.API_SERVER}/servicio/delete/${id}`)
   }
 
-
-  public getByIdMarca(id: number): Observable<any>{
-    return this.http.get(`${this.API_SERVER}/servicio/modeloXmarca/${id}`)
+  public getByIdServicio(id: number): Observable<any>{
+    return this.http.get(`${this.API_SERVER}/servicio/${id}`)
   }
 }

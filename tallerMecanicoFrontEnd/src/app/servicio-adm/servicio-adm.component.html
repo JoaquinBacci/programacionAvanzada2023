@@ -26,8 +26,8 @@
                             <button mat-raised-button (click)="onGuardar()" color="primary" [disabled]="!form.valid">Guardar</button>
                             <button mat-raised-button (click)="onCancelar()" color="warn" style="margin-left: 10px;">Cancelar</button>
                     </div>
-                    <div class="tabla" style="width: 100%;">
-                        <mat-card-title>Consultar servicios:</mat-card-title>
+                    <div class="tabla" style="width: 100%; margin-top: 10px;">
+                        <!-- <mat-card-title>Consultar servicios:</mat-card-title>
                         <div style="display: flex;">
                             <mat-form-field appearance="outline">
                                 <input matInput [(ngModel)]="servicioConsultar.nombre" [ngModelOptions]="{standalone: true}" placeholder="Nombre" (keyup)="onConsultar()"> 
@@ -35,7 +35,7 @@
                             <button mat-icon-button matTooltip="Buscar" (click)="onConsultar()">
                               <mat-icon>search</mat-icon>
                             </button>
-                        </div>
+                        </div> -->
                         <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                             <ng-container matColumnDef="descripcion">
                                 <mat-header-cell *matHeaderCellDef> Descripción </mat-header-cell>
@@ -43,7 +43,7 @@
                             </ng-container>
                             <ng-container matColumnDef="nombre">
                                 <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-                                <mat-cell *matCellDef="let elemento"> {{ elemento.descripcion }} </mat-cell>
+                                <mat-cell *matCellDef="let elemento"> {{ elemento.nombre }} </mat-cell>
                             </ng-container>
                             <ng-container matColumnDef="precio">
                                 <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>

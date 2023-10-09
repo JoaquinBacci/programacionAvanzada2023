@@ -18,7 +18,6 @@ export class ServicioAdmComponent {
   modoEdicion: boolean = false;
   servicioEdit: Servicio;
   servicioConsultar: Servicio;
-  servicios: Servicio[] = [];
 
   constructor(
     private servicioService: ServicioService,
@@ -48,12 +47,7 @@ export class ServicioAdmComponent {
       this.servicioConsultar.nombre = '';
       this.servicioConsultar.precio = 0.00;
 
-      this.onGetAllServicios();
-      this.onConsultar();
-  }
-
-  getObject(){
-
+      this.onConsultarServicios();
   }
   
   onGuardar(){
@@ -73,14 +67,17 @@ export class ServicioAdmComponent {
         servicioRq.activo = true;
         this.servicioService.newServicio(servicioRq).subscribe({
           next:(data)=>{
-            if(data.id!=null){
-              console.log('dataOK: ', data)
-            } else{
+            if(data){
+              if(data.id!=null){
+                console.log('dataOK: ', data)
+              } else{
+                console.log('dataNull: ', data)
+              }
+            } else {
               console.log('dataNull: ', data)
             }
-            
           }, complete: ()=>{
-              this.onConsultar();
+              this.onConsultarServicios();
               this.form.reset();
           }, error: (error)=>{
             console.log('ERROR ', error)
@@ -96,13 +93,17 @@ export class ServicioAdmComponent {
         //Editar marca
         this.servicioService.updateServicio(this.servicioEdit).subscribe({
           next:(data)=>{
-            if(data.id != null){
-              console.log('dataOK: ', data)
-            } else{
+            if(data){
+              if(data.id!=null){
+                console.log('dataOK: ', data)
+              } else{
+                console.log('dataNull: ', data)
+              }
+            } else {
               console.log('dataNull: ', data)
             }
           }, complete: ()=>{
-            this.onConsultar();
+            this.onConsultarServicios();
             this.form.reset();
             this.modoEdicion = false;
           }, error:(error)=>{
@@ -119,15 +120,15 @@ export class ServicioAdmComponent {
       next: (data)=>{
         console.log('data Delete: ', data);
       }, complete: () =>{
-          this.onConsultar();
+          this.onConsultarServicios();
       },error: (error)=>{
           console.log('ERROR ', error)
       }
     });
   }
 
-  onConsultar(){
-    this.servicioService.consultarServicio(this.servicioConsultar).subscribe({
+  onConsultarServicios(){
+    this.servicioService.getAllServicio().subscribe({
       next: (data)=>{
         console.log('servicios: ', data);
         this.dataSource = data;
@@ -136,21 +137,21 @@ export class ServicioAdmComponent {
       },error: (error)=>{
           console.log('ERROR ', error)
       }
-    }); 
-  }
-
-  onGetAllServicios(){
-    this.servicioService.getAllServicio().subscribe({
-      next: (data)=>{
-        console.log('servicios: ', data);
-        this.servicios = data;
-      }, complete: () =>{
-          
-      },error: (error)=>{
-          console.log('ERROR ', error)
-      }
     })  
   }
+
+  // onConsultar(){
+  //   this.servicioService.getByIdServicio(1).subscribe({
+  //     next: (data)=>{
+  //       console.log('servicios: ', data);
+  //       this.dataSource = data;
+  //     }, complete: () =>{
+          
+  //     },error: (error)=>{
+  //         console.log('ERROR ', error)
+  //     }
+  //   }) 
+  // }
 
   controlNombreNuevo():boolean {
     console.log('Nombre: ', this.form.get('nombre').value)
@@ -160,6 +161,7 @@ export class ServicioAdmComponent {
 
   onEditar(servicio: Servicio){
     console.log('servicio: ', servicio);
+    this.servicioEdit = new Servicio();
     this.modoEdicion = true;
     this.servicioEdit.id = servicio.id;
     this.servicioEdit.activo = true;
@@ -174,6 +176,5 @@ export class ServicioAdmComponent {
     this.modoEdicion = false;
     this.servicioConsultar = new Servicio();
   }
-
 
 }
