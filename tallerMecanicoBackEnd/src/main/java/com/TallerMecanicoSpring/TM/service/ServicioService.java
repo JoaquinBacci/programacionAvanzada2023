@@ -33,4 +33,8 @@ public class ServicioService{
         return servicioRepository.save(servicio);
     }
 
+    public void deleteById(Long id){
+        this.servicioRepository.deleteById(id);
+    }
+
 }

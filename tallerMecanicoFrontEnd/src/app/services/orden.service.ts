@@ -17,15 +17,15 @@ export class OrdenService {
   ) { }
 
   public getAllOrdenes(): Observable<any>{
-    return this.http.get(`${this.API_SERVER}/orden/`)
+    return this.http.get(`${this.API_SERVER}/orden`)
   }
 
   public newOrden(orden: Orden): Observable<any>{
-    return this.http.post(`${this.API_SERVER}/orden/`, orden, { headers: this.headers })
+    return this.http.post(`${this.API_SERVER}/orden/save`, orden, { headers: this.headers })
   }
 
   updateOrden( orden: Orden): Observable<any> {
-    return this.http.put(`${this.API_SERVER}/orden/`, orden,  { headers: this.headers });
+    return this.http.put(`${this.API_SERVER}/orden/${orden.id}`, orden,  { headers: this.headers });
   }
 
   consultarOrden(nombre: string): Observable<any>{

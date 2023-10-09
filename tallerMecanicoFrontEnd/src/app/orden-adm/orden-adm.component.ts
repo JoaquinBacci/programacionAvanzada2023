@@ -10,6 +10,7 @@ import { ClienteService } from '../services/cliente.service';
 import { TecnicoService } from '../services/tecnico.service';
 import { VehiculoService } from '../services/vehiculo.service';
 import { Servicio } from '../model/servicio';
+import { ServicioService } from '../services/servicio.service';
 
 @Component({
   selector: 'app-orden-adm',
@@ -19,11 +20,11 @@ import { Servicio } from '../model/servicio';
 export class OrdenAdmComponent implements OnInit{
 
   // Las acciones de esta tabla van a ser: "consultar", "editar"
-  columnasOrdenes = ['cliente', 'vehiculo','fechaIngreso','acciones'];
+  columnasOrdenes = ['cliente', 'vehiculo','acciones'];
   dataSourceOrdenes: any[];
 
   // Las acciones de esta tabla van a ser: "remover servicio"
-  columnasServicios = ['id','nombre','precio','acciones'];
+  columnasServicios = ['descripcion','nombre','precio'];;
   dataSourceServicios: any[];
   total: number = 0; // Variable para mostrar el precio total de la orden
   fechaActual: Date;
@@ -31,6 +32,7 @@ export class OrdenAdmComponent implements OnInit{
   dataClientes: Cliente[];
   dataTecnicos: Tecnico[];
   dataVehiculos: Vehiculo[];
+  dataServicios: Servicio[];
 
   modoEdicion = false;
 
@@ -50,11 +52,17 @@ export class OrdenAdmComponent implements OnInit{
   filtroTecnico: Tecnico = {activo: null, apellido: '', direccion: '', dni: null, email: '', id: null, legajo: null, nombre: '', num_tel: ''};
   filtroOrden: Orden = {activo: true, detallesOrden: null, tecnico: this.filtroTecnico, vehiculo: null, id: null};
 
+  vista: string="";
+  vehiculoSeleccionado: Vehiculo;
+  clienteSeleccionado : Cliente;
+  tecnicoSeleccionado : Tecnico;
+
   constructor(
     private ordenServicio: OrdenService,
     private clienteService: ClienteService,
     private tecnicoService: TecnicoService,
     private vehiculoService: VehiculoService,
+    private sercicioService: ServicioService,
     private fb: FormBuilder
   ){
     this.formularioOrden = this.fb.group({
@@ -69,8 +77,22 @@ export class OrdenAdmComponent implements OnInit{
       this.getAllOrdenes();
       this.getAllClientes();
       this.getAllTecnicos();
+      this.getAllServicios();
       this.fechaActual = new Date();
       if(this.debug){console.log('ngOnInit() - fechaActual: ', this.fechaActual);}
+  }
+
+  getAllServicios(){
+    this.sercicioService.getAllServicio().subscribe({
+      next: (data)=>{
+        this.dataServicios = data;
+      }, complete:()=>{
+
+      }, error:(error)=>{
+        console.log('Error ger servicios: ', error);
+      }
+
+    });
   }
 
   getAllOrdenes(){
@@ -146,6 +168,10 @@ export class OrdenAdmComponent implements OnInit{
         }
       });
     }
+  }
+
+  setVista(vista: string){
+    this.vista=vista;
   }
 
   addServicio( servicio: Servicio ){
@@ -228,5 +254,25 @@ export class OrdenAdmComponent implements OnInit{
     this.estaEnCrearOrden = true; // <-
     this.estaEnEditarOrden = false;
   }
+
+ 
+  setVehiculo(v:Vehiculo){
+    this.vehiculoSeleccionado = new Vehiculo();
+    this.vehiculoSeleccionado = v;
+  }
+
+  deleteVehiculo(){
+    this.vehiculoSeleccionado =  new Vehiculo();
+  }
+
+  setCliente(c:Cliente){
+    this.clienteSeleccionado = new Cliente();
+    this.clienteSeleccionado = c;
+  }
+
+  setTecnico(t:Tecnico){
+    this.tecnicoSeleccionado = t;
+  }
+  
 
 }
