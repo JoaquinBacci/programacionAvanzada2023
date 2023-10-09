@@ -27,12 +27,13 @@ public class Tecnico {
     @NotBlank(message = "por favor ingresa un apellido")
     private String apellido;
     private String direccion;
-    @NotBlank(message = "por favor ingrese un email")
+    //@NotBlank(message = "por favor ingrese un email")
     private String email;
     private boolean activo;
 
-    @OneToMany(mappedBy = "tecnico",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Orden> ordenes;
+
 
     public Tecnico() {
     }
@@ -123,11 +124,4 @@ public class Tecnico {
         this.activo = activo;
     }
 
-    public List<Orden> getOrdenes() {
-        return ordenes;
-    }
-
-    public void setOrdenes(List<Orden> ordenes) {
-        this.ordenes = ordenes;
-    }
 }

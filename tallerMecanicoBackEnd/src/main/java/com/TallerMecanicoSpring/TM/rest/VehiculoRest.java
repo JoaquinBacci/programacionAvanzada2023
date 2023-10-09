@@ -4,10 +4,14 @@
  */
 package com.TallerMecanicoSpring.TM.rest;
 
+import com.TallerMecanicoSpring.TM.model.Servicio;
 import com.TallerMecanicoSpring.TM.model.Vehiculo;
 import com.TallerMecanicoSpring.TM.service.VehiculoService;
+
+import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +49,14 @@ public class VehiculoRest {
     
     @PostMapping("save/")
     private ResponseEntity<Vehiculo> crearVehiculo(@RequestBody Vehiculo v){
-        return ResponseEntity.ok(this.vehiculoService.save(v));
+//        return ResponseEntity.ok(this.vehiculoService.save(v));
+        try{
+            Vehiculo vehiculoGuardado = this.vehiculoService.save(v);
+            return ResponseEntity.created(new URI("/vehiculo/"+vehiculoGuardado.getId())).body(vehiculoGuardado);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
     
     @PutMapping("update/")

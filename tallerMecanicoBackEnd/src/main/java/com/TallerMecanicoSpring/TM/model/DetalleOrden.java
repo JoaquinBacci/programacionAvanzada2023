@@ -1,4 +1,4 @@
-package com.TallerMecanicoSpring.TM.model;
+ package com.TallerMecanicoSpring.TM.model;
 
 /* import com.fasterxml.jackson.annotation.JsonProperty; */
 import jakarta.persistence.*;
@@ -11,7 +11,7 @@ public class DetalleOrden {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_servicio")
     private Servicio servicio;
 
@@ -22,6 +22,10 @@ public class DetalleOrden {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Orden orden; */
 
+    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "orden_id")
+    private Orden orden;
+
     private int cantidad;
 
     public DetalleOrden() {
@@ -31,7 +35,7 @@ public class DetalleOrden {
         this.id = id;
         this.servicio = servicio;
         this.cantidad = cantidad;
-        this.setPrecioTotal();
+        this.precioTotal = getPrecioTotal();
     }
 
     public Long getId() {
@@ -63,11 +67,12 @@ public class DetalleOrden {
         return precioTotal;
     }
 
-    public void setPrecioTotal() {
-        this.precioTotal = (this.servicio.getPrecio() * this.getCantidad());
+    public void setPrecioTotal(double precioTotal) {
+        this.precioTotal = precioTotal;
     }
 
-    /* public Orden getOrden() {
+
+  /* public Orden getOrden() {
         return orden;
     }
 

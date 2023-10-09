@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "servicio")
 public class Servicio {
@@ -30,7 +32,7 @@ public class Servicio {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public DetalleOrden detalleOrden; */
 
-    
+
     public Servicio() {
     }
 

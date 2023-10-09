@@ -18,19 +18,16 @@ public class Vehiculo {
     private String patente;
     @ManyToOne
     @JoinColumn(name="id_marca")
-    @NotNull
     private Marca marca;
     @ManyToOne
     @JoinColumn(name="id_modelo")
-    @NotNull
     private Modelo modelo;
     @ManyToOne
     @JoinColumn(name="id_cliente")
-    @NotNull
     private Cliente cliente;
     private Boolean activo;
 
-    @OneToMany(mappedBy = "vehiculo",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Orden> ordenes;
 
     public Vehiculo( ) {
@@ -108,11 +105,4 @@ public class Vehiculo {
         return activo;
     }
 
-    public List<Orden> getOrdenes() {
-        return ordenes;
-    }
-
-    public void setOrdenes(List<Orden> ordenes) {
-        this.ordenes = ordenes;
-    }
 }

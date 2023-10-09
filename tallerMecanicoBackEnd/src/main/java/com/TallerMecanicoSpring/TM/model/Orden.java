@@ -1,5 +1,6 @@
 package com.TallerMecanicoSpring.TM.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
@@ -15,18 +16,19 @@ public class Orden {
     @AssertTrue(message = "La marca debe ser un booleano")
     private boolean activo;
 
-    @OneToMany(/* mappedBy = "orden" ,*/cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<DetalleOrden> detallesOrden;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "tecnico_id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Tecnico tecnico;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "vehiculo_id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Vehiculo vehiculo;
+
+
+//    private double precioTotal;
 
     public Orden() {
     }
@@ -37,7 +39,28 @@ public class Orden {
         this.detallesOrden = detallesOrden;
         this.tecnico = tecnico;
         this.vehiculo = vehiculo;
+        /* this.setPrecioTotal(); */
     }
+
+//    public double getPrecioTotal() {
+//        double total = 0.0;
+//        if (detallesOrden != null) {
+//            for (DetalleOrden detalle : detallesOrden) {
+//                total += detalle.getPrecioTotal();
+//            }
+//        }
+//        return total;
+//    }
+//
+//    public void setPrecioTotal() {
+//        double total = 0.0;
+//        if (detallesOrden != null) {
+//            for (DetalleOrden detalle : detallesOrden) {
+//                total += detalle.getPrecioTotal();
+//            }
+//        }
+//        this.precioTotal = total;
+//    }
 
     public Long getId() {
         return id;
