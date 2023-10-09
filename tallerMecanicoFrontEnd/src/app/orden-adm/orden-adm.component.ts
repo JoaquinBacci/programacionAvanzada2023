@@ -25,7 +25,7 @@ export class OrdenAdmComponent implements OnInit{
   dataSourceOrdenes: any[];
 
   // Las acciones de esta tabla van a ser: "remover servicio"
-  columnasServicios = ['descripcion','nombre','precio'];
+  columnasServicios = ['descripcion','nombre','precio','acciones'];
   dataSourceServicios: MatTableDataSource<Servicio>;
   total: number = 0; // Variable para mostrar el precio total de la orden
   fechaActual: Date;
@@ -199,14 +199,15 @@ export class OrdenAdmComponent implements OnInit{
     this.calcularTotal();
   }
 
-  removeServicio(servicioAEliminar: Servicio){
+  removeServicio(idServicio: number){
     // Quitar servicio de dataSourceServicios
-    if(this.debug){console.log("removeServicio(): ",servicioAEliminar)}
+    if(this.debug){console.log("removeServicio(): ",idServicio)}
     
 
-    const index = this.arrayServicios.indexOf(servicioAEliminar);
-    if (index !== -1) {
-      this.arrayServicios.splice(index, 1);
+    const indice = this.arrayServicios.findIndex(servicio => servicio.id === idServicio);
+
+    if (indice !== -1) {
+      this.arrayServicios.splice(indice, 1);
     }
     
     this.dataSourceServicios = new MatTableDataSource(this.arrayServicios);    
@@ -215,9 +216,10 @@ export class OrdenAdmComponent implements OnInit{
   }
 
   calcularTotal(){
-    this.arrayServicios.forEach(servicio => {
-      this.total += servicio.precio;
-    });
+    this.total = 0;
+      this.arrayServicios.forEach(servicio => {
+        this.total = this.total + servicio.precio;
+      });
   }
 
   getObjectOrden(){

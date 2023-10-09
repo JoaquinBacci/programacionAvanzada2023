@@ -127,17 +127,27 @@
                                         <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
                                         <mat-cell *matCellDef="let elemento"> {{ elemento.precio }} </mat-cell>
                                     </ng-container>
+
+                                    <ng-container matColumnDef="acciones">
+                                        <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+                                        <mat-cell *matCellDef="let elemento">
+                                          <button mat-icon-button matTooltip="Eliminar" (click)="removeServicio(elemento.id)">
+                                            <mat-icon>delete</mat-icon>
+                                          </button>
+                                        </mat-cell>
+                                      </ng-container>
                                   
                                   
                                     <!-- Define las columnas de la tabla -->
                                     <mat-header-row *matHeaderRowDef="columnasServicios"></mat-header-row>
                                     <mat-row *matRowDef="let row; columns: columnasServicios;"></mat-row>
-                                  </mat-table>
+                                  </mat-table>  
                             </div>
+                            <h2 style="margin-top: 10px; text-align: center;">Total: $ {{total}}</h2>
                         </div>
                     </div>
                 </form>
-                <button mat-raised-button (click)="guardarOrdentrabajo()" color="primary" >Guardar</button>
+                <button mat-raised-button (click)="guardarOrdentrabajo()" color="primary">Guardar</button>
             </mat-card-content>
        </mat-card>
     </div>
