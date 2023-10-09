@@ -3,6 +3,7 @@ package com.TallerMecanicoSpring.TM.service;
 import com.TallerMecanicoSpring.TM.model.Orden;
 import com.TallerMecanicoSpring.TM.model.Servicio;
 import com.TallerMecanicoSpring.TM.repository.OrdenRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class OrdenService {
         return ordenRepository.findById(id);
     }
 
-
+    @Transactional
     public Orden saveOrden(Orden orden){
         return ordenRepository.save(orden);
     }
