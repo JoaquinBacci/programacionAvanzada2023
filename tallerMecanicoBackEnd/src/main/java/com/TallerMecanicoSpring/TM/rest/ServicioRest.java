@@ -63,4 +63,11 @@ public class ServicioRest {
             return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @DeleteMapping("delete/{id}")
+    private ResponseEntity<Boolean> deleteById(@PathVariable ("id") Long id){
+        this.servicioService.deleteById(id);
+        return ResponseEntity.ok(servicioService.findById(id) == null);
+    }
+
 }
