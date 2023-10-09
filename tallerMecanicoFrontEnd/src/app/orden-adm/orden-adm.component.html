@@ -53,17 +53,17 @@
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <div style="width: 40%;">
                             <mat-form-field style="width: 100%;">
-                                <mat-select placeholder="Cliente">
-                                <mat-option *ngFor="let cliente of dataClientes" [value]="cliente.id" (click)="setCliente(cliente)">
+                                <mat-select placeholder="Cliente" formControlName="cliente" (selectionChange)="getAllVehiculos()">
+                                <mat-option *ngFor="let cliente of dataClientes" [value]="cliente" (click)="setCliente(cliente)">
                                     {{ cliente.apellido + ', ' + cliente.nombre }}
                                 </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         
                             <div class="infoVehiculo" *ngIf="clienteSeleccionado!=null" style="width: 100%;">
-                                <mat-form-field>
-                                    <mat-select placeholder="Vehiculo">
-                                    <mat-option *ngFor="let vehiculo of dataVehiculos" [value]="vehiculo.id" (click)="setVehiculo(vehiculo)">
+                                <mat-form-field style="width: 100%;">
+                                    <mat-select placeholder="Vehiculo"  formControlName="vehiculo">
+                                    <mat-option *ngFor="let vehiculo of dataVehiculos" [value]="vehiculo" (click)="setVehiculo(vehiculo)">
                                         {{ vehiculo.patente + ', ' + vehiculo.marca.nombre + ' ' + vehiculo.modelo.nombre }}
                                     </mat-option>
                                     </mat-select>
@@ -96,21 +96,22 @@
                         <div class="servicios" style="width: 40%;">
                             <div >
                                 <mat-form-field style="width: 100%;">
-                                    <mat-select placeholder="Tecnico">
-                                    <mat-option *ngFor="let tecnico of dataTecnicos" [value]="tecnico.id" (click)="setTecnico(tecnico)">
+                                    <mat-select placeholder="Tecnico" formControlName="tecnico">
+                                    <mat-option *ngFor="let tecnico of dataTecnicos" [value]="tecnico" (click)="setTecnico(tecnico)">
                                         {{ tecnico.apellido + ', ' + tecnico.nombre }}
                                     </mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
-                            <div >
+                            <div style="display: flex; align-content: center;">
                                 <mat-form-field style="width: 100%;">
-                                    <mat-select placeholder="Servicio">
-                                    <mat-option *ngFor="let servicio of dataServicios" [value]="servicio.id">
+                                    <mat-select placeholder="Servicio" formControlName="servicio">
+                                    <mat-option *ngFor="let servicio of dataServicios" [value]="servicio">
                                         {{ servicio.nombre }}
                                     </mat-option>
                                     </mat-select>
-                                </mat-form-field>
+                                </mat-form-field>               
+                                <mat-icon style="margin: 2px" matTooltip="Añadir" (click)="addServicio()">add</mat-icon>
                             </div>
                             <div style="width: 100%;">
                                 <mat-table [dataSource]="dataSourceServicios" class="mat-elevation-z8">
@@ -136,10 +137,9 @@
                         </div>
                     </div>
                 </form>
+                <button mat-raised-button (click)="guardarOrdentrabajo()" color="primary" >Guardar</button>
             </mat-card-content>
-
        </mat-card>
-
     </div>
 </div>
 

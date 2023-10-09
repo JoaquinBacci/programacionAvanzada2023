@@ -4,6 +4,7 @@ import { Modelo } from "./modelo";
 
 export class Vehiculo {
     id: number;
+    anio: number;
     kilometraje: number;
     patente: string;
     marca: Marca;

@@ -11,6 +11,7 @@ import { TecnicoService } from '../services/tecnico.service';
 import { VehiculoService } from '../services/vehiculo.service';
 import { Servicio } from '../model/servicio';
 import { ServicioService } from '../services/servicio.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-orden-adm',
@@ -24,15 +25,20 @@ export class OrdenAdmComponent implements OnInit{
   dataSourceOrdenes: any[];
 
   // Las acciones de esta tabla van a ser: "remover servicio"
-  columnasServicios = ['descripcion','nombre','precio'];;
-  dataSourceServicios: any[];
+  columnasServicios = ['descripcion','nombre','precio'];
+  dataSourceServicios: MatTableDataSource<Servicio>;
   total: number = 0; // Variable para mostrar el precio total de la orden
   fechaActual: Date;
+
+  arrayServicios: Servicio[] = [];
 
   dataClientes: Cliente[];
   dataTecnicos: Tecnico[];
   dataVehiculos: Vehiculo[];
   dataServicios: Servicio[];
+
+  dataDetalleOrdenes: DetalleOrden[] = [];
+
 
   modoEdicion = false;
 
@@ -50,7 +56,7 @@ export class OrdenAdmComponent implements OnInit{
 
   flitroCliente: Cliente = {activo:true, apellido: '', direccion: '', dni: null, email: '', id: null, nombre: '', num_tel: '', vehiculos: null};
   filtroTecnico: Tecnico = {activo: null, apellido: '', direccion: '', dni: null, email: '', id: null, legajo: null, nombre: '', num_tel: ''};
-  filtroOrden: Orden = {activo: true, detallesOrden: null, tecnico: this.filtroTecnico, vehiculo: null, id: null};
+  filtroOrden: Orden = {activo: true, detallesOrden: null, tecnico: this.filtroTecnico, vehiculo: null, id: null, fechaIngreso: '',descripcion:''};
 
   vista: string="";
   vehiculoSeleccionado: Vehiculo;
@@ -70,6 +76,7 @@ export class OrdenAdmComponent implements OnInit{
       tecnico: [ new Tecnico(), [Validators.required]],
       vehiculo: [ new Vehiculo(), [Validators.required]],
       servicio: [this.fb.array([]), [Validators.required]],
+      descripcion: ['',[Validators.required,Validators.maxLength(50)]]
     });
   }
 
@@ -149,14 +156,17 @@ export class OrdenAdmComponent implements OnInit{
     });
   }
 
-  getAllVehiculos(cliente: Cliente){
+  getAllVehiculos(){
     // Si se selecciono cliente:
     // Se recuperan los vehiculos para poblar el selector de vehiculos
+
+    let cliente: Cliente = this.formularioOrden.get('cliente').value
     if(cliente){
-      this.vehiculoService.getByCliente(cliente).subscribe({
+      this.vehiculoService.getByCliente(cliente.id).subscribe({
         next:(data)=>{
           if(data){
             this.dataVehiculos = data;
+            console.log(this.dataVehiculos)
           } else {
             if(this.debug){console.log('getAllVehiculos() - dataNULL: ', data);}
           }
@@ -174,11 +184,17 @@ export class OrdenAdmComponent implements OnInit{
     this.vista=vista;
   }
 
-  addServicio( servicio: Servicio ){
+  addServicio(){
+    let servicio: Servicio;
+
+    servicio = this.formularioOrden.get('servicio').value;
     // Añadir servicio a dataSourceServicios
     if(this.debug){console.log("addServicio(): ",servicio)}
 
-    this.dataSourceServicios.push(servicio);
+    this.arrayServicios.push(servicio);
+
+    this.dataSourceServicios = new MatTableDataSource(this.arrayServicios);
+    console.log("ARRAY SERVICIO:",this.arrayServicios);
 
     this.calcularTotal();
   }
@@ -186,29 +202,46 @@ export class OrdenAdmComponent implements OnInit{
   removeServicio(servicioAEliminar: Servicio){
     // Quitar servicio de dataSourceServicios
     if(this.debug){console.log("removeServicio(): ",servicioAEliminar)}
+    
 
-    const index = this.dataSourceServicios.indexOf(servicioAEliminar);
+    const index = this.arrayServicios.indexOf(servicioAEliminar);
     if (index !== -1) {
-      this.dataSourceServicios.splice(index, 1);
+      this.arrayServicios.splice(index, 1);
     }
+    
+    this.dataSourceServicios = new MatTableDataSource(this.arrayServicios);    
 
     this.calcularTotal();
   }
 
   calcularTotal(){
-    this.dataSourceServicios.forEach(servicio => {
+    this.arrayServicios.forEach(servicio => {
       this.total += servicio.precio;
     });
   }
 
   getObjectOrden(){
     // Armar objeto de orden para enviar a servicio de ordenes
-    let object: Orden = new Orden();
-    object.activo = true;
-    object.detallesOrden = this.formularioOrden.get('servicio').value;
+    let object: any = {id: null,activo: null,tecnico: null,vehiculo: null,descripcion: null,fechaIngreso: null,detallesOrden: null};
     object.id = null;
+    object.activo = true;
     object.tecnico = this.formularioOrden.get('tecnico').value;
     object.vehiculo = this.formularioOrden.get('vehiculo').value;
+    object.descripcion = this.formularioOrden.get('descripcion').value;
+    object.fechaIngreso = null;
+
+    console.log("arrayServicios",this.arrayServicios);
+    const detallesOrden: DetalleOrden[] = this.arrayServicios.map((servicio) => {
+      const detalle: any = { id: null, servicio: {id:null},cantidad: null };
+      detalle.servicio.id = servicio.id;
+      detalle.cantidad = 1;
+      // Puedes establecer otras propiedades en detalle si es necesario
+      return detalle;
+    });
+    
+    object.detallesOrden = detallesOrden;
+
+    console.log("a",detallesOrden);
 
     if(this.debug){console.log("getObjectOrden(): ",object);}
     return object
@@ -234,7 +267,6 @@ export class OrdenAdmComponent implements OnInit{
       }
     })
   }
-
 
   // Metodos para mostrar ocultar elementos en la interfaz de Ordenes
   onEditarOrdenes(){
@@ -273,6 +305,5 @@ export class OrdenAdmComponent implements OnInit{
   setTecnico(t:Tecnico){
     this.tecnicoSeleccionado = t;
   }
-  
 
 }
