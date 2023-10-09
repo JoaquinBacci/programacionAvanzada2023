@@ -1,8 +1,7 @@
 package com.TallerMecanicoSpring.TM.rest;
 
 import com.TallerMecanicoSpring.TM.model.*;
-import com.TallerMecanicoSpring.TM.repository.ServicioRepository;
-import com.TallerMecanicoSpring.TM.repository.VehiculoRepository;
+import com.TallerMecanicoSpring.TM.repository.*;
 import com.TallerMecanicoSpring.TM.service.OrdenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +24,12 @@ public class OrdenRest {
 
     @Autowired
     VehiculoRepository vehiculoRepository;
+
+    @Autowired
+    MarcaRepository marcaRepository;
+
+    @Autowired
+    ModeloRepository modeloRepository;
 
     //Método GET todas las ordenes
     @GetMapping
@@ -58,19 +63,19 @@ public class OrdenRest {
             orden.setTecnico(tecnico);
             }
 
-            //Guardar el vehiculo en orden
-            Optional<Vehiculo> vehiculoExistente = vehiculoRepository.findById(orden.getVehiculo().getId());
-            Vehiculo vehiculo = new Vehiculo();
-            if(vehiculoExistente.isPresent()){
-                //Si se encuentra el vehiculo existente
-                vehiculo.setId(vehiculoExistente.get().getId());
-                vehiculo.setPatente(vehiculoExistente.get().getPatente());
-                vehiculo.setMarca(vehiculoExistente.get().getMarca());
-                vehiculo.setModelo(vehiculoExistente.get().getModelo());
-                vehiculo.setKilometraje(vehiculoExistente.get().getKilometraje());
-                vehiculo.setActivo(vehiculoExistente.get().getActivo());
+            if (orden.getVehiculo() != null && orden.getVehiculo().getId() != null) {
+                Optional<Vehiculo> vehiculoExistente = vehiculoRepository.findById(orden.getVehiculo().getId());
+                if (vehiculoExistente.isPresent()) {
+                    // Usar la instancia existente en lugar de crear una nueva
+                    orden.setVehiculo(vehiculoExistente.get());
+                } else {
+                    // Manejar el caso en que el vehículo no existe en la base de datos
+                    System.out.println("El vehículo no existe en la base de datos");
+                    // Puedes lanzar una excepción o manejarlo de otra manera según tus requerimientos.
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Por ejemplo, devolver una respuesta de error.
+                }
             }
-            orden.setVehiculo(vehiculo);
+
 
             //Guardar los detalles de orden
             List<DetalleOrden> detallesOrden = new ArrayList<>();
@@ -90,6 +95,7 @@ public class OrdenRest {
                     // Puedes lanzar una excepción, devolver un error, o manejarlo de otra manera según tus requerimientos.
                 }
             }
+
             orden.setDetallesOrden(detallesOrden);
 
 
