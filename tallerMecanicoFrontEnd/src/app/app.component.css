@@ -15,7 +15,7 @@ div button {
 
 .side-nav-container button {
     margin-bottom: 5px;
-    text-align-last: justify;
+    text-align-last: left;
 }
 
 .side-nav-container button mat-icon{

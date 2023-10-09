@@ -8,10 +8,6 @@
     height: 80vh;
 }
 
-mat-header-cell{
-    height: 100px;
-}
-
 div mat-form-field{
     margin-right: 5px;
     width: 100%;
