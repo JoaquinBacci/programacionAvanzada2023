@@ -53,7 +53,10 @@
             </mat-card-content>
 
             <mat-card-content *ngIf="vista == 'CREAR'">
-                <mat-card-title>Nueva orden</mat-card-title>
+                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                    <mat-card-title>Nueva orden</mat-card-title>
+                    <h4> Fecha: {{fechaActual | date:"dd/MM/yyyy"}}</h4>
+                </div>
                 <form [formGroup]="formularioOrden" >
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <div style="width: 40%;">
@@ -73,7 +76,7 @@
                                     </mat-option>
                                     </mat-select>
                                 </mat-form-field>
-                                <div *ngIf="vehiculoSeleccionado != null">
+                                <div *ngIf="vehiculoSeleccionado != null || vehiculoSeleccionado != undefined" style="display: flex; flex-direction: row;">
                                     <table>
                                         <tr>
                                             <td>Marca: </td>
@@ -93,7 +96,7 @@
                                         </tr>
                                     </table>
                                     <div>
-                                        <button mat-icon-button (click)="deleteVehiculo()" color="primary" > <mat-icon>delete</mat-icon></button>
+                                        <button mat-icon-button (click)="deleteVehiculo()" color="red" > <mat-icon>delete</mat-icon></button>
                                     </div>
                                 </div>
                             </div>

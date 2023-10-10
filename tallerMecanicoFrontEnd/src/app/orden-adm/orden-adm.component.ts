@@ -301,12 +301,14 @@ export class OrdenAdmComponent implements OnInit{
   }
 
   deleteVehiculo(){
-    this.vehiculoSeleccionado =  new Vehiculo();
+    this.vehiculoSeleccionado = undefined;
+    this.formularioOrden.get('vehiculo').reset();
   }
 
   setCliente(c:Cliente){
     this.clienteSeleccionado = new Cliente();
     this.clienteSeleccionado = c;
+    this.deleteVehiculo();
   }
 
   setTecnico(t:Tecnico){
