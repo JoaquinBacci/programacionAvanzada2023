@@ -66,4 +66,7 @@ httpd.conf
 /logs/
 /modules/
 
+.vscode/settings.json
+
+
 **/application.properties
