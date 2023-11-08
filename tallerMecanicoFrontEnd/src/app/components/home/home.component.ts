@@ -1,4 +1,4 @@
-import { Component, ViewChild  } from '@angular/core';
+import { Component, OnInit, ViewChild  } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 
@@ -7,35 +7,10 @@ import { Router } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
-  @ViewChild(MatSidenav) sidenav!: MatSidenav;
-  constructor(
-    private router: Router,
-  ) {}
- 
-  closeSidenav() {
-    this.sidenav.close();
-  }
-  openSidenav() {
-    this.sidenav.open();
-  }
+export class HomeComponent{
+  constructor(private router: Router,) {}
 
-  openClientes() {
-    this.router.navigate(['/cliente']);
+  openGestionOrden(){
+    this.router.navigate(['/orden']);
   }
-
-  openModelo() {
-    this.router.navigate(['/modelo']);
-  }
-
-  openVehiculo() {
-    this.router.navigate(['/vehiculo']);
-  }
-  openTecnico() {
-    this.router.navigate(['/tecnico']);
-  }
-  openMarca() {
-    this.router.navigate(['/marca']);
-  }
-  
 }

@@ -18,7 +18,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select'; 
 import { MatOptionModule } from '@angular/material/core';
-
+import {MatDialogModule} from '@angular/material/dialog';
 
 
 import { HeaderComponent } from './components/header/header.component';
@@ -29,6 +29,10 @@ import { VehiculoAdmComponent } from './vehiculo-adm/vehiculo-adm.component';
 import { ClienteAdmComponent } from './cliente-adm/cliente-adm.component';
 import { TecnicoAdmComponent } from './tecnico-adm/tecnico-adm.component';
 import { HomeComponent } from './components/home/home.component';
+import { VehiculoXclienteComponent } from './dialogs/vehiculoXcliente/vehiculoXcliente.component';
+import { ConfirmComponent } from './dialogs/confirm/confirm.component';
+import { ServicioAdmComponent } from './servicio-adm/servicio-adm.component';
+import { OrdenAdmComponent } from './orden-adm/orden-adm.component';
 
 
 
@@ -43,7 +47,11 @@ import { HomeComponent } from './components/home/home.component';
     VehiculoAdmComponent,
     ClienteAdmComponent,
     TecnicoAdmComponent,
-    HomeComponent
+    HomeComponent,
+    VehiculoXclienteComponent,
+    ConfirmComponent,
+    ServicioAdmComponent,
+    OrdenAdmComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +71,8 @@ import { HomeComponent } from './components/home/home.component';
     MatSidenavModule,
     MatListModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,6 +1,6 @@
 <div class="container">
     <div class="subContainer" >
-        <form [formGroup]="form" style=" width: 100%; border: solid 1px black">
+        <form [formGroup]="form" style=" width: 100%;">
             <mat-card appearance="outlined" style="border-radius: 10px; padding: 10px;">
                 <mat-card-title>Vehiculos</mat-card-title>
                 <div style="display: flex; flex-direction: column; justify-content: space-around;">
@@ -14,19 +14,22 @@
                                     <input matInput formControlName="kilometraje" placeholder="Kilometros"> 
                                 </mat-form-field>
                                 <mat-form-field appearance="outline">
-                                    <mat-select formControlName="marca">
+                                    <mat-label> Marca </mat-label>
+                                    <mat-select formControlName="marca" (selectionChange)="onMarcaSelectionChange($event.value)">
                                         <mat-option [value]="null"> Selecione una Marca </mat-option>
-                                        <mat-option *ngFor="let marca of marcas" [value]="marca.id">{{ marca.nombre }}</mat-option>
+                                        <mat-option *ngFor="let marca of marcas" [value]="marca.id" >{{ marca.nombre }}</mat-option>
                                       </mat-select>
                                 </mat-form-field>
-                                <mat-form-field appearance="outline">
+                                <mat-form-field *ngIf="idMarcaSelect" appearance="outline">
+                                    <mat-label> Modelo </mat-label>
                                     <mat-select formControlName="modelo">
                                         <mat-option [value]="null"> Selecione un Modelo </mat-option>
                                         <mat-option *ngFor="let modelo of modelos" [value]="modelo.id">{{ modelo.nombre }}</mat-option>
                                       </mat-select>
                                 </mat-form-field>
                                 <mat-form-field appearance="outline">
-                                    <mat-select formControlName="marca">
+                                  <mat-label> Cliente </mat-label>
+                                    <mat-select formControlName="cliente">
                                         <mat-option [value]="null"> Selecione un Cliente </mat-option>
                                         <mat-option *ngFor="let cliente of clientes" [value]="cliente.id">{{ cliente.apellido + ', ' + cliente.nombre}}</mat-option>
                                       </mat-select>
@@ -42,7 +45,7 @@
                             <button mat-icon-button matTooltip="Buscar" (click)="onConsultar()">
                               <mat-icon>search</mat-icon>
                             </button>
-                        </div> -->
+                        </div> --> 
                         <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                             <!-- Columna Nombre -->
                             <ng-container matColumnDef="Patente">
@@ -56,10 +59,13 @@
                             </ng-container>
                             <ng-container matColumnDef="Marca">
                               <mat-header-cell *matHeaderCellDef> 
-                                <mat-form-field appearance="outline"floatLabel="always" >
-                                  <mat-label>Marca</mat-label>
-                                  <input matInput  [(ngModel)]="vehiculoConsultar.marca.nombre" [ngModelOptions]="{standalone: true}" (keyup)="onConsultar()"> 
-                                </mat-form-field>  
+                                <mat-form-field appearance="outline" floatLabel="always" >
+                                  <mat-label> Marca </mat-label>
+                                  <mat-select [(ngModel)]="vehiculoConsultar.marca.id" [ngModelOptions]="{standalone: true}">
+                                    <mat-option [value]="null"> Selecione una Marca </mat-option>
+                                    <mat-option *ngFor="let marca of marcas" [value]="marca.id" >{{ marca.nombre }}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
                               </mat-header-cell>
                               <mat-cell *matCellDef="let elemento"> {{ elemento.marca.nombre }} </mat-cell>
                             </ng-container>
@@ -67,7 +73,10 @@
                                 <mat-header-cell *matHeaderCellDef> 
                                   <mat-form-field appearance="outline"floatLabel="always" >
                                     <mat-label>Modelo</mat-label>
-                                    <input matInput  [(ngModel)]="vehiculoConsultar.modelo.nombre" [ngModelOptions]="{standalone: true}"  (keyup)="onConsultar()"> 
+                                    <mat-select [(ngModel)]="vehiculoConsultar.modelo.id" [ngModelOptions]="{standalone: true}">
+                                      <mat-option [value]="null"> Selecione una Marca </mat-option>
+                                      <mat-option *ngFor="let modelo of modelosConsult" [value]="modelo.id" >{{ modelo.nombre }}</mat-option>
+                                    </mat-select>
                                   </mat-form-field>
                                 </mat-header-cell>
                                 <mat-cell *matCellDef="let elemento"> {{ elemento.modelo.nombre }} </mat-cell>
@@ -85,12 +94,14 @@
                                 <mat-header-cell *matHeaderCellDef> 
                                   <mat-form-field appearance="outline" floatLabel="always" >
                                     <mat-label>Cliente</mat-label>
-                                    <input matInput  [(ngModel)]="filtroCliente" [ngModelOptions]="{standalone: true}"  (keyup)="onConsultar()"> 
+                                    <mat-select [(ngModel)]="vehiculoConsultar.cliente.id" [ngModelOptions]="{standalone: true}">
+                                      <mat-option [value]="null"> Selecione una Marca </mat-option>
+                                      <mat-option *ngFor="let cliente of clientes" [value]="cliente.id" >{{ cliente.nombre }}</mat-option>
+                                    </mat-select>
                                   </mat-form-field>  
                                 </mat-header-cell>
-                                <mat-cell *matCellDef="let elemento"> {{ elemento.cleinte.nombre }} </mat-cell>
+                                <mat-cell *matCellDef="let elemento"> {{ elemento.cliente.nombre + ', ' + elemento.cliente.apellido}} </mat-cell>
                               </ng-container>
-                          
                             <!-- Columna Acciones -->
                             <ng-container matColumnDef="Acciones">
                               <mat-header-cell *matHeaderCellDef> 

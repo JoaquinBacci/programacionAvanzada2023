@@ -7,6 +7,8 @@ package com.TallerMecanicoSpring.TM.rest;
 import com.TallerMecanicoSpring.TM.model.Cliente;
 import com.TallerMecanicoSpring.TM.service.ClienteService;
 import java.util.List;
+
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -50,7 +52,7 @@ public class ClienteRest {
     }
     
     @PostMapping("save/")
-    private ResponseEntity<Cliente> saveTecnico(@RequestBody Cliente clienteRq){
+    private ResponseEntity<Cliente> saveTecnico(@Valid @RequestBody Cliente clienteRq){
         return ResponseEntity.ok(this.clienteService.save(clienteRq));
     }
 }

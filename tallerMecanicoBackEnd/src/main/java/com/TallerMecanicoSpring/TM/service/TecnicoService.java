@@ -35,39 +35,7 @@ public class TecnicoService implements TecnicoRepository{
 
     @Override
     public <S extends Tecnico> S saveAndFlush(S entity) {
-        if(entity.getId() != null){
-            //Editar el tecnico
-            Optional<Tecnico> tecnicoExistente = this.findById(entity.getId());
-
-            if(tecnicoExistente.isPresent()){
-                Tecnico t = tecnicoExistente.get();
-                t.setActivo(entity.isActivo());
-                t.setNombre(entity.getNombre());
-                t.setApellido(entity.getApellido());
-                t.setDni(entity.getDni());
-                t.setDireccion(entity.getDireccion());
-                t.setEmail(entity.getEmail());
-                t.setLegajo(entity.getLegajo());
-                t.setNum_tel(entity.getNum_tel());
-                
-                
-                return this.tecnicoRepository.save(entity);
-            } else {
-                return (S) new Tecnico();
-            }
-            
-            
-        } else {
-            //Crear nuevo Tecnico
-            List<Tecnico> tecnicos = new ArrayList();
-            tecnicos = this.tecnicoRepository.findAll();
-            for(Tecnico tecnico: tecnicos){
-                if(tecnico.getDni() == entity.getDni()){
-                   return (S) new Tecnico();  
-                }
-            }
-            return this.tecnicoRepository.save(entity);
-        }
+        return null;
     }
     
     public <S extends Tecnico> Tecnico update(Tecnico tecnicoRq){
@@ -222,7 +190,39 @@ public class TecnicoService implements TecnicoRepository{
 
     @Override
     public <S extends Tecnico> S save(S entity) {
-        return this.tecnicoRepository.save(entity);
+        if(entity.getId() != null){
+            //Editar el tecnico
+            Optional<Tecnico> tecnicoExistente = this.findById(entity.getId());
+
+            if(tecnicoExistente.isPresent()){
+                Tecnico t = tecnicoExistente.get();
+                t.setActivo(entity.isActivo());
+                t.setNombre(entity.getNombre());
+                t.setApellido(entity.getApellido());
+                t.setDni(entity.getDni());
+                t.setDireccion(entity.getDireccion());
+                t.setEmail(entity.getEmail());
+                t.setLegajo(entity.getLegajo());
+                t.setNum_tel(entity.getNum_tel());
+                
+                
+                return this.tecnicoRepository.save(entity);
+            } else {
+                return (S) new Tecnico();
+            }
+            
+            
+        } else {
+            //Crear nuevo Tecnico
+            List<Tecnico> tecnicos = new ArrayList();
+            tecnicos = this.tecnicoRepository.findAll();
+            for(Tecnico tecnico: tecnicos){
+                if(tecnico.getDni() == entity.getDni()){
+                   return (S) new Tecnico();  
+                }
+            }
+            return this.tecnicoRepository.save(entity);
+        }
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

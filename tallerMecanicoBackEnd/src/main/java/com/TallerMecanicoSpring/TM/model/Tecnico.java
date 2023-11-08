@@ -1,31 +1,39 @@
 
 package com.TallerMecanicoSpring.TM.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import org.antlr.v4.runtime.misc.NotNull;
+
+import java.util.List;
 
 @Entity
 @Table(name="tecnico")
 public class Tecnico {
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
+    @Min(value = 10000000, message = "El DNI debe tener 8 dígitos")
+    @Max(value = 99999999, message = "El DNI debe tener 8 dígitos")
     private Integer dni;
     @NotNull
     private String num_tel;
     private Integer legajo;
-    @NotNull
+    @NotBlank(message = "por favor ingresa un nombre")
     private String nombre;
-    @NotNull
+    @NotBlank(message = "por favor ingresa un apellido")
     private String apellido;
     private String direccion;
+    //@NotBlank(message = "por favor ingrese un email")
     private String email;
     private boolean activo;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Orden> ordenes;
+
 
     public Tecnico() {
     }
@@ -115,5 +123,5 @@ public class Tecnico {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
-    
+
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Vehiculo } from '../model/vehiculo';
 import { Marca } from '../model/marca';
@@ -13,15 +13,16 @@ import { ClienteService } from '../services/cliente.service';
   templateUrl: './vehiculo-adm.component.html',
   styleUrls: ['./vehiculo-adm.component.css']
 })
-export class VehiculoAdmComponent {
+export class VehiculoAdmComponent implements OnInit, OnChanges{
   idVehiculoUpdate: number = undefined;
   vehiculoConsultar: Vehiculo;
-  filtroCliente: string;
   modoEdicion: boolean = false;
   columnas: string[] = ['Patente','Marca', 'Modelo','Kilometros','Cliente','Acciones']
   dataSource
+  idMarcaSelect: number = undefined;
   marcas: Marca[] = [];
   modelos: Modelo[] = [];
+  modelosConsult: Modelo[] = [];
   clientes: Cliente[];
 
   form: FormGroup;
@@ -34,11 +35,11 @@ export class VehiculoAdmComponent {
     private fb: FormBuilder
   ){
     this.form = this.fb.group({
-      patente: ['',[Validators.required, Validators.pattern('/^[A-Z]{2,3}\d{3}[A-Z]{2}$/')]],
-      marca: ['',[Validators.required]],
-      modelo: ['', [Validators.required] ],
-      kilometraje: ['',[Validators.maxLength(7)]],
-      cliente: ['',[Validators.required, Validators.maxLength(50)]],
+      patente: ['',[Validators.required,Validators.pattern(/^(([a-zA-Z]{3})(\d{3}))|(([a-zA-Z]{2})([\d]{3})([a-zA-Z]{2}))$/)]],
+      marca: ['', Validators.required],  //id
+      modelo: ['', Validators.required ],
+      kilometraje: ['', Validators.required],
+      cliente: ['', Validators.required],
     })
   }
 
@@ -52,11 +53,15 @@ export class VehiculoAdmComponent {
     this.vehiculoConsultar.cliente = new Cliente();
 
     this.marcaService.getAllMarcas().subscribe((data)=> this.marcas = data);
-    this.modeloService.getAllModelo().subscribe((data)=> this.modelos = data);
     this.clienteService.getAll().subscribe((data)=> this.clientes = data);
+    this.modeloService.getAllModelo().subscribe((data)=>this.modelosConsult = data);
     
     
     this.onConsultar();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+      console.log('Form.valid: ', this.form.valid);
   }
 
   onConsultar(){
@@ -80,8 +85,9 @@ export class VehiculoAdmComponent {
     vehiculoRq.kilometraje = this.form.get('kilometraje').value;
     vehiculoRq.marca = this.marcas.find((m) => m.id = this.form.get('marca').value);
     vehiculoRq.modelo = this.modelos.find((m)=> m.id = this.form.get('modelo').value);
-    vehiculoRq.cliente = this.form.get('cliente').value;
+    vehiculoRq.cliente = this.clientes.find((c)=> c.id = this.form.get('cliente').value);
     
+    console.log('VehiculoRq: ', vehiculoRq);
 
     if(!this.modoEdicion){
       //guardar
@@ -127,12 +133,16 @@ export class VehiculoAdmComponent {
 
   onEditar(vehiculo: Vehiculo){
     this.modoEdicion = true;
+    this.idMarcaSelect = undefined;
     this.idVehiculoUpdate = vehiculo.id;
     this.form.get('patente').setValue(vehiculo.patente);
-    this.form.get('kilomentraje').setValue(vehiculo.kilometraje);
+    this.form.get('kilometraje').setValue(vehiculo.kilometraje);
     this.form.get('marca').setValue(vehiculo.marca.id);
-    this.form.get('modelo').setValue(vehiculo.modelo.id);
+    this.idMarcaSelect = vehiculo.marca.id
     this.form.get('cliente').setValue(vehiculo.cliente.id);
+    this.form.get('modelo').setValue(vehiculo.modelo.id);
+
+    
   }
 
   onEliminar(id: number){
@@ -159,6 +169,13 @@ export class VehiculoAdmComponent {
 
   onValidarCampo(campo: string){
 
+  }
+
+  onMarcaSelectionChange(selectedValue: number | null): void {
+    this.idMarcaSelect = selectedValue;
+    if(this.idMarcaSelect!=null){
+      this.modeloService.getByIdMarca(this.idMarcaSelect).subscribe((data)=> this.modelos = data);
+    }
   }
 }
   

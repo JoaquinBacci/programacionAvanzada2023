@@ -1,0 +1,95 @@
+<div class="container">
+    <div class="subContainer" >
+        <form [formGroup]="form" style="width: 100%;">
+            <mat-card appearance="outlined" style="border-radius: 10px; padding: 10px;">
+                <mat-card-title>Servicios</mat-card-title>
+                <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                    <div class="form" style="width: 100%;">
+                        <mat-card-title>{{modoEdicion? 'Editar Servicio' : 'Nuevo Servicio'}}</mat-card-title>
+                            <div>   
+                                <mat-form-field appearance="outline" style="width: 30%">
+                                  <input matInput formControlName="descripcion" placeholder="Descripción"> 
+                                </mat-form-field>
+                            </div>
+                            <div>   
+                                <mat-form-field appearance="outline" style="width: 30%">
+                                  <input matInput formControlName="nombre" placeholder="Nombre"> 
+                                </mat-form-field>
+                            </div>
+                            <div>    
+                                <mat-form-field appearance="outline"  placeholder="Precio" style="width: 30%">
+                                  <input matInput type="number" formControlName="precio" placeholder="0">
+                                  <span matTextPrefix>$&nbsp;</span>
+                                  <mat-error *ngIf="form.get('precio').hasError('precioInvalido')">El precio no es válido.</mat-error> 
+                                </mat-form-field>
+                            </div>
+                            <button mat-raised-button (click)="onGuardar()" color="primary" [disabled]="!form.valid">Guardar</button>
+                            <button mat-raised-button (click)="onCancelar()" color="warn" style="margin-left: 10px;">Cancelar</button>
+                    </div>
+                    <div class="tabla" style="width: 100%; margin-top: 10px;">
+                        <!-- <mat-card-title>Consultar servicios:</mat-card-title>
+                        <div style="display: flex;">
+                            <mat-form-field appearance="outline">
+                                <input matInput [(ngModel)]="servicioConsultar.nombre" [ngModelOptions]="{standalone: true}" placeholder="Nombre" (keyup)="onConsultar()"> 
+                            </mat-form-field>
+                            <button mat-icon-button matTooltip="Buscar" (click)="onConsultar()">
+                              <mat-icon>search</mat-icon>
+                            </button>
+                        </div> -->
+                        <mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="padding-top: 20px">
+                            <ng-container matColumnDef="descripcion">
+                                <mat-header-cell *matHeaderCellDef> 
+                                  <mat-form-field placeholder="Descripción" appearance="outline">
+                                    <mat-label>Descripcion</mat-label>
+                                    <input matInput  [(ngModel)]="servicioConsultar.descripcion" [ngModelOptions]="{standalone: true}" (keyup)="onConsultarServicios()"> 
+                                  </mat-form-field>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let elemento"> {{ elemento.descripcion }} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="nombre">
+                              <mat-header-cell *matHeaderCellDef> 
+                                <mat-form-field placeholder="Nombre"  appearance="outline">
+                                  <mat-label>Nombre</mat-label>
+                                  <input matInput  [(ngModel)]="servicioConsultar.nombre" [ngModelOptions]="{standalone: true}" (keyup)="onConsultarServicios()"> 
+                                </mat-form-field>
+                              </mat-header-cell>
+                                <mat-cell *matCellDef="let elemento"> {{ elemento.nombre }} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="precio">
+                                <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+                                <mat-cell *matCellDef="let elemento"> {{ elemento.precio }} </mat-cell>
+                            </ng-container>
+                          
+                            <!-- Columna Acciones -->
+                            <ng-container matColumnDef="acciones">
+                              <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+                              <mat-cell *matCellDef="let elemento">
+                                <button mat-icon-button matTooltip="Editar" (click)="onEditar(elemento)">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button matTooltip="Eliminar" (click)="onEliminar(elemento.id)">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </mat-cell>
+                            </ng-container>
+                          
+                            <!-- Define las columnas de la tabla -->
+                            <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+                          </mat-table>
+                    </div>
+                </div>
+                
+                
+            
+                
+                <div>
+                    
+                    
+                </div>
+                <!-- <button mat-raised-button (click)="onConsultar()" color="primary">consultar</button> -->
+            </mat-card>
+        </form>
+    </div>
+</div>
+

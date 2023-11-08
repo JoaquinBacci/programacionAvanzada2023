@@ -1,14 +1,10 @@
 
 package com.TallerMecanicoSpring.TM.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.antlr.v4.runtime.misc.NotNull;
+
+import java.util.List;
 
 @Entity
 @Table(name="vehiculo")
@@ -16,27 +12,38 @@ public class Vehiculo {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int kilometraje;
+    
+    private Integer kilometraje;
     @NotNull
     private String patente;
     @ManyToOne
     @JoinColumn(name="id_marca")
-    @NotNull
     private Marca marca;
     @ManyToOne
     @JoinColumn(name="id_modelo")
-    @NotNull
     private Modelo modelo;
     @ManyToOne
     @JoinColumn(name="id_cliente")
-    @NotNull
     private Cliente cliente;
     private Boolean activo;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Orden> ordenes;
+
+    private Integer anio;
+
+    public Integer getAnio() {
+        return anio;
+    }
+
+    public void setAnio(Integer anio) {
+        this.anio = anio;
+    }
 
     public Vehiculo( ) {
     }
 
-    public Vehiculo(Long id, int kilometraje, String patente, Marca marca, Modelo modelo, Cliente cliente, Boolean activo) {
+    public Vehiculo(Long id, Integer kilometraje, String patente, Marca marca, Modelo modelo, Cliente cliente, Boolean activo, Integer anio) {
         this.id = id;
         this.kilometraje = kilometraje;
         this.patente = patente;
@@ -44,6 +51,7 @@ public class Vehiculo {
         this.modelo = modelo;
         this.cliente = cliente;
         this.activo = activo;
+        this.anio = anio;
     }
 
     public Long getId() {
@@ -70,13 +78,11 @@ public class Vehiculo {
         this.activo = activo;
     }
     
-    
-
-    public int getKilometraje() {
+    public Integer getKilometraje() {
         return kilometraje;
     }
 
-    public void setKilometraje(int kilometraje) {
+    public void setKilometraje(Integer kilometraje) {
         this.kilometraje = kilometraje;
     }
 
@@ -103,4 +109,9 @@ public class Vehiculo {
     public void setModelo(Modelo modelo) {
         this.modelo = modelo;
     }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
 }

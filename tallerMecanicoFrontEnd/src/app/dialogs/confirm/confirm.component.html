@@ -1,0 +1,38 @@
+<div style="width: 50vw; height: fit-content;">
+    <div style="display: flex; justify-content: center; align-content: center;">
+        <mat-card style="height: 100%; width: 100%;">
+         
+            <button mat-icon-button matTooltip="cerrar" (click)="onNoClick()" style="float: left;">
+                <mat-icon>close </mat-icon>
+            </button>
+
+            <mat-card-content>
+                <div>
+                    <div *ngIf="data.tipo == 'error'">
+                        <mat-icon> error </mat-icon>
+                    </div>
+                    <div *ngIf="data.tipo == 'normal'">
+                        <mat-icon> info </mat-icon>
+                    </div>
+                    <div> 
+                        {{data.mensaje}} 
+                    </div>
+                    <div style="display: flex; justify-content: end;">
+                        <button *ngIf="data.textoAceptar"  mat-raised-button  (click)="onAceptClick()" style="margin: 5px;">
+                            {{data.textoAceptar}}
+                        </button>
+                        <button  mat-raised-button color="primary"  (click)="onNoClick()" style="float: left;">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+                
+                
+            </mat-card-content>
+
+
+
+
+        </mat-card>
+    </div>
+</div>

@@ -7,6 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+
 import java.util.List;
 
 @Entity
@@ -15,20 +19,25 @@ public class Cliente {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int dni;
-    private int num_tel;
+    @Min(value = 10000000, message = "El DNI debe tener 8 dígitos")
+    @Max(value = 99999999, message = "El DNI debe tener 8 dígitos")
+    private Integer dni;
+    private String num_tel;
+    @NotBlank(message = "por favor ingresa un nombre")
     private String nombre;
+    @NotBlank(message = "por favor ingresa un apellido")
     private String apellido;
     private String direccion;
     private String email;
     private boolean activo;
-    @OneToMany
-    private List<Vehiculo> vehiculos;
+
+    private String licenciaConducir;
+    
 
     public Cliente() {
     }
 
-    public Cliente(Long id, int dni, int num_tel, String nombre, String apellido, String direccion, String email, boolean activo, List<Vehiculo> vehiculos) {
+    public Cliente(Long id, Integer dni, String num_tel, String nombre, String apellido, String direccion, String email, boolean activo) {
         this.id = id;
         this.dni = dni;
         this.num_tel = num_tel;
@@ -37,7 +46,6 @@ public class Cliente {
         this.direccion = direccion;
         this.email = email;
         this.activo = activo;
-        this.vehiculos = vehiculos;
     }
 
     public Long getId() {
@@ -48,19 +56,19 @@ public class Cliente {
         this.id = id;
     }
 
-    public int getDni() {
+    public Integer getDni() {
         return dni;
     }
 
-    public void setDni(int dni) {
+    public void setDni(Integer dni) {
         this.dni = dni;
     }
 
-    public int getNum_tel() {
+    public String getNum_tel() {
         return num_tel;
     }
 
-    public void setNum_tel(int num_tel) {
+    public void setNum_tel(String num_tel) {
         this.num_tel = num_tel;
     }
 
@@ -104,14 +112,11 @@ public class Cliente {
         this.activo = activo;
     }
 
-    public List<Vehiculo> getVehiculos() {
-        return vehiculos;
+    public String getLicenciaConducir() {
+        return licenciaConducir;
     }
 
-    public void setVehiculos(List<Vehiculo> vehiculos) {
-        this.vehiculos = vehiculos;
+    public void setLicenciaConducir(String licenciaConducir) {
+        this.licenciaConducir = licenciaConducir;
     }
-
-    
-    
 }
