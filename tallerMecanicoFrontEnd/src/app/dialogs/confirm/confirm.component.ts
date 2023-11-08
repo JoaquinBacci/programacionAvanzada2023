@@ -6,22 +6,21 @@ import { VehiculoXclienteComponent } from '../vehiculoXcliente/vehiculoXcliente.
 @Component({
   selector: 'app-confirm',
   templateUrl: './confirm.component.html',
-  styleUrls: ['./confirm.component.css']
+  styleUrls: ['./confirm.component.css'],
 })
 export class ConfirmComponent {
-  
-  
   constructor(
     private router: Router,
     public dialogRef: MatDialogRef<VehiculoXclienteComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {tipo: string, mensaje: string, textoAceptar: string}
-  ){}
-  
+    @Inject(MAT_DIALOG_DATA)
+    public data: { tipo: string; mensaje: string; textoAceptar: string }
+  ) {}
+
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  onAceptClick(){
+  onAceptClick() {
     this.dialogRef.close(true);
   }
 }
