@@ -113,23 +113,22 @@ public class OrdenRest {
         }
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> actualizarOrden(@RequestBody Orden orden){
-        /* try{
-            //Buscamos la orden existe con el id
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarOrden(@RequestBody Orden nuevaOrden, @PathVariable Long id){
+        try{
+            // Buscamos la orden existe con el id
             Orden ordenExistente = ordenService.findByIdOrden(id).get();
-            //Actualizamos la orden
-            ordenExistente.setTecnico(orden.getTecnico());
-            ordenExistente.setVehiculo(orden.getVehiculo());
+            System.out.println("ID de Orden Existente -> " + ordenExistente.getId());
+            System.out.println("ID del nuevo tecnico -> "+ nuevaOrden.getTecnico().getId());
 
+            // Actualizamos la orden
+            ordenExistente.setTecnico(nuevaOrden.getTecnico());
+            // Usamos el service para guardar la orden
             ordenService.saveOrden(ordenExistente);
             return new ResponseEntity<Orden>(HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
-        } */
-
-        return ResponseEntity.ok(this.ordenService.updateOrden(orden));
-
+        }
     }
 
     @GetMapping("/getByCLiente/{id}")
