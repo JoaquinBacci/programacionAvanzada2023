@@ -21,7 +21,7 @@ public class DetalleOrdenRest {
     @GetMapping
     public ResponseEntity<List<DetalleOrden>> findAllDetallesOrden(){
         return ResponseEntity.ok(this.detalleOrdenService.findAllDetallesOrden());
-    };
+    }
 
     //Método GET by  para detalle orden
     @GetMapping(path = "/{id}")
@@ -29,7 +29,6 @@ public class DetalleOrdenRest {
         return this.detalleOrdenService.findById(id);
     }
 
-    //Método POST para detalle orden
     @PostMapping("/save")
     private ResponseEntity<DetalleOrden> saveDetalleOrden(@RequestBody DetalleOrden detalleOrden){
         try{
@@ -41,7 +40,6 @@ public class DetalleOrdenRest {
         }
     }
 
-    //Método PUT
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarDetalleOrden(@RequestBody DetalleOrden detalleOrden, @PathVariable Long id){
         try{

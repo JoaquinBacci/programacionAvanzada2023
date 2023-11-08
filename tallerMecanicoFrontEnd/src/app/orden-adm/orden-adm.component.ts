@@ -12,6 +12,7 @@ import { VehiculoService } from '../services/vehiculo.service';
 import { Servicio } from '../model/servicio';
 import { ServicioService } from '../services/servicio.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-orden-adm',
@@ -21,11 +22,11 @@ import { MatTableDataSource } from '@angular/material/table';
 export class OrdenAdmComponent implements OnInit{
 
   // Las acciones de esta tabla van a ser: "consultar", "editar"
-  columnasOrdenes = ['cliente', 'vehiculo','acciones'];
+  columnasOrdenes = ['cliente', 'vehiculo','fechaIngreso','tecnico','acciones'];
   dataSourceOrdenes: any[];
 
   // Las acciones de esta tabla van a ser: "remover servicio"
-  columnasServicios = ['descripcion','nombre','precio'];
+  columnasServicios = ['descripcion','nombre','precio','acciones'];
   dataSourceServicios: MatTableDataSource<Servicio>;
   total: number = 0; // Variable para mostrar el precio total de la orden
   fechaActual: Date;
@@ -69,6 +70,7 @@ export class OrdenAdmComponent implements OnInit{
     private tecnicoService: TecnicoService,
     private vehiculoService: VehiculoService,
     private sercicioService: ServicioService,
+    private router: Router,
     private fb: FormBuilder
   ){
     this.formularioOrden = this.fb.group({
@@ -108,6 +110,7 @@ export class OrdenAdmComponent implements OnInit{
       next:(data)=>{
         if(data){
           this.dataSourceOrdenes = data;
+          console.log('Ordenes: ', data);
         } else {
           if(this.debug){console.log('getAllOrdenes() - dataNULL: ', data);}
         }
@@ -199,14 +202,15 @@ export class OrdenAdmComponent implements OnInit{
     this.calcularTotal();
   }
 
-  removeServicio(servicioAEliminar: Servicio){
+  removeServicio(idServicio: number){
     // Quitar servicio de dataSourceServicios
-    if(this.debug){console.log("removeServicio(): ",servicioAEliminar)}
+    if(this.debug){console.log("removeServicio(): ",idServicio)}
     
 
-    const index = this.arrayServicios.indexOf(servicioAEliminar);
-    if (index !== -1) {
-      this.arrayServicios.splice(index, 1);
+    const indice = this.arrayServicios.findIndex(servicio => servicio.id === idServicio);
+
+    if (indice !== -1) {
+      this.arrayServicios.splice(indice, 1);
     }
     
     this.dataSourceServicios = new MatTableDataSource(this.arrayServicios);    
@@ -215,17 +219,19 @@ export class OrdenAdmComponent implements OnInit{
   }
 
   calcularTotal(){
-    this.arrayServicios.forEach(servicio => {
-      this.total += servicio.precio;
-    });
+    this.total = 0;
+      this.arrayServicios.forEach(servicio => {
+        this.total = this.total + servicio.precio;
+      });
   }
 
   getObjectOrden(){
     // Armar objeto de orden para enviar a servicio de ordenes
-    let object: any = {id: null,activo: null,tecnico: null,vehiculo: null,descripcion: null,fechaIngreso: null,detallesOrden: null};
+    let object: any = {id: null,activo: null,tecnico: {id: null},vehiculo: null,descripcion: null,fechaIngreso: null,detallesOrden: null};
     object.id = null;
     object.activo = true;
-    object.tecnico = this.formularioOrden.get('tecnico').value;
+    let tecnico = this.formularioOrden.get('tecnico').value;
+    object.tecnico.id = tecnico.id; 
     object.vehiculo = this.formularioOrden.get('vehiculo').value;
     object.descripcion = this.formularioOrden.get('descripcion').value;
     object.fechaIngreso = null;
@@ -262,6 +268,7 @@ export class OrdenAdmComponent implements OnInit{
         // Se actualiza la tabla de ordenes
         this.getAllOrdenes()
         this.formularioOrden.reset();
+        this.router.navigate(['/home']);
       },error: (error) => {
         if(this.debug){console.log('guardarOrdentrabajo() - ERROR: ', error);}
       }
@@ -294,12 +301,14 @@ export class OrdenAdmComponent implements OnInit{
   }
 
   deleteVehiculo(){
-    this.vehiculoSeleccionado =  new Vehiculo();
+    this.vehiculoSeleccionado = undefined;
+    this.formularioOrden.get('vehiculo').reset();
   }
 
   setCliente(c:Cliente){
     this.clienteSeleccionado = new Cliente();
     this.clienteSeleccionado = c;
+    this.deleteVehiculo();
   }
 
   setTecnico(t:Tecnico){

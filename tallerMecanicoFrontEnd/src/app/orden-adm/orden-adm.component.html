@@ -14,7 +14,7 @@
                     <!-- Columna Nombre -->
                     <ng-container matColumnDef="cliente">
                       <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
-                      <mat-cell *matCellDef="let elemento"> {{ elemento.cliente.apellido + ', ' + elemento.cliente.nombre }} </mat-cell>
+                      <mat-cell *matCellDef="let elemento"> {{ elemento.vehiculo.cliente.apellido + ', ' + elemento.vehiculo.cliente.nombre }} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="vehiculo">
@@ -22,10 +22,15 @@
                         <mat-cell *matCellDef="let elemento"> {{ elemento.vehiculo.patente + ' ' + elemento.vehiculo.marca.nombre + ', ' + elemento.vehiculo.modelo.nombre }} </mat-cell>
                       </ng-container>
 
-                      <!-- <ng-container matColumnDef="fechaIngreso">
-                        <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
+                      <ng-container matColumnDef="fechaIngreso">
+                        <mat-header-cell *matHeaderCellDef> Fecha Ingreso </mat-header-cell>
                         <mat-cell *matCellDef="let elemento"> {{ elemento.fechaIngreso }} </mat-cell>
-                      </ng-container> -->
+                      </ng-container>
+
+                      <ng-container matColumnDef="tecnico">
+                        <mat-header-cell *matHeaderCellDef> Tecnico </mat-header-cell>
+                        <mat-cell *matCellDef="let elemento"> {{ elemento.tecnico.apellido + ', ' + elemento.tecnico.nombre }} </mat-cell>
+                      </ng-container>
                   
                     <!-- Columna Acciones -->
                     <ng-container matColumnDef="acciones">
@@ -48,7 +53,10 @@
             </mat-card-content>
 
             <mat-card-content *ngIf="vista == 'CREAR'">
-                <mat-card-title>Nueva orden</mat-card-title>
+                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                    <mat-card-title>Nueva orden</mat-card-title>
+                    <h4> Fecha: {{fechaActual | date:"dd/MM/yyyy"}}</h4>
+                </div>
                 <form [formGroup]="formularioOrden" >
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <div style="width: 40%;">
@@ -68,7 +76,7 @@
                                     </mat-option>
                                     </mat-select>
                                 </mat-form-field>
-                                <div *ngIf="vehiculoSeleccionado != null">
+                                <div *ngIf="vehiculoSeleccionado != null || vehiculoSeleccionado != undefined" style="display: flex; flex-direction: row;">
                                     <table>
                                         <tr>
                                             <td>Marca: </td>
@@ -88,7 +96,7 @@
                                         </tr>
                                     </table>
                                     <div>
-                                        <button mat-icon-button (click)="deleteVehiculo()" color="primary" > <mat-icon>delete</mat-icon></button>
+                                        <button mat-icon-button (click)="deleteVehiculo()" color="red" > <mat-icon>delete</mat-icon></button>
                                     </div>
                                 </div>
                             </div>
@@ -127,17 +135,27 @@
                                         <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
                                         <mat-cell *matCellDef="let elemento"> {{ elemento.precio }} </mat-cell>
                                     </ng-container>
+
+                                    <ng-container matColumnDef="acciones">
+                                        <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+                                        <mat-cell *matCellDef="let elemento">
+                                          <button mat-icon-button matTooltip="Eliminar" (click)="removeServicio(elemento.id)">
+                                            <mat-icon>delete</mat-icon>
+                                          </button>
+                                        </mat-cell>
+                                      </ng-container>
                                   
                                   
                                     <!-- Define las columnas de la tabla -->
                                     <mat-header-row *matHeaderRowDef="columnasServicios"></mat-header-row>
                                     <mat-row *matRowDef="let row; columns: columnasServicios;"></mat-row>
-                                  </mat-table>
+                                  </mat-table>  
                             </div>
+                            <h2 style="margin-top: 10px; text-align: center;">Total: $ {{total}}</h2>
                         </div>
                     </div>
                 </form>
-                <button mat-raised-button (click)="guardarOrdentrabajo()" color="primary" >Guardar</button>
+                <button mat-raised-button (click)="guardarOrdentrabajo()" color="primary">Guardar</button>
             </mat-card-content>
        </mat-card>
     </div>

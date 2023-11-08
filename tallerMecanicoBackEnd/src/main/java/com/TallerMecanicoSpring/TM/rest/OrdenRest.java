@@ -55,17 +55,6 @@ public class OrdenRest {
             if(tecnicoExistente.isPresent()){
                 orden.setTecnico(tecnicoExistente.get());
             }else {
-//            Tecnico tecnico = new Tecnico();
-//            tecnico.setNombre(orden.getTecnico().getNombre());
-//            tecnico.setApellido(orden.getTecnico().getApellido());
-//            tecnico.setDireccion(orden.getTecnico().getDireccion());
-//            tecnico.setDni(orden.getTecnico().getDni());
-//            tecnico.setEmail(orden.getTecnico().getEmail());
-//            tecnico.setLegajo(orden.getTecnico().getLegajo());
-//            tecnico.setNum_tel(orden.getTecnico().getNum_tel());
-//            if(orden.getTecnico().isActivo()){
-//            tecnico.setActivo(true);
-//            }
                 // Manejar el caso en que el vehículo no existe en la base de datos
                 System.out.println("El tecnico no existe en la base de datos");
                 // Puedes lanzar una excepción o manejarlo de otra manera según tus requerimientos.
@@ -95,7 +84,15 @@ public class OrdenRest {
                 if (servicioExistente.isPresent()) {
                     // Si se encuentra el servicio existente, asignarlo al detalle de la orden
                     detalleOrden.setServicio(servicioExistente.get());
-                    detalleOrden.setPrecioTotal(servicioExistente.get().getPrecio() * detalleOrden.getCantidad());
+                    // Asignamos el precio de descuento que pone el tecnico o dejamos el precio del servicio comun
+                    // el front end tiene que mandar 0 si el tecnico no modifica precio y si si modifica tiene que mandar el precio modificado
+                    if(detalleOrden.getPrecioIndividual() == 0) {
+                        detalleOrden.setPrecioIndividual(servicioExistente.get().getPrecio());
+                    }
+                    System.out.println("Precio individual" + detalleOrden.getPrecioIndividual());
+                    System.out.println("Precio total" + (detalleOrden.getPrecioIndividual()  * detalleOrden.getCantidad()));
+
+                    detalleOrden.setPrecioTotal(detalleOrden.getPrecioIndividual()  * detalleOrden.getCantidad());
 
                     // Agregar el detalle de la orden a la lista
                     detallesOrden.add(detalleOrden);
@@ -116,23 +113,22 @@ public class OrdenRest {
         }
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> actualizarOrden(@RequestBody Orden orden){
-        /* try{
-            //Buscamos la orden existe con el id
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarOrden(@RequestBody Orden nuevaOrden, @PathVariable Long id){
+        try{
+            // Buscamos la orden existe con el id
             Orden ordenExistente = ordenService.findByIdOrden(id).get();
-            //Actualizamos la orden
-            ordenExistente.setTecnico(orden.getTecnico());
-            ordenExistente.setVehiculo(orden.getVehiculo());
+            System.out.println("ID de Orden Existente -> " + ordenExistente.getId());
+            System.out.println("ID del nuevo tecnico -> "+ nuevaOrden.getTecnico().getId());
 
+            // Actualizamos la orden
+            ordenExistente.setTecnico(nuevaOrden.getTecnico());
+            // Usamos el service para guardar la orden
             ordenService.saveOrden(ordenExistente);
             return new ResponseEntity<Orden>(HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<Orden>(HttpStatus.NOT_FOUND);
-        } */
-
-        return ResponseEntity.ok(this.ordenService.updateOrden(orden));
-
+        }
     }
 
     @GetMapping("/getByCLiente/{id}")

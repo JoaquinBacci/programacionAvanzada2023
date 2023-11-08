@@ -36,10 +36,10 @@
                               <mat-icon>search</mat-icon>
                             </button>
                         </div> -->
-                        <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                        <mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="padding-top: 20px">
                             <ng-container matColumnDef="descripcion">
                                 <mat-header-cell *matHeaderCellDef> 
-                                  <mat-form-field appearance="outline"floatLabel="always" >
+                                  <mat-form-field placeholder="Descripción" appearance="outline">
                                     <mat-label>Descripcion</mat-label>
                                     <input matInput  [(ngModel)]="servicioConsultar.descripcion" [ngModelOptions]="{standalone: true}" (keyup)="onConsultarServicios()"> 
                                   </mat-form-field>
@@ -48,7 +48,7 @@
                             </ng-container>
                             <ng-container matColumnDef="nombre">
                               <mat-header-cell *matHeaderCellDef> 
-                                <mat-form-field appearance="outline"floatLabel="always" >
+                                <mat-form-field placeholder="Nombre"  appearance="outline">
                                   <mat-label>Nombre</mat-label>
                                   <input matInput  [(ngModel)]="servicioConsultar.nombre" [ngModelOptions]="{standalone: true}" (keyup)="onConsultarServicios()"> 
                                 </mat-form-field>

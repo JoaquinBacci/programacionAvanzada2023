@@ -23,7 +23,6 @@ public class DetalleOrdenService {
     }
 
     public DetalleOrden saveDetalleOrden(DetalleOrden detalleOrden){
-        System.out.println("PrecioTotal: " + detalleOrden.getPrecioTotal());
         return detalleOrdenRepository.save(detalleOrden);
     }
 }

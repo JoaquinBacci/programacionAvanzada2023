@@ -1,0 +1,24 @@
+.dialogo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialogo-mensaje {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  font-size: 18px;
+  border-top: 1px solid #d3d3d3;
+  border-bottom: 1px solid #d3d3d3;
+  padding: 10px;
+}
+
+.dialogo__img {
+  width: 250px;
+  display: block;
+}
+
+.icon-display:hover {
+  transform: scale(1.3);
+}
