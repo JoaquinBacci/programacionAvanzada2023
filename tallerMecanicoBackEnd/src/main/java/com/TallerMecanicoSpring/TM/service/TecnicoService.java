@@ -302,4 +302,19 @@ public class TecnicoService implements TecnicoRepository{
     public <S extends Tecnico, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    public Optional<Tecnico> findByEmail(String email) {
+        Tecnico tecnico = null;
+        List<Tecnico> listaDeTecnicos = new ArrayList();
+        listaDeTecnicos = this.findAll();
+        // Utiliza un for each en lugar de un bucle for para recorrer los técnicos
+        for (Tecnico t : listaDeTecnicos) {
+            if (t.getEmail().equalsIgnoreCase(email)) {
+                tecnico = t;
+                break;
+            }
+        }
+        // Devuelve el Optional con el técnico encontrado, o vacío si no se encuentra
+        return Optional.ofNullable(tecnico);
+    }
 }

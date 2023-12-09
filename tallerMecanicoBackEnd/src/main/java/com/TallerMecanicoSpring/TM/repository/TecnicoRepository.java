@@ -7,10 +7,11 @@ package com.TallerMecanicoSpring.TM.repository;
 import com.TallerMecanicoSpring.TM.model.Tecnico;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-/**
- *
- * @author maite
- */
+import java.util.Optional;
+
+
 public interface TecnicoRepository extends JpaRepository<Tecnico, Long>{
+
+    Optional<Tecnico> findByEmail(String email);
     
 }

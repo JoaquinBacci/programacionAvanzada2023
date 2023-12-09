@@ -119,6 +119,7 @@ public class MarcaService implements MarcaRepository{
     public <S extends Marca> S save(S entity) {
         System.out.println("===== SAVE =====");
         if(entity.getId() != null){
+            System.out.println("El ID es -> " + entity.getId());
             System.out.println("Hay id -> EDITAR ");
             //Editar la Marca ya existente
             Optional<Marca> marcaExistente = this.findById(entity.getId());
