@@ -5,8 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Orden {
@@ -28,13 +31,13 @@ public class Orden {
     @JoinColumn(name = "vehiculo_id")
     private Vehiculo vehiculo;
 
-    private String fechaIngreso;
+    private Date fechaIngreso;
 
-    public String getFechaIngreso() {
+    public Date getFechaIngreso() {
         return fechaIngreso;
     }
 
-    public void setFechaIngreso(String fechaIngreso) {
+    public void setFechaIngreso(Date fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }
 
@@ -124,4 +127,6 @@ public class Orden {
     public void setVehiculo(Vehiculo vehiculo) {
         this.vehiculo = vehiculo;
     }
+
+    
 }

@@ -4,6 +4,7 @@
        <div style="display: flex;">
             <button mat-raised-button (click)="setVista('CREAR')" color="primary" > Crear Orden </button>
             <button mat-raised-button (click)="setVista('CONSULTAR')" color="warn" style="margin-left: 10px;"> Consultar Ordenes </button> 
+            <button mat-raised-button (click)="setVista('REPORTE')" color="white" style="margin-left: 10px;"> Reporte </button> 
        </div>
 
        <mat-card style="margin-top: 20px;">
@@ -24,13 +25,57 @@
 
                       <ng-container matColumnDef="fechaIngreso">
                         <mat-header-cell *matHeaderCellDef> Fecha Ingreso </mat-header-cell>
-                        <mat-cell *matCellDef="let elemento"> {{ elemento.fechaIngreso }} </mat-cell>
+                        <mat-cell *matCellDef="let elemento"> {{ elemento.fechaIngreso | date:'dd/MM/yyyy'}} </mat-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="tecnico">
                         <mat-header-cell *matHeaderCellDef> Tecnico </mat-header-cell>
                         <mat-cell *matCellDef="let elemento"> {{ elemento.tecnico.apellido + ', ' + elemento.tecnico.nombre }} </mat-cell>
                       </ng-container>
+                  
+                    <!-- Columna Acciones -->
+                    <ng-container matColumnDef="acciones">
+                      <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+                      <mat-cell *matCellDef="let elemento">
+                        <button mat-icon-button matTooltip="Editar" >
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                        <!-- <button mat-icon-button matTooltip="Eliminar" (click)="onEliminar(elemento.id)">
+                          <mat-icon>delete</mat-icon>
+                        </button> -->
+                      </mat-cell>
+                    </ng-container>
+                  
+                    <!-- Define las columnas de la tabla -->
+                    <mat-header-row *matHeaderRowDef="columnasOrdenes"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: columnasOrdenes;"></mat-row>
+                  </mat-table>
+
+            </mat-card-content>
+
+            <mat-card-content *ngIf=" vista == 'REPORTE' ">
+                <mat-card-title> Reporte Ordenes</mat-card-title>
+                <mat-table [dataSource]="dataSourceOrdenes" class="mat-elevation-z8">
+                    <!-- Columna Nombre -->
+                    <ng-container matColumnDef="fecha">
+                      <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
+                      <mat-cell *matCellDef="let elemento"> {{ elemento.fechaIngreso }} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="servicio">
+                      <mat-header-cell *matHeaderCellDef> Vehiculo </mat-header-cell>
+                      <mat-cell *matCellDef="let elemento"> {{ elemento.servicio }} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="tecnico">
+                      <mat-header-cell *matHeaderCellDef> Tecnico </mat-header-cell>
+                      <mat-cell *matCellDef="let elemento"> {{ elemento.nombreTecnico }} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="monto">
+                      <mat-header-cell *matHeaderCellDef> Tecnico </mat-header-cell>
+                      <mat-cell *matCellDef="let elemento"> {{ elemento.monto }} </mat-cell>
+                    </ng-container>
                   
                     <!-- Columna Acciones -->
                     <ng-container matColumnDef="acciones">

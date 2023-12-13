@@ -1,6 +1,9 @@
 package com.TallerMecanicoSpring.TM.service;
 
+import com.TallerMecanicoSpring.TM.model.DetalleOrden;
 import com.TallerMecanicoSpring.TM.model.Orden;
+import com.TallerMecanicoSpring.TM.model.RqReporteTecServEntreFecha;
+import com.TallerMecanicoSpring.TM.model.RsReporteTecServEntreFecha;
 import com.TallerMecanicoSpring.TM.model.Servicio;
 import com.TallerMecanicoSpring.TM.repository.OrdenRepository;
 import jakarta.transaction.Transactional;
@@ -8,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrdenService {
@@ -26,12 +32,15 @@ public class OrdenService {
         return ordenRepository.findById(id);
     }
 
+    
+
     @Transactional
     public Orden saveOrden(Orden orden){
         if(orden.getId() == null){
             Date fi = new Date();
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            orden.setFechaIngreso(format.format(fi));
+            //SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            //Recordar Reparar
+            orden.setFechaIngreso(fi);
             return ordenRepository.save(orden);
         } else {
 
