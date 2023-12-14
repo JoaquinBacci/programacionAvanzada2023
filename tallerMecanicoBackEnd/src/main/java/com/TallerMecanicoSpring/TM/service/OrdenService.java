@@ -33,6 +33,9 @@ public class OrdenService {
 
     @Transactional
     public Orden saveOrden(Orden orden) {
+        if (orden.getVehiculo() == null) {
+            throw new IllegalArgumentException("El vehiculo no debe ser nulo");
+        }
         if (orden.getId() == null) {
             // GUARDAR NUEVA ORDEN
             Date fi = new Date();

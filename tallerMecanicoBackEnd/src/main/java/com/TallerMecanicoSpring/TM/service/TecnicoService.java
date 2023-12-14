@@ -190,6 +190,9 @@ public class TecnicoService implements TecnicoRepository{
 
     @Override
     public <S extends Tecnico> S save(S entity) {
+        if (entity.getDni() == null) {
+            throw new IllegalArgumentException("El DNI del técnico no puede ser nulo");
+        }
         if(entity.getId() != null){
             //Editar el tecnico
             Optional<Tecnico> tecnicoExistente = this.findById(entity.getId());

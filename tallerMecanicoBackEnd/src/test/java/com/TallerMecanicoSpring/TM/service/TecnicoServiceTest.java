@@ -55,16 +55,17 @@ public class TecnicoServiceTest {
         assertThat(tecnicoGuardado).isNotNull();
     }
 
-//    @DisplayName("Prueba Unitaria para guardar tecnico con throw exception")
-//    @Test
-//    void testGuardarTecnicoConThrow() {
-//        //given
-//        given(tecnicoRepository.save(tecnico)).willReturn(Optional.of(tecnico)); // si no existe el mail, se devuelve el tecnico
-//        //when
-//        assertThrows(ResourceNotFoundException.class,() -> {
-//            tecnicoService.save(tecnico);
-//        });
-//        //then
-//        verify(tecnicoRepository, never()).save(any(Tecnico.class));
-//    }
+    @DisplayName("Prueba Unitaria para guardar técnico sin DNI")
+    @Test
+    void testGuardarTecnicoSinDNI() {
+        // Configuramos el técnico para que no tenga DNI
+        tecnico.setDni(null);
+
+        // Cuando intentamos guardar un técnico sin DNI, debería lanzar una excepción o devolver null
+        assertThrows(IllegalArgumentException.class, () -> tecnicoService.save(tecnico));
+
+        // Verificamos que el método save del repositorio nunca fue invocado
+        verify(tecnicoRepository, never()).save(any(Tecnico.class));
+    }
+
 }
