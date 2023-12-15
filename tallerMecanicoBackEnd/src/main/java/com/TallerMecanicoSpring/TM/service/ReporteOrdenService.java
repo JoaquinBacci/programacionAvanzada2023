@@ -1,5 +1,6 @@
 package com.TallerMecanicoSpring.TM.service;
 
+import com.TallerMecanicoSpring.TM.dto.RqReporteDTO;
 import com.TallerMecanicoSpring.TM.model.DetalleOrden;
 import com.TallerMecanicoSpring.TM.model.Orden;
 import com.TallerMecanicoSpring.TM.model.RqReporteTecServEntreFecha;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -21,16 +23,33 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
+@Service
 public class ReporteOrdenService {
 
     @Autowired
     private OrdenService ordenServicio;
 
-    public List<RsReporteTecServEntreFecha> reporteOrenesPeriodo(RqReporteTecServEntreFecha rq){
+    public List<RsReporteTecServEntreFecha> reporteOrdenesPeriodo(RqReporteDTO rqdto){
         
         List<Orden> allOrdenes = ordenServicio.findAllOrdenes();
         List<RsReporteTecServEntreFecha> listRs = new ArrayList<RsReporteTecServEntreFecha>();
+
+        RqReporteTecServEntreFecha rq = new RqReporteTecServEntreFecha();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        try {
+            // Convertir las fechas desde String a Date
+            rq.setFechaDesde(dateFormat.parse(rqdto.getFechaDesde()));
+            rq.setFechaHasta(dateFormat.parse(rqdto.getFechaHasta()));
+            rq.setIdsTecnicos(rqdto.getIdsTecnicos());
+            rq.setIdsServicios(rqdto.getIdsServicios());
+        } catch (ParseException e) {
+            // Manejar la excepción si hay un problema al parsear las fechas
+            e.printStackTrace();
+        }
+
+
                 
         Date fechaDesde = rq.getFechaDesde();
         Date fechaHasta = rq.getFechaHasta();
@@ -38,8 +57,9 @@ public class ReporteOrdenService {
         Long[] idsServicios = rq.getIdsServicios();
 
         allOrdenes = allOrdenes.stream()
-            .filter(o -> o.getFechaIngreso().after(fechaDesde) && o.getFechaIngreso().before(fechaHasta))
-            .collect(Collectors.toList());
+                .filter(o -> o.getFechaIngreso() != null && fechaDesde != null && fechaHasta != null &&
+                        o.getFechaIngreso().after(fechaDesde) && o.getFechaIngreso().before(fechaHasta))
+                .collect(Collectors.toList());
 
         for(Orden o: allOrdenes){
             for(Long i: idsTecnicos){

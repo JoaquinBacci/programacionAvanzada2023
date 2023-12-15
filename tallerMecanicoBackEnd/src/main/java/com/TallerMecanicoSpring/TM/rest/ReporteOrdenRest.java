@@ -1,5 +1,6 @@
 package com.TallerMecanicoSpring.TM.rest;
 
+import com.TallerMecanicoSpring.TM.dto.RqReporteDTO;
 import com.TallerMecanicoSpring.TM.model.*;
 import com.TallerMecanicoSpring.TM.repository.*;
 import com.TallerMecanicoSpring.TM.service.ClienteService;
@@ -22,12 +23,16 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/reporte/")
 public class ReporteOrdenRest {
+    @Autowired
+    ReporteOrdenService rptOrdenServ;
     
-    ReporteOrdenService rptOrdenServ = new ReporteOrdenService();
-    
+//    @PostMapping("orden/")
+//    private ResponseEntity<List<RsReporteTecServEntreFecha>> search(@RequestBody RqReporteTecServEntreFecha rptOrdenRq){
+//        return ResponseEntity.ok(rptOrdenServ.reporteOrdenesPeriodo(rptOrdenRq));
+//    }
     @PostMapping("orden/")
-    private ResponseEntity<List<RsReporteTecServEntreFecha>> search(@RequestBody RqReporteTecServEntreFecha rptOrdenRq){
-        return ResponseEntity.ok(rptOrdenServ.reporteOrenesPeriodo(rptOrdenRq));
+    private ResponseEntity<List<RsReporteTecServEntreFecha>> search(@RequestBody RqReporteDTO reporteDTO){
+        return ResponseEntity.ok(rptOrdenServ.reporteOrdenesPeriodo(reporteDTO));
     }
 
     
