@@ -14,7 +14,7 @@ public class Orden {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @AssertTrue(message = "La marca debe ser un booleano")
+    @AssertTrue(message = "Activo debe ser un booleano")
     private boolean activo;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
@@ -28,13 +28,38 @@ public class Orden {
     @JoinColumn(name = "vehiculo_id")
     private Vehiculo vehiculo;
 
-    private String fechaIngreso;
+    private Date fechaIngreso;
+    private String estado; //"creada" "enCurso" "finalizada" "cancelada"
 
-    public String getFechaIngreso() {
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public void crear(){
+        this.setEstado("creada");
+    }
+
+    public void iniciar(){
+        this.setEstado("enCurso");
+    }
+
+    public void finalizar(){
+        this.setEstado("finalizada");
+    }
+
+    public void cancelar(){
+        this.setEstado("cancelada");
+    }
+
+    public Date getFechaIngreso() {
         return fechaIngreso;
     }
 
-    public void setFechaIngreso(String fechaIngreso) {
+    public void setFechaIngreso(Date fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }
 

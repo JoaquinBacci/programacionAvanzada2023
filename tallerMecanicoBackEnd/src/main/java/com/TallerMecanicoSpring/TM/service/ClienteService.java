@@ -129,7 +129,7 @@ public class ClienteService implements ClienteRepository{
             
             
         } else {
-            //Crear nuevo Tecnico
+            //Crear nuevo Cliente
             List<Cliente> clientes = new ArrayList();
             clientes = this.clienteRepository.findAll();
             for(Cliente c: clientes){
@@ -137,6 +137,17 @@ public class ClienteService implements ClienteRepository{
                    return (S) new Cliente();  
                 }
             }
+
+            /*Cliente c = new Cliente();
+            c.setActivo(true);
+            c.setApellido(entity.getApellido());
+            c.setDireccion(entity.getDireccion());
+            c.setNombre(entity.getNombre());
+            c.setDni(entity.getDni());
+            c.setEmail(entity.getEmail());
+            c.setLicenciaConducir(entity.getLicenciaConducir());
+            c.setNum_tel(entity.getNum_tel());
+*/          entity.setActivo(true);
             return this.clienteRepository.save(entity);
         }
     }

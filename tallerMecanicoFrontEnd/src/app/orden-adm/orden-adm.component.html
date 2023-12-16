@@ -9,94 +9,63 @@
        <mat-card style="margin-top: 20px;">
 
             <mat-card-content *ngIf=" vista == 'CONSULTAR' ">
-                <mat-card-title> Ordenes de trabajo</mat-card-title>
-                <mat-table [dataSource]="dataSourceOrdenes" class="mat-elevation-z8">
-                    <!-- Columna Nombre -->
-                    <ng-container matColumnDef="cliente">
-                      <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
-                      <mat-cell *matCellDef="let elemento"> {{ elemento.vehiculo.cliente.apellido + ', ' + elemento.vehiculo.cliente.nombre }} </mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="vehiculo">
-                        <mat-header-cell *matHeaderCellDef> Vehiculo </mat-header-cell>
-                        <mat-cell *matCellDef="let elemento"> {{ elemento.vehiculo.patente + ' ' + elemento.vehiculo.marca.nombre + ', ' + elemento.vehiculo.modelo.nombre }} </mat-cell>
-                      </ng-container>
-
-                      <ng-container matColumnDef="fechaIngreso">
-                        <mat-header-cell *matHeaderCellDef> Fecha Ingreso </mat-header-cell>
-                        <mat-cell *matCellDef="let elemento"> {{ elemento.fechaIngreso }} </mat-cell>
-                      </ng-container>
-
-                      <ng-container matColumnDef="tecnico">
-                        <mat-header-cell *matHeaderCellDef> Tecnico </mat-header-cell>
-                        <mat-cell *matCellDef="let elemento"> {{ elemento.tecnico.apellido + ', ' + elemento.tecnico.nombre }} </mat-cell>
-                      </ng-container>
-                  
-                    <!-- Columna Acciones -->
-                    <ng-container matColumnDef="acciones">
-                      <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
-                      <mat-cell *matCellDef="let elemento">
-                        <button mat-icon-button matTooltip="Editar" >
-                          <mat-icon>edit</mat-icon>
-                        </button>
-                        <!-- <button mat-icon-button matTooltip="Eliminar" (click)="onEliminar(elemento.id)">
-                          <mat-icon>delete</mat-icon>
-                        </button> -->
-                      </mat-cell>
-                    </ng-container>
-                  
-                    <!-- Define las columnas de la tabla -->
-                    <mat-header-row *matHeaderRowDef="columnasOrdenes"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: columnasOrdenes;"></mat-row>
-                  </mat-table>
-
+                <app-orden-edit  [dataSourceOrdenes]="dataSourceOrdenes"  (editarClicked)="editar($event)"></app-orden-edit>
             </mat-card-content>
 
-            <mat-card-content *ngIf="vista == 'CREAR'">
+            <mat-card-content *ngIf="vista == 'CREAR' || vista == 'EDITAR' ">
                 <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                    <mat-card-title>Nueva orden</mat-card-title>
-                    <h4> Fecha: {{fechaActual | date:"dd/MM/yyyy"}}</h4>
+                    <mat-card-title> {{vista == 'CREAR'? 'Nueva orden' : 'Editar orden'}}</mat-card-title>
+                    <h4 *ngIf="vista == 'CREAR'"> Fecha: {{ fechaActual | date:"dd/MM/yyyy"}}</h4>
+                    <h4 *ngIf="vista == 'EDITAR'"> Fecha: {{orden?.fechaIngreso | date:"dd/MM/yyyy"}}</h4>
                 </div>
                 <form [formGroup]="formularioOrden" >
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <div style="width: 40%;">
-                            <mat-form-field style="width: 100%;">
+                            <mat-form-field style="width: 100%;" *ngIf="vista == 'CREAR'">
                                 <mat-select placeholder="Cliente" formControlName="cliente" (selectionChange)="getAllVehiculos()">
                                 <mat-option *ngFor="let cliente of dataClientes" [value]="cliente" (click)="setCliente(cliente)">
                                     {{ cliente.apellido + ', ' + cliente.nombre }}
                                 </mat-option>
                                 </mat-select>
                             </mat-form-field>
+
+                            <mat-form-field style="width: 100%;" *ngIf="vista == 'EDITAR'">
+                                <input matInput  [value]="clienteSeleccionado?.nombre + ', ' + clienteSeleccionado?.apellido" [disabled]="true">
+                            </mat-form-field>
                         
                             <div class="infoVehiculo" *ngIf="clienteSeleccionado!=null" style="width: 100%;">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;" *ngIf="vista == 'CREAR'">
                                     <mat-select placeholder="Vehiculo"  formControlName="vehiculo">
                                     <mat-option *ngFor="let vehiculo of dataVehiculos" [value]="vehiculo" (click)="setVehiculo(vehiculo)">
                                         {{ vehiculo.patente + ', ' + vehiculo.marca.nombre + ' ' + vehiculo.modelo.nombre }}
                                     </mat-option>
                                     </mat-select>
                                 </mat-form-field>
-                                <div *ngIf="vehiculoSeleccionado != null || vehiculoSeleccionado != undefined" style="display: flex; flex-direction: row;">
-                                    <table>
-                                        <tr>
-                                            <td>Marca: </td>
-                                            <td>{{vehiculoSeleccionado.marca.nombre}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Modelo: </td>
-                                            <td>{{vehiculoSeleccionado.modelo.nombre}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Patente: </td>
-                                            <td>{{vehiculoSeleccionado.patente}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Kilometraje: </td>
-                                            <td>{{vehiculoSeleccionado.kilometraje}}</td>
-                                        </tr>
-                                    </table>
-                                    <div>
-                                        <button mat-icon-button (click)="deleteVehiculo()" color="red" > <mat-icon>delete</mat-icon></button>
+                                <div *ngIf="vehiculoSeleccionado != null || vehiculoSeleccionado != undefined">
+                                    <div><h4>Datos del Vehiculo:</h4></div> 
+                                    <div  style="display: flex; flex-direction: row;">
+                                        <table>
+                                            <tr>
+                                                <td>Marca: </td>
+                                                <td>{{vehiculoSeleccionado.marca.nombre}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Modelo: </td>
+                                                <td>{{vehiculoSeleccionado.modelo.nombre}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Patente: </td>
+                                                <td>{{vehiculoSeleccionado.patente}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Kilometraje: </td>
+                                                <td>{{vehiculoSeleccionado.kilometraje}}</td>
+                                            </tr>
+                                        </table>
+
+                                        <div *ngIf="vista == 'CREAR'">
+                                            <button mat-icon-button (click)="deleteVehiculo()" color="red" > <mat-icon>delete</mat-icon></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -104,8 +73,8 @@
                         <div class="servicios" style="width: 40%;">
                             <div >
                                 <mat-form-field style="width: 100%;">
-                                    <mat-select placeholder="Tecnico" formControlName="tecnico">
-                                    <mat-option *ngFor="let tecnico of dataTecnicos" [value]="tecnico" (click)="setTecnico(tecnico)">
+                                    <mat-select placeholder="Tecnico" formControlName="tecnico" >
+                                    <mat-option *ngFor="let tecnico of dataTecnicos"  [value]="tecnico" (click)="setTecnico(tecnico)">
                                         {{ tecnico.apellido + ', ' + tecnico.nombre }}
                                     </mat-option>
                                     </mat-select>

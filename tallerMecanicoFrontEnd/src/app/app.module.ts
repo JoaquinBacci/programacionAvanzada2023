@@ -33,6 +33,7 @@ import { VehiculoXclienteComponent } from './dialogs/vehiculoXcliente/vehiculoXc
 import { ConfirmComponent } from './dialogs/confirm/confirm.component';
 import { ServicioAdmComponent } from './servicio-adm/servicio-adm.component';
 import { OrdenAdmComponent } from './orden-adm/orden-adm.component';
+import { OrdenEditComponent } from './orden-edit/orden-edit.component';
 
 
 
@@ -51,7 +52,8 @@ import { OrdenAdmComponent } from './orden-adm/orden-adm.component';
     VehiculoXclienteComponent,
     ConfirmComponent,
     ServicioAdmComponent,
-    OrdenAdmComponent
+    OrdenAdmComponent,
+    OrdenEditComponent
   ],
   imports: [
     BrowserModule,

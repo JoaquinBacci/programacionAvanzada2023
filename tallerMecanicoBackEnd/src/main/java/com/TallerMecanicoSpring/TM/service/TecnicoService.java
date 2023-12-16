@@ -221,6 +221,7 @@ public class TecnicoService implements TecnicoRepository{
                    return (S) new Tecnico();  
                 }
             }
+            entity.setActivo(true);
             return this.tecnicoRepository.save(entity);
         }
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
