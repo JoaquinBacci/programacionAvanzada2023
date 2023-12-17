@@ -132,7 +132,13 @@ public class OrdenService {
             }
             ordenAGuardar.setDetallesOrden(detallesOrden);
         }
-
+        
+        if(ordenRq.getDetallesAEliminar().size() > 0){
+            for(DetalleOrden detalleOrden:ordenRq.getDetallesAEliminar()){
+                //Eliminar El detalle
+                this.detalleService.deleteById(detalleOrden.getId());
+            }
+        }
 
         /*TODO: MANEJAR LOS DETALLES A ELIMINAR */
         return this.ordenRepository.save(ordenAGuardar);

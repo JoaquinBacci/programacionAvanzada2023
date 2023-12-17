@@ -56,4 +56,8 @@ public class DetalleOrdenService {
 
         return detalleOrdenRepository.save(detalleOrden);
     }
+    
+    public void deleteById(Long id){
+        this.detalleOrdenRepository.deleteById(id);
+    }
 }

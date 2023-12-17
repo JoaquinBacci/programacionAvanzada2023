@@ -27,7 +27,7 @@ export class OrdenAdmComponent implements OnInit{
   dataSourceOrdenes: any[];
 
   // Las acciones de esta tabla van a ser: "remover servicio"
-  columnasServicios = ['descripcion','nombre','precio','acciones'];
+  columnasServicios = ['nombre','precio','acciones'];
   dataSourceServicios: MatTableDataSource<Servicio>;
   total: number = 0; // Variable para mostrar el precio total de la orden
   fechaActual: Date;
@@ -38,6 +38,8 @@ export class OrdenAdmComponent implements OnInit{
   dataTecnicos: Tecnico[];
   dataVehiculos: Vehiculo[];
   dataServicios: Servicio[];
+
+  servicios: Servicio[]=[];
 
   dataDetalleOrdenes: DetalleOrden[] = [];
 
@@ -105,18 +107,18 @@ export class OrdenAdmComponent implements OnInit{
         this.formularioOrden.get('vehiculo').setValue(this.orden.vehiculo);
         this.setVehiculo(this.formularioOrden.get('vehiculo').value);
         this.formularioOrden.get('descripcion').setValue(this.orden.descripcion);
-
-
-        console.log('Cliente Seleccionado: ', this.clienteSeleccionado);
-        console.log("this.formularioOrden.get('cliente').value: ", this.formularioOrden.get('cliente').value);
-        console.log("this.formularioOrden.get('tecnico').value: ", this.formularioOrden.get('tecnico').value);
-        console.log("this.formularioOrden.get('vehiculo').value: ", this.formularioOrden.get('vehiculo').value);
+        
         
         const arrayServicio: Servicio[] =[];
         this.orden.detallesOrden.forEach((detalle) => {
           arrayServicio.push(detalle.servicio);
         });
         this.dataSourceServicios = new MatTableDataSource(arrayServicio);
+        this.arrayServicios = arrayServicio;
+
+        this.calcularTotal();
+
+        console.log('datasourceServicios: ', this.dataSourceServicios);
       },
       complete: () => {
         console.log('this.orden: ', this.orden);
@@ -144,6 +146,7 @@ export class OrdenAdmComponent implements OnInit{
   getAllServicios(){
     this.sercicioService.getAllServicio().subscribe({
       next: (data)=>{
+        this.servicios = data;
         this.dataServicios = data;
       }, complete:()=>{
 
@@ -210,7 +213,7 @@ export class OrdenAdmComponent implements OnInit{
   }
 
   getAllVehiculos(){
-    console.log('get vehiculos')
+    //console.log('get vehiculos')
     // Si se selecciono cliente:
     // Se recuperan los vehiculos para poblar el selector de vehiculos
 
@@ -275,48 +278,18 @@ export class OrdenAdmComponent implements OnInit{
         this.total = this.total + servicio.precio;
       });
   }
-
-      // Armar objeto de orden para enviar a servicio de ordenes
-  /*  let object: any = {id: null,activo: null,tecnico: {id: null},vehiculo: null,descripcion: null,fechaIngreso: null,detallesOrden: null};
-    object.id = null;
-    object.activo = true;
-    let tecnico = this.formularioOrden.get('tecnico').value;
-    object.tecnico.id = tecnico.id; 
-    object.vehiculo = this.formularioOrden.get('vehiculo').value;
-    object.descripcion = this.formularioOrden.get('descripcion').value;
-    object.fechaIngreso = null;
-
-    console.log("arrayServicios",this.arrayServicios);
-    const detallesOrden: DetalleOrden[] = this.arrayServicios.map((servicio) => {
-      const detalle: any = { id: null, servicio: {id:null},cantidad: null };
-      detalle.servicio.id = servicio.id;
-      detalle.cantidad = 1;
-      // Puedes establecer otras propiedades en detalle si es necesario
-      return detalle;
-    });
-    
-    object.detallesOrden = detallesOrden;
-
-    console.log("a",detallesOrden);
-
-    if(this.debug){console.log("getObjectOrden(): ",object);}
-    return object
-*/
   getObjectOrden():OrdenSaveRq{
     let orden: OrdenSaveRq = new OrdenSaveRq();
     orden.idTecnico = (this.formularioOrden.get('tecnico').value).id;
-
-    console.log('Id Tecnico: ', orden.idTecnico);
-
-    orden.idVehiculo = (this.formularioOrden.get('vehiculo').value).id
+    orden.idVehiculo = (this.formularioOrden.get('vehiculo').value).id;
+    orden.descripcion = this.formularioOrden.get('descripcion').value;
 
 
     orden.detallesAGuardar = this.arrayServicios.map((servicio) => {
       const detalle: DetalleOrden = new DetalleOrden();
       detalle.servicio = servicio;
-      detalle.cantidad = 1;
-      // Puedes establecer otras propiedades en detalle si es necesario
-      // Manejar el precio Individual del servicio
+      detalle.cantidad = 1; //por defecto es 1 y se pueden agregar varias veces el mismo servicio, creando la cantidad de detalles como servicios se añadan
+      detalle.precioIndividual = servicio.precio      
       return detalle;
     });
 
@@ -330,9 +303,20 @@ export class OrdenAdmComponent implements OnInit{
 
   }
 
+  onPrecioChange(event, servicio){
+    let precio = (event.target as HTMLInputElement).value;
+    let indice = this.arrayServicios.findIndex(s => s.id === servicio.id);
+
+    if (indice !== -1) {
+      this.arrayServicios[indice].precio = parseFloat(precio);
+    }
+
+    console.log('arrayServicio: ', this.arrayServicios);
+  }
+
   guardarOrdentrabajo(){
     let ordenRq: OrdenSaveRq = this.getObjectOrden();
-
+    console.log("ORDEN RQ: ", ordenRq);
 
     if(this.vista=='CREAR'){
       this.ordenServicio.newOrden(ordenRq).subscribe({
@@ -462,9 +446,6 @@ export class OrdenAdmComponent implements OnInit{
 
   disabledFormField(){
     const isDisabled = this.vista === 'EDITAR';
-    console.log('Disabled: ', isDisabled);
-
-    // Solo forzar la detección de cambios si es necesario
     return isDisabled;
   }
 
@@ -472,4 +453,40 @@ export class OrdenAdmComponent implements OnInit{
     return this.vista === 'EDITAR';
   }*/
 
+  getPrecio(servicio: Servicio, i: number){
+    if(this.vista == 'EDITAR' && i < this.orden.detallesOrden.length){
+      return this.orden.detallesOrden[i].precioIndividual
+    } else{
+      return servicio.precio;
+    }
+  }
 }
+
+
+
+// Armar objeto de orden para enviar a servicio de ordenes
+  /*  let object: any = {id: null,activo: null,tecnico: {id: null},vehiculo: null,descripcion: null,fechaIngreso: null,detallesOrden: null};
+    object.id = null;
+    object.activo = true;
+    let tecnico = this.formularioOrden.get('tecnico').value;
+    object.tecnico.id = tecnico.id; 
+    object.vehiculo = this.formularioOrden.get('vehiculo').value;
+    object.descripcion = this.formularioOrden.get('descripcion').value;
+    object.fechaIngreso = null;
+
+    console.log("arrayServicios",this.arrayServicios);
+    const detallesOrden: DetalleOrden[] = this.arrayServicios.map((servicio) => {
+      const detalle: any = { id: null, servicio: {id:null},cantidad: null };
+      detalle.servicio.id = servicio.id;
+      detalle.cantidad = 1;
+      // Puedes establecer otras propiedades en detalle si es necesario
+      return detalle;
+    });
+    
+    object.detallesOrden = detallesOrden;
+
+    console.log("a",detallesOrden);
+
+    if(this.debug){console.log("getObjectOrden(): ",object);}
+    return object
+*/
