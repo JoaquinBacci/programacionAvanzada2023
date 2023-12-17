@@ -17,7 +17,7 @@ export class ClienteAdmComponent implements OnInit {
   idUpdate: number;
   form: FormGroup
   clienteConsultar: Cliente;
-  columnas: string[] = [ 'Nombre', 'Apellido', 'DNI', 'Telefono', 'CorreoElectronico', 'Acciones'];
+  columnas: string[] = [ 'Nombre', 'Apellido', 'DNI', 'Telefono', 'CorreoElectronico', 'licenciaConducir', 'Acciones'];
   dataSource: any;
 
   constructor(
@@ -32,6 +32,7 @@ export class ClienteAdmComponent implements OnInit {
       apellido: ['', [Validators.required, Validators.maxLength(50)]],
       direccion: [''],
       email: ['',[Validators.email]],
+      licencia:[''],
       activo: [true,[]],
     })
   }
@@ -46,6 +47,7 @@ export class ClienteAdmComponent implements OnInit {
     this.clienteConsultar.activo = true;
     this.clienteConsultar.dni = null;
     this.clienteConsultar.num_tel = '';
+    this.clienteConsultar.licenciaConducir='';
 
     this.onConsultar();
 
@@ -61,6 +63,7 @@ export class ClienteAdmComponent implements OnInit {
     clienteRq.num_tel = this.form.get('num_tel').value;
     clienteRq.dni = this.form.get('dni').value;
     clienteRq.activo = this.form.get('activo').value;
+    clienteRq.licenciaConducir = this.form.get('licencia').value;
 
 
     if(!this.modoEdicion){

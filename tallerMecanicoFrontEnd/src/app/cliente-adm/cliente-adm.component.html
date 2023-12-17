@@ -25,6 +25,9 @@
                                 <mat-form-field appearance="outline">
                                     <input matInput formControlName="direccion" placeholder="Direccion"> 
                                 </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                  <input matInput formControlName="licencia" placeholder="Licencia de Conducir"> 
+                              </mat-form-field>
                             </div>
                             <button mat-raised-button (click)="onGuardar()" color="primary" [disabled]="!form.valid">Guardar</button>
                             <button mat-raised-button (click)="onCancelar()" color="warn" style="margin-left: 10px;">Cancelar</button>
@@ -92,7 +95,12 @@
                                 </mat-header-cell>
                                 <mat-cell *matCellDef="let elemento"> {{ elemento.direccion }} </mat-cell>
                               </ng-container>
-                              
+                              <ng-container matColumnDef="licenciaConducir">
+                                <mat-header-cell *matHeaderCellDef> 
+                                  Licencia:
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let elemento"> {{ elemento.licenciaConducir }} </mat-cell>
+                              </ng-container>
                           
                             <!-- Columna Acciones -->
                             <ng-container matColumnDef="Acciones">

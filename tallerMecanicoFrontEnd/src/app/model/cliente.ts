@@ -10,4 +10,5 @@ export class Cliente{
     email: string;
     activo: boolean;
     vehiculos?: Vehiculo[];
+    licenciaConducir: string;
 }

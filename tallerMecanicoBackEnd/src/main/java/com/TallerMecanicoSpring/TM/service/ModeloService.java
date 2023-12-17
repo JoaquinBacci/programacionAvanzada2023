@@ -174,6 +174,7 @@ public class ModeloService implements ModeloRepository{
                 }
             } 
             entity.setNombre(nombreModelo);
+            entity.setActivo(true);
             return this.modeloRepository.save(entity);
         }
     }

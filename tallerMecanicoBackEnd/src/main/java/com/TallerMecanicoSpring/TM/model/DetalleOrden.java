@@ -20,6 +20,8 @@ public class DetalleOrden {
     @JoinColumn(name = "orden_id")
     private Orden orden;
 
+    
+
     private int cantidad;
 
     private double precioIndividual;

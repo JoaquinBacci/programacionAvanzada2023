@@ -1,0 +1,54 @@
+<mat-card-title> Ordenes de trabajo</mat-card-title>
+<mat-table [dataSource]="dataSourceOrdenes" class="mat-elevation-z8">
+    <!-- Columna Nombre -->
+    <ng-container matColumnDef="cliente">
+      <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
+      <mat-cell *matCellDef="let elemento"> {{ elemento.vehiculo.cliente.apellido + ', ' + elemento.vehiculo.cliente.nombre }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="vehiculo">
+        <mat-header-cell *matHeaderCellDef> Vehiculo </mat-header-cell>
+        <mat-cell *matCellDef="let elemento"> {{ elemento.vehiculo.patente + ' ' + elemento.vehiculo.marca.nombre + ', ' + elemento.vehiculo.modelo.nombre }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaIngreso">
+        <mat-header-cell *matHeaderCellDef> Fecha Ingreso </mat-header-cell>
+        <mat-cell *matCellDef="let elemento"> {{ elemento.fechaIngreso }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="tecnico">
+        <mat-header-cell *matHeaderCellDef> Tecnico </mat-header-cell>
+        <mat-cell *matCellDef="let elemento"> {{ elemento.tecnico.apellido + ', ' + elemento.tecnico.nombre }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+        <mat-cell *matCellDef="let elemento"> {{ elemento.estado}} </mat-cell>
+      </ng-container>
+  
+    <!-- Columna Acciones -->
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+      <mat-cell *matCellDef="let elemento">
+        <button mat-icon-button *ngIf="elemento.estado != 'finalizada' && elemento.estado != 'cancelada'" matTooltip="Editar" (click)="onEditar(elemento.id)" >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button *ngIf="elemento.estado == 'creada'" mat-icon-button matTooltip="Iniciar" (click)="iniciarOrden(elemento)">
+          <mat-icon>start</mat-icon>
+        </button>
+        <button *ngIf="elemento.estado != 'finalizada' && elemento.estado != 'cancelada'" mat-icon-button matTooltip="Cancelar" (click)="cancelarOrden(elemento)">
+            <mat-icon>cancel</mat-icon>
+        </button>
+        <button *ngIf="elemento.estado == 'enCurso'" mat-icon-button matTooltip="Finalizar" (click)="finalizarOrden(elemento)">
+            <mat-icon>done_all</mat-icon>
+        </button>
+        <button *ngIf="elemento.estado == 'finalizada'" mat-icon-button matTooltip="Imprimir Factura" (click)="imprimirFactura()">
+            <mat-icon>download</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+  
+    <!-- Define las columnas de la tabla -->
+    <mat-header-row *matHeaderRowDef="columnasOrdenes"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columnasOrdenes;"></mat-row>
+  </mat-table>

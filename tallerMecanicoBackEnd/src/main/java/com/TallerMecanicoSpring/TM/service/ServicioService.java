@@ -52,6 +52,7 @@ public class ServicioService{
                     return null; // Ya existe un servicio con el mismo nombre
                 }
             }
+            servicioRq.setActivo(true);
             return this.servicioRepository.save(servicioRq);
         }
     }

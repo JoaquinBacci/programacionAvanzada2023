@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Orden } from '../model/orden';
 import { DetalleOrden } from '../model/detalleOrden';
 import { OrdenService } from '../services/orden.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Cliente } from '../model/cliente';
 import { Tecnico } from '../model/tecnico';
 import { Vehiculo } from '../model/vehiculo';
@@ -13,6 +13,7 @@ import { Servicio } from '../model/servicio';
 import { ServicioService } from '../services/servicio.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { OrdenSaveRq } from '../model/OrdenSaveRq';
 
 @Component({
   selector: 'app-orden-adm',
@@ -22,11 +23,11 @@ import { Router } from '@angular/router';
 export class OrdenAdmComponent implements OnInit{
 
   // Las acciones de esta tabla van a ser: "consultar", "editar"
-  columnasOrdenes = ['cliente', 'vehiculo','fechaIngreso','tecnico','acciones'];
+  columnasOrdenes = ['cliente', 'vehiculo','fechaIngreso','tecnico','estado','acciones'];
   dataSourceOrdenes: any[];
 
   // Las acciones de esta tabla van a ser: "remover servicio"
-  columnasServicios = ['descripcion','nombre','precio','acciones'];
+  columnasServicios = ['nombre','precio','acciones'];
   dataSourceServicios: MatTableDataSource<Servicio>;
   total: number = 0; // Variable para mostrar el precio total de la orden
   fechaActual: Date;
@@ -37,6 +38,8 @@ export class OrdenAdmComponent implements OnInit{
   dataTecnicos: Tecnico[];
   dataVehiculos: Vehiculo[];
   dataServicios: Servicio[];
+
+  servicios: Servicio[]=[];
 
   dataDetalleOrdenes: DetalleOrden[] = [];
 
@@ -52,12 +55,14 @@ export class OrdenAdmComponent implements OnInit{
   estaEnCrearOrden: boolean = false;
   estaEnEditarOrden: boolean = false;
 
+  estadosOrden: string[] = ['iniciada','cancelada', 'enCurso', 'finalizada'];
+
   // Habilita deshabilita console.logs
   debug: boolean = true;
 
-  flitroCliente: Cliente = {activo:true, apellido: '', direccion: '', dni: null, email: '', id: null, nombre: '', num_tel: '', vehiculos: null};
+  flitroCliente: Cliente = {activo:true, apellido: '', direccion: '', dni: null, email: '', id: null, nombre: '', num_tel: '', vehiculos: null, licenciaConducir:''};
   filtroTecnico: Tecnico = {activo: null, apellido: '', direccion: '', dni: null, email: '', id: null, legajo: null, nombre: '', num_tel: ''};
-  filtroOrden: Orden = {activo: true, detallesOrden: null, tecnico: this.filtroTecnico, vehiculo: null, id: null, fechaIngreso: '',descripcion:''};
+  filtroOrden: Orden = {activo: true, detallesOrden: null, tecnico: this.filtroTecnico, vehiculo: null, id: null, fechaIngreso: '',descripcion:'',estado:''};
 
   vista: string="";
   vehiculoSeleccionado: Vehiculo;
@@ -91,9 +96,57 @@ export class OrdenAdmComponent implements OnInit{
       if(this.debug){console.log('ngOnInit() - fechaActual: ', this.fechaActual);}
   }
 
+  getOrdenById(id) {
+    this.ordenServicio.getOrdenById(id).subscribe({
+      next: (value) => {
+        this.orden = value;
+        this.formularioOrden.get('cliente').setValue(this.orden.vehiculo.cliente);
+        this.setCliente(this.formularioOrden.get('cliente').value);
+        this.formularioOrden.get('tecnico').setValue(this.orden.tecnico);
+        this.setTecnico(this.formularioOrden.get('tecnico').value);
+        this.formularioOrden.get('vehiculo').setValue(this.orden.vehiculo);
+        this.setVehiculo(this.formularioOrden.get('vehiculo').value);
+        this.formularioOrden.get('descripcion').setValue(this.orden.descripcion);
+        
+        
+        const arrayServicio: Servicio[] =[];
+        this.orden.detallesOrden.forEach((detalle) => {
+          arrayServicio.push(detalle.servicio);
+        });
+        this.dataSourceServicios = new MatTableDataSource(arrayServicio);
+        this.arrayServicios = arrayServicio;
+
+        this.calcularTotal();
+
+        console.log('datasourceServicios: ', this.dataSourceServicios);
+      },
+      complete: () => {
+        console.log('this.orden: ', this.orden);
+      },
+      error: (err) => {
+        console.log('error ', err);
+      },
+    });
+  }
+  
+  
+  editar(event){
+    console.log('EDITAR: ', event);
+    this.setVista('EDITAR');
+
+    this.formularioOrden.get('cliente').disable();
+    this.formularioOrden.get('vehiculo').disable();
+
+    
+    //BuscarOrden y setear valores del formulario.
+    this.getOrdenById(event);
+    
+  }
+  
   getAllServicios(){
     this.sercicioService.getAllServicio().subscribe({
       next: (data)=>{
+        this.servicios = data;
         this.dataServicios = data;
       }, complete:()=>{
 
@@ -160,6 +213,7 @@ export class OrdenAdmComponent implements OnInit{
   }
 
   getAllVehiculos(){
+    //console.log('get vehiculos')
     // Si se selecciono cliente:
     // Se recuperan los vehiculos para poblar el selector de vehiculos
 
@@ -224,55 +278,83 @@ export class OrdenAdmComponent implements OnInit{
         this.total = this.total + servicio.precio;
       });
   }
+  getObjectOrden():OrdenSaveRq{
+    let orden: OrdenSaveRq = new OrdenSaveRq();
+    orden.idTecnico = (this.formularioOrden.get('tecnico').value).id;
+    orden.idVehiculo = (this.formularioOrden.get('vehiculo').value).id;
+    orden.descripcion = this.formularioOrden.get('descripcion').value;
 
-  getObjectOrden(){
-    // Armar objeto de orden para enviar a servicio de ordenes
-    let object: any = {id: null,activo: null,tecnico: {id: null},vehiculo: null,descripcion: null,fechaIngreso: null,detallesOrden: null};
-    object.id = null;
-    object.activo = true;
-    let tecnico = this.formularioOrden.get('tecnico').value;
-    object.tecnico.id = tecnico.id; 
-    object.vehiculo = this.formularioOrden.get('vehiculo').value;
-    object.descripcion = this.formularioOrden.get('descripcion').value;
-    object.fechaIngreso = null;
 
-    console.log("arrayServicios",this.arrayServicios);
-    const detallesOrden: DetalleOrden[] = this.arrayServicios.map((servicio) => {
-      const detalle: any = { id: null, servicio: {id:null},cantidad: null };
-      detalle.servicio.id = servicio.id;
-      detalle.cantidad = 1;
-      // Puedes establecer otras propiedades en detalle si es necesario
+    orden.detallesAGuardar = this.arrayServicios.map((servicio) => {
+      const detalle: DetalleOrden = new DetalleOrden();
+      detalle.servicio = servicio;
+      detalle.cantidad = 1; //por defecto es 1 y se pueden agregar varias veces el mismo servicio, creando la cantidad de detalles como servicios se añadan
+      detalle.precioIndividual = servicio.precio      
       return detalle;
     });
-    
-    object.detallesOrden = detallesOrden;
 
-    console.log("a",detallesOrden);
+    orden.detallesAEliminar = [];
 
-    if(this.debug){console.log("getObjectOrden(): ",object);}
-    return object
+    if(this.vista =='EDITAR'){
+      orden.idOrden = this.orden.id;
+    }
+
+    return orden;
+
+  }
+
+  onPrecioChange(event, servicio){
+    let precio = (event.target as HTMLInputElement).value;
+    let indice = this.arrayServicios.findIndex(s => s.id === servicio.id);
+
+    if (indice !== -1) {
+      this.arrayServicios[indice].precio = parseFloat(precio);
+    }
+
+    console.log('arrayServicio: ', this.arrayServicios);
   }
 
   guardarOrdentrabajo(){
-    let orden = this.getObjectOrden();
+    let ordenRq: OrdenSaveRq = this.getObjectOrden();
+    console.log("ORDEN RQ: ", ordenRq);
 
-    this.ordenServicio.newOrden(orden).subscribe({
-      next: (data) => {
-        if(data){
-          if(this.debug){console.log('guardarOrdentrabajo() - dataOK: ', data);}
-        } else {
-          if(this.debug){console.log('guardarOrdentrabajo() - dataNULL: ', data);}
+    if(this.vista=='CREAR'){
+      this.ordenServicio.newOrden(ordenRq).subscribe({
+        next: (data) => {
+          if(data){
+            if(this.debug){console.log('guardarOrdentrabajo() - dataOK: ', data);}
+          } else {
+            if(this.debug){console.log('guardarOrdentrabajo() - dataNULL: ', data);}
+          }
+        },
+        complete: () => {
+          // Se actualiza la tabla de ordenes
+          this.getAllOrdenes()
+          this.formularioOrden.reset();
+          this.router.navigate(['/home']);
+        },error: (error) => {
+          if(this.debug){console.log('guardarOrdentrabajo() - ERROR: ', error);}
         }
-      },
-      complete: () => {
-        // Se actualiza la tabla de ordenes
-        this.getAllOrdenes()
-        this.formularioOrden.reset();
-        this.router.navigate(['/home']);
-      },error: (error) => {
-        if(this.debug){console.log('guardarOrdentrabajo() - ERROR: ', error);}
-      }
-    })
+      })
+    } else {
+      this.ordenServicio.updateOrden(ordenRq).subscribe({
+        next: (data) => {
+          if(data){
+            if(this.debug){console.log('guardarOrdentrabajo() - dataOK: ', data);}
+          } else {
+            if(this.debug){console.log('guardarOrdentrabajo() - dataNULL: ', data);}
+          }
+        },
+        complete: () => {
+          // Se actualiza la tabla de ordenes
+          this.getAllOrdenes()
+          this.formularioOrden.reset();
+          this.router.navigate(['/home']);
+        },error: (error) => {
+          if(this.debug){console.log('guardarOrdentrabajo() - ERROR: ', error);}
+        }
+      });
+    }
   }
 
   // Metodos para mostrar ocultar elementos en la interfaz de Ordenes
@@ -280,6 +362,10 @@ export class OrdenAdmComponent implements OnInit{
     this.estaEnConsultaOrdenes = false;
     this.estaEnCrearOrden = false;
     this.estaEnEditarOrden = true; // <- 
+  }
+
+  onEditar(id){
+    this.router.navigate([`orden/${id}`])
   }
 
   onConsultarOrdenes(){
@@ -306,13 +392,101 @@ export class OrdenAdmComponent implements OnInit{
   }
 
   setCliente(c:Cliente){
+    console.log('setCliente: ', c);
     this.clienteSeleccionado = new Cliente();
     this.clienteSeleccionado = c;
     this.deleteVehiculo();
+    console.log('cliente: ' + this.clienteSeleccionado);
+    //this.getAllVehiculos();
   }
 
   setTecnico(t:Tecnico){
     this.tecnicoSeleccionado = t;
   }
 
+  iniciarOrden(o:Orden){
+    this.ordenServicio.iniciarOrden(o).subscribe({
+      next:(data)=>{
+        if(data){
+          console.log('Se actualizo el estado');
+        } else{
+          console.log('NO hay data = error');
+        }
+      }
+    });
+  }
+
+  cancelarOrden(o:Orden){
+    this.ordenServicio.cancelarOrden(o).subscribe({
+      next:(data)=>{
+        if(data){
+          console.log('Se actualizo el estado');
+        } else{
+          console.log('NO hay data = error');
+        }
+      }
+    });
+  }
+
+  finalizarOrden(o:Orden){
+    this.ordenServicio.finalizarOrden(o).subscribe({
+      next:(data)=>{
+        if(data){
+          console.log('Se actualizo el estado');
+        } else{
+          console.log('NO hay data = error');
+        }
+      }
+    });
+  }
+
+  imprimirFactura(){
+    console.log('impresion de factura')
+  }
+
+  disabledFormField(){
+    const isDisabled = this.vista === 'EDITAR';
+    return isDisabled;
+  }
+
+  /*get isFormFieldDisabled(): boolean {
+    return this.vista === 'EDITAR';
+  }*/
+
+  getPrecio(servicio: Servicio, i: number){
+    if(this.vista == 'EDITAR' && i < this.orden.detallesOrden.length){
+      return this.orden.detallesOrden[i].precioIndividual
+    } else{
+      return servicio.precio;
+    }
+  }
 }
+
+
+
+// Armar objeto de orden para enviar a servicio de ordenes
+  /*  let object: any = {id: null,activo: null,tecnico: {id: null},vehiculo: null,descripcion: null,fechaIngreso: null,detallesOrden: null};
+    object.id = null;
+    object.activo = true;
+    let tecnico = this.formularioOrden.get('tecnico').value;
+    object.tecnico.id = tecnico.id; 
+    object.vehiculo = this.formularioOrden.get('vehiculo').value;
+    object.descripcion = this.formularioOrden.get('descripcion').value;
+    object.fechaIngreso = null;
+
+    console.log("arrayServicios",this.arrayServicios);
+    const detallesOrden: DetalleOrden[] = this.arrayServicios.map((servicio) => {
+      const detalle: any = { id: null, servicio: {id:null},cantidad: null };
+      detalle.servicio.id = servicio.id;
+      detalle.cantidad = 1;
+      // Puedes establecer otras propiedades en detalle si es necesario
+      return detalle;
+    });
+    
+    object.detallesOrden = detallesOrden;
+
+    console.log("a",detallesOrden);
+
+    if(this.debug){console.log("getObjectOrden(): ",object);}
+    return object
+*/

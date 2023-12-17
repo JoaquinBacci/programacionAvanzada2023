@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/enviroments/enviroment';
 import { Orden } from '../model/orden';
+import { OrdenSaveRq } from '../model/OrdenSaveRq';
 
 @Injectable({
   providedIn: 'root'
@@ -17,14 +18,18 @@ export class OrdenService {
   ) { }
 
   public getAllOrdenes(): Observable<any>{
-    return this.http.get(`${this.API_SERVER}/orden`)
+    return this.http.get(`${this.API_SERVER}/orden`);
   }
 
-  public newOrden(orden: Orden): Observable<any>{
+  public getOrdenById(id):Observable<Orden>{
+    return this.http.get<Orden>(`${this.API_SERVER}/orden/get/${id}`);
+  }
+
+  public newOrden(orden: OrdenSaveRq): Observable<any>{
     return this.http.post(`${this.API_SERVER}/orden/save`, orden, { headers: this.headers })
   }
 
-  updateOrden( orden: Orden): Observable<any> {
+  updateOrden( orden: OrdenSaveRq): Observable<any> {
     return this.http.put(`${this.API_SERVER}/orden/update`, orden,  { headers: this.headers });
   }
 
@@ -35,4 +40,17 @@ export class OrdenService {
   deleteorden(id: number): Observable<any>{
     return this.http.delete(`${this.API_SERVER}/orden/delete/${id}`)
   }
+
+  iniciarOrden(orden: Orden): Observable<Orden>{
+    return this.http.post<Orden>(`${this.API_SERVER}/orden/iniciar`, orden, { headers: this.headers })
+  }
+
+  cancelarOrden(orden: Orden): Observable<Orden>{
+    return this.http.post<Orden>(`${this.API_SERVER}/orden/cancelar`, orden, { headers: this.headers })
+  }
+
+  finalizarOrden(orden: Orden): Observable<Orden>{
+    return this.http.post<Orden>(`${this.API_SERVER}/orden/finalizar`, orden, { headers: this.headers })
+  }
+
 }
