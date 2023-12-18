@@ -1,11 +1,10 @@
 package com.TallerMecanicoSpring.TM.service;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-import com.TallerMecanicoSpring.TM.exceptions.ResourceNotFoundException;
 import com.TallerMecanicoSpring.TM.model.Tecnico;
 import com.TallerMecanicoSpring.TM.repository.TecnicoRepository;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.never;
@@ -60,12 +61,10 @@ public class TecnicoServiceTest {
     void testGuardarTecnicoSinDNI() {
         // Configuramos el técnico para que no tenga DNI
         tecnico.setDni(null);
-
-        // Cuando intentamos guardar un técnico sin DNI, debería lanzar una excepción o devolver null
-        assertThrows(IllegalArgumentException.class, () -> tecnicoService.save(tecnico));
-
-        // Verificamos que el método save del repositorio nunca fue invocado
-        verify(tecnicoRepository, never()).save(any(Tecnico.class));
+        given(tecnicoRepository.save(tecnico)).willThrow(ConstraintViolationException.class);
+        // Verificar que se lanza la excepción esperada al intentar guardar
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            tecnicoService.save(tecnico);
+        });
     }
-
 }

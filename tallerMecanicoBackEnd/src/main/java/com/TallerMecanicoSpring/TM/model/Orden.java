@@ -20,15 +20,16 @@ public class Orden {
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<DetalleOrden> detallesOrden;
 
-    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "tecnico_id")
     private Tecnico tecnico;
 
-    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "vehiculo_id")
     private Vehiculo vehiculo;
 
     private Date fechaIngreso;
+
     private String estado; //"creada" "enCurso" "finalizada" "cancelada"
 
     public String getEstado() {
@@ -73,9 +74,6 @@ public class Orden {
 
     private String descripcion;
 
-
-//    private double precioTotal;
-
     public Orden() {
     }
 
@@ -86,29 +84,8 @@ public class Orden {
         this.tecnico = tecnico;
         this.vehiculo = vehiculo;
         this.descripcion = descripcion;
-        /* this.setPrecioTotal(); */
-        /* this.setFechaIngreso(); */
     }
 
-//    public double getPrecioTotal() {
-//        double total = 0.0;
-//        if (detallesOrden != null) {
-//            for (DetalleOrden detalle : detallesOrden) {
-//                total += detalle.getPrecioTotal();
-//            }
-//        }
-//        return total;
-//    }
-//
-//    public void setPrecioTotal() {
-//        double total = 0.0;
-//        if (detallesOrden != null) {
-//            for (DetalleOrden detalle : detallesOrden) {
-//                total += detalle.getPrecioTotal();
-//            }
-//        }
-//        this.precioTotal = total;
-//    }
 
     public Long getId() {
         return id;
@@ -148,5 +125,19 @@ public class Orden {
 
     public void setVehiculo(Vehiculo vehiculo) {
         this.vehiculo = vehiculo;
+    }
+
+    @Override
+    public String toString() {
+        return "Orden{" +
+                "id=" + id +
+                ", activo=" + activo +
+                ", detallesOrden=" + detallesOrden +
+                ", tecnico=" + tecnico +
+                ", vehiculo=" + vehiculo +
+                ", fechaIngreso=" + fechaIngreso +
+                ", estado='" + estado + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                '}';
     }
 }

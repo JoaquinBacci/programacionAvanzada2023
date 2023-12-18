@@ -11,7 +11,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -190,9 +193,6 @@ public class TecnicoService implements TecnicoRepository{
 
     @Override
     public <S extends Tecnico> S save(S entity) {
-        if (entity.getDni() == null) {
-            throw new IllegalArgumentException("El DNI del técnico no puede ser nulo");
-        }
         if(entity.getId() != null){
             //Editar el tecnico
             Optional<Tecnico> tecnicoExistente = this.findById(entity.getId());
@@ -208,7 +208,7 @@ public class TecnicoService implements TecnicoRepository{
                 t.setLegajo(entity.getLegajo());
                 t.setNum_tel(entity.getNum_tel());
                 
-                
+
                 return this.tecnicoRepository.save(entity);
             } else {
                 return (S) new Tecnico();
@@ -225,7 +225,11 @@ public class TecnicoService implements TecnicoRepository{
                 }
             }
             entity.setActivo(true);
-            return this.tecnicoRepository.save(entity);
+            try{
+                return this.tecnicoRepository.save(entity);
+            }catch (ConstraintViolationException error) {
+                throw new DataIntegrityViolationException("Error de integración de datos" + error);
+            }
         }
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }

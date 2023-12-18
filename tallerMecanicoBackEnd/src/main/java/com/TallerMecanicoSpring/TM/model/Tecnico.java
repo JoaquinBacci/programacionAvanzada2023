@@ -1,12 +1,11 @@
 
 package com.TallerMecanicoSpring.TM.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -16,8 +15,10 @@ public class Tecnico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Min(value = 10000000, message = "El DNI debe tener 8 dígitos")
     @Max(value = 99999999, message = "El DNI debe tener 8 dígitos")
+    @NotNull
     private Integer dni;
     @NotNull
     private String num_tel;
