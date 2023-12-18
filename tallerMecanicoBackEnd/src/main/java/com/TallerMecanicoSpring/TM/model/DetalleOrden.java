@@ -11,7 +11,7 @@ public class DetalleOrden {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="id_servicio")
     private Servicio servicio;
 

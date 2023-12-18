@@ -84,7 +84,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <mat-select placeholder="Servicio" formControlName="servicio">
                                     <mat-option *ngFor="let servicio of dataServicios" [value]="servicio">
-                                        {{ servicio.nombre + servicio.precio}}
+                                        {{ servicio.nombre}}
                                     </mat-option>
                                     </mat-select>
                                 </mat-form-field>               
@@ -104,7 +104,7 @@
                                         <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
                                         <mat-cell *matCellDef="let elemento; let i = index">
                                             <mat-form-field style="width: 100%;">
-                                                <input matInput  [value]="getPrecio(elemento, i)" [disabled]="false" (change)="onPrecioChange($event, elemento)">
+                                                <input matInput type="number" [value]="getPrecio(elemento, i)" [disabled]="false" (change)="onPrecioChange($event, i)">
                                             </mat-form-field>
                                         </mat-cell>
                                     </ng-container>
@@ -116,7 +116,7 @@
                                             <mat-icon>delete</mat-icon>
                                           </button>
                                         </mat-cell>
-                                      </ng-container>
+                                    </ng-container>
                                   
                                   
                                     <!-- Define las columnas de la tabla -->
