@@ -302,7 +302,7 @@ export class OrdenAdmComponent implements OnInit{
       console.log('detallesIniciales: ', this.detallesOrdenAEditar);
       orden.detallesAGuardar = this.arrayServicios.map((servicio, i) => {
         const detalle: DetalleOrden = new DetalleOrden();
-        if(i<this.dataDetalleOrdenes.length  && this.detallesOrdenAEditar[i].servicio.id === servicio.id){
+        if((i<this.detallesOrdenAEditar.length ) && (this.detallesOrdenAEditar[i].servicio.id === servicio.id)){
           this.detallesOrdenAEditar[i].precioIndividual = servicio.precio 
           detalle.id =  this.detallesOrdenAEditar[i].id;
           detalle.precioIndividual =  this.detallesOrdenAEditar[i].precioIndividual;
