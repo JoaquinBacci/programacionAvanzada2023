@@ -69,6 +69,8 @@ export class OrdenAdmComponent implements OnInit{
   clienteSeleccionado : Cliente;
   tecnicoSeleccionado : Tecnico;
 
+  detallesOrdenAEditar: DetalleOrden[]; // array para comparar los detalles existentes con los detalles nuevos a guardar y los que hay que eliminar :)
+
   constructor(
     private ordenServicio: OrdenService,
     private clienteService: ClienteService,
@@ -100,6 +102,8 @@ export class OrdenAdmComponent implements OnInit{
     this.ordenServicio.getOrdenById(id).subscribe({
       next: (value) => {
         this.orden = value;
+        this.detallesOrdenAEditar = this.orden.detallesOrden;
+
         this.formularioOrden.get('cliente').setValue(this.orden.vehiculo.cliente);
         this.setCliente(this.formularioOrden.get('cliente').value);
         this.formularioOrden.get('tecnico').setValue(this.orden.tecnico);
@@ -284,21 +288,43 @@ export class OrdenAdmComponent implements OnInit{
     orden.idVehiculo = (this.formularioOrden.get('vehiculo').value).id;
     orden.descripcion = this.formularioOrden.get('descripcion').value;
 
+    console.log('arrayServicios: ', this.arrayServicios);
+    
+    if(this.vista == 'CREAR'){
+      orden.detallesAGuardar = this.arrayServicios.map((servicio) => {
+        const detalle: DetalleOrden = new DetalleOrden();
+        detalle.servicio = servicio;
+        detalle.cantidad = 1; //por defecto es 1 y se pueden agregar varias veces el mismo servicio, creando la cantidad de detalles como servicios se añadan
+        detalle.precioIndividual = servicio.precio      
+        return detalle;
+      });
+    } else if(this.vista=='EDITAR'){
+      console.log('detallesIniciales: ', this.detallesOrdenAEditar);
+      orden.detallesAGuardar = this.arrayServicios.map((servicio, i) => {
+        const detalle: DetalleOrden = new DetalleOrden();
+        if(i<this.dataDetalleOrdenes.length  && this.detallesOrdenAEditar[i].servicio.id === servicio.id){
+          this.detallesOrdenAEditar[i].precioIndividual = servicio.precio 
+          detalle.id =  this.detallesOrdenAEditar[i].id;
+          detalle.precioIndividual =  this.detallesOrdenAEditar[i].precioIndividual;
+          detalle.cantidad =  this.detallesOrdenAEditar[i].cantidad;
+          detalle.servicio =  this.detallesOrdenAEditar[i].servicio;
+        } else {
+          detalle.servicio = servicio;
+          detalle.cantidad = 1; //por defecto es 1 y se pueden agregar varias veces el mismo servicio, creando la cantidad de detalles como servicios se añadan
+          detalle.precioIndividual = servicio.precio 
+        }
+     
+        return detalle;
+      });
 
-    orden.detallesAGuardar = this.arrayServicios.map((servicio) => {
-      const detalle: DetalleOrden = new DetalleOrden();
-      detalle.servicio = servicio;
-      detalle.cantidad = 1; //por defecto es 1 y se pueden agregar varias veces el mismo servicio, creando la cantidad de detalles como servicios se añadan
-      detalle.precioIndividual = servicio.precio      
-      return detalle;
-    });
-
+    }
     orden.detallesAEliminar = [];
 
     if(this.vista =='EDITAR'){
       orden.idOrden = this.orden.id;
     }
 
+    console.log('rq: ', orden);
     return orden;
 
   }
