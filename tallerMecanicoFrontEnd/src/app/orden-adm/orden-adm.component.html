@@ -84,7 +84,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <mat-select placeholder="Servicio" formControlName="servicio">
                                     <mat-option *ngFor="let servicio of dataServicios" [value]="servicio">
-                                        {{ servicio.nombre }}
+                                        {{ servicio.nombre + servicio.precio}}
                                     </mat-option>
                                     </mat-select>
                                 </mat-form-field>               
