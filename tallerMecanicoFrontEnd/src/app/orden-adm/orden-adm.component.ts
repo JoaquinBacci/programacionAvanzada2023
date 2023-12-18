@@ -252,7 +252,7 @@ export class OrdenAdmComponent implements OnInit{
     // Añadir servicio a dataSourceServicios
     if(this.debug){console.log("addServicio(): ",servicio)}
 
-    this.arrayServicios.push(servicio);
+    this.arrayServicios.push(JSON.parse(JSON.stringify(servicio))); // forzar a crear una nueva instancia de Servicio (problema de referencia)
 
     this.dataSourceServicios = new MatTableDataSource(this.arrayServicios);
     console.log("ARRAY SERVICIO:",this.arrayServicios);
@@ -329,13 +329,10 @@ export class OrdenAdmComponent implements OnInit{
 
   }
 
-  onPrecioChange(event, servicio){
-    let precio = (event.target as HTMLInputElement).value;
-    let indice = this.arrayServicios.findIndex(s => s.id === servicio.id);
+  onPrecioChange(event, index){
+    let precio = event.target.value;
 
-    if (indice !== -1) {
-      this.arrayServicios[indice].precio = parseFloat(precio);
-    }
+    this.arrayServicios[index].precio = parseFloat(precio);
 
     console.log('arrayServicio: ', this.arrayServicios);
   }
