@@ -1,4 +1,6 @@
-package com.TallerMecanicoSpring.TM.model;
+package com.TallerMecanicoSpring.TM.dao;
+import com.TallerMecanicoSpring.TM.model.DetalleOrden;
+
 import java.util.List;
 
 public class OrdenSaveRq {

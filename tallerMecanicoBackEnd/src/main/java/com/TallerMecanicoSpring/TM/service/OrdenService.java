@@ -1,13 +1,9 @@
 package com.TallerMecanicoSpring.TM.service;
 
 import com.TallerMecanicoSpring.TM.model.Orden;
-import com.TallerMecanicoSpring.TM.model.OrdenSaveRq;
-import com.TallerMecanicoSpring.TM.model.RqReporteTecServEntreFecha;
-import com.TallerMecanicoSpring.TM.model.RsReporteTecServEntreFecha;
-import com.TallerMecanicoSpring.TM.model.Servicio;
+import com.TallerMecanicoSpring.TM.dao.OrdenSaveRq;
 import com.TallerMecanicoSpring.TM.model.Tecnico;
 import com.TallerMecanicoSpring.TM.model.Vehiculo;
-import com.TallerMecanicoSpring.TM.model.Cliente;
 import com.TallerMecanicoSpring.TM.model.DetalleOrden;
 import com.TallerMecanicoSpring.TM.repository.ClienteRepository;
 import com.TallerMecanicoSpring.TM.repository.DetalleOrdenRepository;
@@ -20,11 +16,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Optional;
 
 @Service
