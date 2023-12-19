@@ -10,6 +10,8 @@ import com.TallerMecanicoSpring.TM.service.VehiculoService;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,12 @@ public class VehiculoRest {
     private ResponseEntity<List<Vehiculo>> getAllVehiculos(){
         return ResponseEntity.ok(this.vehiculoService.findAll());
     }
+
+    @GetMapping("get/{id}")
+    private ResponseEntity<Optional<Vehiculo>> findById(@PathVariable("id") Long id){
+        return ResponseEntity.ok(this.vehiculoService.findById(id));
+    }
+
     //GetByCliente
     @GetMapping("getByClient/{idCliente}")
     private ResponseEntity<List<Vehiculo>> getVehiculoPorCliente(@PathVariable("idCliente") Long id){

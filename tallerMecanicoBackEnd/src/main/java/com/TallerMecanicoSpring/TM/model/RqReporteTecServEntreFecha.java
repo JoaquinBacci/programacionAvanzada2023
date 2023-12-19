@@ -34,3 +34,4 @@ public class RqReporteTecServEntreFecha {
         this.idsServicios = idsServicios;
     }
 }
+

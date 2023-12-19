@@ -12,4 +12,5 @@ export class Orden {
     vehiculo: Vehiculo;
     // cliente: Cliente;
     fechaIngreso: string;
+    estado: string;
   }

@@ -144,6 +144,7 @@ public class VehiculoService implements VehiculoRepository{
                    return (S) new Vehiculo();  
                 }
             }
+            entity.setActivo(true);
             return this.vehiculoRepository.save(entity);
         }
     }
@@ -232,6 +233,8 @@ public class VehiculoService implements VehiculoRepository{
     
     @Override
     public Optional<Vehiculo> findById(Long id) {
+        System.out.println("======HOLA SOY EL SERVICE===========");
+        System.out.println("EL ID QUE LLEGA ACA ES: " + id);
         return this.vehiculoRepository.findById(id);
     }
 

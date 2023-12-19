@@ -149,6 +149,7 @@ public class MarcaService implements MarcaRepository{
                 }
             } 
             entity.setNombre(nombreMarca);
+            entity.setActivo(true);
             return this.marcaRepository.save(entity);
         }
        

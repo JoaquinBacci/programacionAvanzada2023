@@ -8,6 +8,7 @@ import { VehiculoAdmComponent } from './vehiculo-adm/vehiculo-adm.component';
 import { ServicioAdmComponent } from './servicio-adm/servicio-adm.component';
 import { HomeComponent } from './components/home/home.component';
 import { OrdenAdmComponent } from './orden-adm/orden-adm.component';
+import { OrdenEditComponent } from './orden-edit/orden-edit.component';
 
 
 const routes: Routes = [
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'vehiculo', component: VehiculoAdmComponent },
   { path: 'servicio', component: ServicioAdmComponent},
   { path: 'orden', component: OrdenAdmComponent},
+  { path: 'orden/:id', component: OrdenEditComponent},
 ];
 
 @NgModule({
