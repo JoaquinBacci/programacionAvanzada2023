@@ -76,4 +76,16 @@ public class DetalleOrden {
     public void setPrecioIndividual(double precioIndividual) {
         this.precioIndividual = precioIndividual;
     }
+
+    @Override
+    public String toString() {
+        return "DetalleOrden{" +
+                "id=" + id +
+                ", servicio=" + servicio +
+                ", orden=" + orden +
+                ", cantidad=" + cantidad +
+                ", precioIndividual=" + precioIndividual +
+                ", precioTotal=" + precioTotal +
+                '}';
+    }
 }

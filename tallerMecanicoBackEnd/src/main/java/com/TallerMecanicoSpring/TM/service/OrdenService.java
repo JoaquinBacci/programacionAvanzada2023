@@ -12,8 +12,11 @@ import com.TallerMecanicoSpring.TM.repository.ServicioRepository;
 import com.TallerMecanicoSpring.TM.repository.TecnicoRepository;
 import com.TallerMecanicoSpring.TM.repository.VehiculoRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +26,7 @@ import java.util.Optional;
 
 @Service
 public class OrdenService {
+
     @Autowired
     OrdenRepository ordenRepository;
 
@@ -85,13 +89,14 @@ public class OrdenService {
         ordenAGuardar.setActivo(true);
 
         if(ordenRq.getIdTecnico()!=null){
+            System.out.println(ordenRq.getIdTecnico());
             Optional<Tecnico> tecnicoExistente = tecnicoRepository.findById(ordenRq.getIdTecnico());
             System.out.println("===== TECNICO: " + tecnicoExistente.get().getNombre());
             if(tecnicoExistente.isPresent()){
                 ordenAGuardar.setTecnico(tecnicoExistente.get());
                 System.out.println("===== TECNICO: " + ordenAGuardar.getTecnico().getNombre());
             } else{
-                 throw new UnsupportedOperationException("El tecnico no existe en la BD");
+                 throw new EntityNotFoundException("El tecnico no existe en la BD");
             }
 
         } else {
@@ -110,7 +115,7 @@ public class OrdenService {
                  System.out.println("VEHICULO PRESENT");
             } else {
                 System.out.println("VEHICULO NO!!!!   PRESENT");
-                throw new UnsupportedOperationException("El vehiculo no existe en la BD");
+                throw new EntityNotFoundException("El vehiculo no existe en la BD");
             }
         } else {
             throw new UnsupportedOperationException("No hay idVehiculo en la request");
@@ -126,16 +131,23 @@ public class OrdenService {
             }
             ordenAGuardar.setDetallesOrden(detallesOrden);
         }
-        
-        if(ordenRq.getDetallesAEliminar().size() > 0){
-            for(DetalleOrden detalleOrden:ordenRq.getDetallesAEliminar()){
-                //Eliminar El detalle
-                this.detalleService.deleteById(detalleOrden.getId());
+        if(ordenRq.getDetallesAEliminar() != null) {
+            if(ordenRq.getDetallesAEliminar().size() > 0){
+                for(DetalleOrden detalleOrden:ordenRq.getDetallesAEliminar()){
+                    //Eliminar El detalle
+                    this.detalleService.deleteById(detalleOrden.getId());
+                }
             }
         }
 
+        try {
+            return ordenRepository.save(ordenAGuardar);
+        } catch (ConstraintViolationException error) {
+            throw new DataIntegrityViolationException("Error de integración de datos" + error);
+        }
+
         /*TODO: MANEJAR LOS DETALLES A ELIMINAR */
-        return this.ordenRepository.save(ordenAGuardar);
+
     }
 
      //lista a guardar y lista a eliminar

@@ -3,6 +3,7 @@ package com.TallerMecanicoSpring.TM.service;
 import com.TallerMecanicoSpring.TM.dao.OrdenSaveRq;
 import com.TallerMecanicoSpring.TM.model.*;
 import com.TallerMecanicoSpring.TM.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,7 +35,10 @@ public class OrdenServiceTest {
     private TecnicoRepository tecnicoRepositoryMock;
 
     @Mock
-    private DetalleOrdenRepository detalleOrdenRepositoryMock;
+    private VehiculoService vehiculoServiceMock;
+
+    @Mock
+    private DetalleOrdenService detalleOrdenServiceMock;
 
     @InjectMocks
     private OrdenService ordenService;
@@ -41,36 +47,19 @@ public class OrdenServiceTest {
 
     private OrdenSaveRq ordenRq;
 
+    private Tecnico tecnico;
+
+    private Vehiculo vehiculo;
     private DetalleOrden detalleOrden1;
     private DetalleOrden detalleOrden2;
 
 
-//    @BeforeEach
-//    void setup(){
-//        ordenRq.setIdTecnico(1L);
-//        ordenRq.setIdVehiculo(1L);
-//        List<DetalleOrden> detallesOrden = new ArrayList<>();
-//        // creamos un detalle de servicio
-//        DetalleOrden detalleOrden1 = new DetalleOrden();
-//        Servicio servicio1 = servicioRepository.findById(1L).get();
-//        detalleOrden1.setServicio(servicio1);
-//        detalleOrden1.setCantidad(2);
-//        detallesOrden.add(detalleOrden1);
-//        // creamos otro detalle de servicio
-//        DetalleOrden detalleOrden2 = new DetalleOrden();
-//        Servicio servicio2 = servicioRepository.findById(2L).get();
-//        detalleOrden2.setServicio(servicio2);
-//        detalleOrden2.setCantidad(1);
-//        detallesOrden.add(detalleOrden2);
-//        ordenRq.setDetallesAGuardar(detallesOrden);
-//        ordenRq.setDescripcion("Descripción 1");
-//    }
 
     @BeforeEach
     void setup(){
         this.orden = new Orden();
         // Creamos un mock de vehiculo
-        Vehiculo vehiculo = new Vehiculo();
+        this.vehiculo = new Vehiculo();
         vehiculo.setId(1L);
         vehiculo.setCliente(new Cliente(1L,42567231,"3423544578","Nicolas","Mamani","Bell Ville 123","nico@gmail.com",true));
         vehiculo.setActivo(true);
@@ -81,7 +70,7 @@ public class OrdenServiceTest {
         vehiculo.setModelo(modelo);
         orden.setVehiculo(vehiculo);
         // Creamos un mock de tecnico
-        Tecnico tecnico = new Tecnico(1L,45567876,"3377564532",15678,"Hernan","Arias","Deheza 123","hernan@gmail.com",true);
+        this.tecnico = new Tecnico(1L,45567876,"3377564532",15678,"Hernan","Arias","Deheza 123","hernan@gmail.com",true);
         orden.setTecnico(tecnico);
         List<DetalleOrden> detallesOrden = new ArrayList<>();
         // creamos un detalle de servicio
@@ -89,6 +78,7 @@ public class OrdenServiceTest {
         Servicio servicio1 = new Servicio(1L,"Servicio 1",50,true,"descripción servicio 1");
         detalleOrden1.setServicio(servicio1);
         detalleOrden1.setCantidad(2);
+        detalleOrden1.setPrecioTotal(detalleOrden1.getPrecioTotal());
         detallesOrden.add(detalleOrden1);
         // creamos otro detalle de servicio
         this.detalleOrden2 = new DetalleOrden();
@@ -96,6 +86,7 @@ public class OrdenServiceTest {
         Servicio servicio2 = new Servicio(2L, "Servicios 2", 80,true,"Descripción servicio 2");
         detalleOrden2.setServicio(servicio2);
         detalleOrden2.setCantidad(1);
+        detalleOrden2.setPrecioTotal(detalleOrden2.getPrecioTotal());
         detallesOrden.add(detalleOrden2);
         orden.setActivo(true);
         orden.setDescripcion("Descripción de orden 1");
@@ -114,13 +105,33 @@ public class OrdenServiceTest {
     @Test
     @DisplayName("Test para guardar una orden del service")
     void guardarOrden(){
-        given(tecnicoRepositoryMock.findById(1L)).willReturn(Optional.of(orden.getTecnico()));
-        given(vehiculoRepositoryMock.findById(1L)).willReturn(Optional.of(orden.getVehiculo()));
-        given(detalleOrdenRepositoryMock.save(detalleOrden1)).willReturn(detalleOrden1);
-        given(detalleOrdenRepositoryMock.save(detalleOrden2)).willReturn(detalleOrden2);
-        given(ordenRepositoryMock.save(orden)).willReturn(orden);
-        // FALTA TERMINAR
+        given(tecnicoRepositoryMock.findById(this.tecnico.getId())).willReturn(Optional.of(this.tecnico));
+        given(vehiculoServiceMock.findById(this.vehiculo.getId())).willReturn(Optional.of(orden.getVehiculo()));
+        given(detalleOrdenServiceMock.saveDetalleOrden(detalleOrden1)).willReturn(detalleOrden1);
+        given(detalleOrdenServiceMock.saveDetalleOrden(detalleOrden2)).willReturn(detalleOrden2);
+        given(ordenRepositoryMock.save(any(Orden.class))).willAnswer(invocation -> invocation.getArgument(0));
         Orden ordenGuardada = ordenService.saveOrden(ordenRq);
+        System.out.println("en test " + ordenGuardada);
         assertThat(ordenGuardada).isNotNull();
+        // faltaria retocar para que los will return sean otro objeto pero con los id puesto para una simulación más realista
+
+    }
+
+    @Test
+    @DisplayName("Test para no guardar una orden cuando no tiene tecnico")
+    void noGuardarOrdenSinTecnico(){
+        ordenRq.setIdTecnico(null);
+        assertThrows(UnsupportedOperationException.class, () -> {
+            ordenService.saveOrden(ordenRq);
+        });
+    }
+
+    @Test
+    void noGuardarOrdenSinVehiculo(){
+        ordenRq.setIdVehiculo(null);
+        given(tecnicoRepositoryMock.findById(this.tecnico.getId())).willReturn(Optional.of(this.tecnico));
+        assertThrows(UnsupportedOperationException.class, () -> {
+            ordenService.saveOrden(ordenRq);
+        });
     }
 }
