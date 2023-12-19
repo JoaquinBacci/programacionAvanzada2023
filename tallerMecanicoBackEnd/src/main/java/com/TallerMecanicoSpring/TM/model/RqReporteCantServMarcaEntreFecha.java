@@ -5,8 +5,8 @@ import java.util.Date;
 public class RqReporteCantServMarcaEntreFecha {
     private Date fechaDesde;
     private Date fechaHasta;
-    private long[] idsServicios;
-    private long[] idMarcas;
+    private Long[] idsServicios;
+    private Long[] idMarcas;
     
     public Date getFechaDesde() {
         return fechaDesde;
@@ -20,16 +20,16 @@ public class RqReporteCantServMarcaEntreFecha {
     public void setFechaHasta(Date fechaHasta) {
         this.fechaHasta = fechaHasta;
     }
-    public long[] getIdsServicios() {
+    public Long[] getIdsServicios() {
         return idsServicios;
     }
-    public void setIdsServicios(long[] idsServicios) {
+    public void setIdsServicios(Long[] idsServicios) {
         this.idsServicios = idsServicios;
     }
-    public long[] getIdMarcas() {
+    public Long[] getIdMarcas() {
         return idMarcas;
     }
-    public void setIdMarcas(long[] idMarcas) {
+    public void setIdMarcas(Long[] idMarcas) {
         this.idMarcas = idMarcas;
     }
      

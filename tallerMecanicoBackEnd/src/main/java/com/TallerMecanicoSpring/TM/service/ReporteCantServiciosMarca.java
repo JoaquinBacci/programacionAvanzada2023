@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +46,7 @@ public class ReporteCantServiciosMarca {
         //List<Orden> allOrdenes = ordenServicio.findAllOrdenes();
         List<RsReporteCantServMarcaEntreFecha> listRs = new ArrayList<RsReporteCantServMarcaEntreFecha>();
 
-        /*RqReporteCantServMarcaEntreFecha rq = new RqReporteCantServMarcaEntreFecha();
+        RqReporteCantServMarcaEntreFecha rq = new RqReporteCantServMarcaEntreFecha();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -54,12 +55,12 @@ public class ReporteCantServiciosMarca {
             rq.setFechaDesde(dateFormat.parse(rqdto.getFechaDesde()));
             rq.setFechaHasta(dateFormat.parse(rqdto.getFechaHasta()));
             rq.setIdsServicios(rqdto.getIdsServicios());
-            rq.setIdMarcas(rqdto.getIdMarcas());
+            rq.setIdMarcas(rqdto.getIdsMarcas());
         } catch (ParseException e) {
             // Manejar la excepción si hay un problema al parsear las fechas
             e.printStackTrace();
-        }*/
-
+        }
+        
         String sql = "SELECT marca.nombre, servicio.nombre, COUNT(servicio.id) " +
              "FROM orden " +
              "INNER JOIN orden_detalles_orden ON (orden.id = orden_detalles_orden.orden_id) " +
@@ -69,17 +70,24 @@ public class ReporteCantServiciosMarca {
              "INNER JOIN vehiculo ON (orden.vehiculo_id = vehiculo.id) " +
              "INNER JOIN modelo ON (vehiculo.id_modelo = modelo.id) " +
              "INNER JOIN marca ON (modelo.id_marca = marca.id) " +
-             "WHERE marca.id IN (1,2,3) AND servicio.id IN (2,3) AND orden.fecha_ingreso BETWEEN '2023-12-15' AND '2023-12-31' " +
+             "WHERE marca.id IN :idMarcas AND servicio.id IN :idServicios AND DATE(orden.fecha_ingreso) BETWEEN :fechaDesde AND :fechaHasta " +
              "GROUP BY servicio.nombre, marca.nombre " +
              "ORDER BY marca.nombre";
 
+        List<Long> idMarcasList = Arrays.asList(rq.getIdMarcas());
+        List<Long> idServiciosList = Arrays.asList(rq.getIdsServicios());
+
         Query query = entityManager.createNativeQuery(sql);
+        query.setParameter("fechaDesde", rq.getFechaDesde());
+        query.setParameter("fechaHasta", rq.getFechaHasta());
+        query.setParameter("idMarcas", idMarcasList);
+        query.setParameter("idServicios", idServiciosList);
         List<Object[]> results = query.getResultList();
 
         for (Object[] result : results) {
             String marcaNombre = (String) result[0];
             String servicioNombre = (String) result[1];
-            Integer count = (Integer) result[2];
+            Long count = (Long) result[2];
     
             RsReporteCantServMarcaEntreFecha rs = new RsReporteCantServMarcaEntreFecha();
             rs.setMarca(marcaNombre);
