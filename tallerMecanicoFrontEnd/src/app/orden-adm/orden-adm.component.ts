@@ -70,7 +70,6 @@ export class OrdenAdmComponent implements OnInit{
   tecnicoSeleccionado : Tecnico;
 
   detallesOrdenAEditar: DetalleOrden[]; // array para comparar los detalles existentes con los detalles nuevos a guardar y los que hay que eliminar :)
-
   constructor(
     private ordenServicio: OrdenService,
     private clienteService: ClienteService,
@@ -114,8 +113,10 @@ export class OrdenAdmComponent implements OnInit{
         
         
         const arrayServicio: Servicio[] =[];
-        this.orden.detallesOrden.forEach((detalle) => {
+        this.orden.detallesOrden.forEach((detalle,i) => {
+          //arrayServicio.push(JSON.parse(JSON.stringify(detalle.servicio)));
           arrayServicio.push(detalle.servicio);
+          arrayServicio[i].precio = detalle.precioIndividual;
         });
         this.dataSourceServicios = new MatTableDataSource(arrayServicio);
         this.arrayServicios = arrayServicio;
@@ -291,6 +292,8 @@ export class OrdenAdmComponent implements OnInit{
     console.log('arrayServicios: ', this.arrayServicios);
     
     if(this.vista == 'CREAR'){
+      orden.detallesAEliminar = [];
+
       orden.detallesAGuardar = this.arrayServicios.map((servicio) => {
         const detalle: DetalleOrden = new DetalleOrden();
         detalle.servicio = servicio;
@@ -317,8 +320,13 @@ export class OrdenAdmComponent implements OnInit{
         return detalle;
       });
 
+      orden.detallesAEliminar = [];
+      orden.detallesAEliminar = this.detallesOrdenAEditar.filter(originalDetalle => {
+        return !this.arrayServicios.some(servicio => servicio.id === originalDetalle.servicio.id);
+      });
+
     }
-    orden.detallesAEliminar = [];
+   
 
     if(this.vista =='EDITAR'){
       orden.idOrden = this.orden.id;
@@ -335,6 +343,7 @@ export class OrdenAdmComponent implements OnInit{
     this.arrayServicios[index].precio = parseFloat(precio);
 
     console.log('arrayServicio: ', this.arrayServicios);
+    this.calcularTotal();
   }
 
   guardarOrdentrabajo(){
