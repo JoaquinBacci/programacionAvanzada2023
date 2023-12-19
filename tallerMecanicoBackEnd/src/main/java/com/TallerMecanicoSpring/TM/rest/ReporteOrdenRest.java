@@ -1,10 +1,12 @@
 package com.TallerMecanicoSpring.TM.rest;
 
 import com.TallerMecanicoSpring.TM.dto.RqReporteDTO;
+import com.TallerMecanicoSpring.TM.dto.RqReporteCantDTO;
 import com.TallerMecanicoSpring.TM.model.*;
 import com.TallerMecanicoSpring.TM.repository.*;
 import com.TallerMecanicoSpring.TM.service.ClienteService;
 import com.TallerMecanicoSpring.TM.service.OrdenService;
+import com.TallerMecanicoSpring.TM.service.ReporteCantServiciosMarca;
 import com.TallerMecanicoSpring.TM.service.ReporteOrdenService;
 
 import org.aspectj.weaver.ast.Or;
@@ -35,9 +37,14 @@ public class ReporteOrdenRest {
         return ResponseEntity.ok(rptOrdenServ.reporteOrdenesPeriodo(reporteDTO));
     }
 
-    
-    
-    
+    @Autowired
+    ReporteCantServiciosMarca rptOrdenCantServ;
+
+    @PostMapping("ordencantserv/")
+    private ResponseEntity<List<RsReporteCantServMarcaEntreFecha>> search(@RequestBody RqReporteCantDTO reporteCantDTO){
+        return ResponseEntity.ok(rptOrdenCantServ.ReporteCantServiciosMarca(reporteCantDTO));
+    }
+
     
     
 }
