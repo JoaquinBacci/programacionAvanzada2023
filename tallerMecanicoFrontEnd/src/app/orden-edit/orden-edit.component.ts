@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { OrdenService } from '../services/orden.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Orden } from '../model/orden';
 import { ClienteService } from '../services/cliente.service';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -29,11 +29,13 @@ export class OrdenEditComponent implements OnInit{
 
   @Input('dataSourceOrdenes') dataSourceOrdenes: any[];
   @Output() editarClicked: EventEmitter<number> = new EventEmitter<number>();
+  @Output() actualizarOrdenes: EventEmitter<any> = new EventEmitter<any>();
   columnasOrdenes = ['cliente', 'vehiculo','fechaIngreso','tecnico','estado','acciones'];
 
   constructor(
     private ordenService: OrdenService,
     private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
     private servicioService: ServicioService
   ){
@@ -131,6 +133,7 @@ export class OrdenEditComponent implements OnInit{
       next:(data)=>{
         if(data){
           console.log('Se actualizo el estado');
+          this.actualizarOrdenes.emit();
         } else{
           console.log('NO hay data = error');
         }
@@ -143,6 +146,7 @@ export class OrdenEditComponent implements OnInit{
       next:(data)=>{
         if(data){
           console.log('Se actualizo el estado');
+          this.actualizarOrdenes.emit();
         } else{
           console.log('NO hay data = error');
         }
@@ -155,6 +159,7 @@ export class OrdenEditComponent implements OnInit{
       next:(data)=>{
         if(data){
           console.log('Se actualizo el estado');
+          this.actualizarOrdenes.emit();
         } else{
           console.log('NO hay data = error');
         }
@@ -162,5 +167,20 @@ export class OrdenEditComponent implements OnInit{
     });
   }
 
-  imprimirFactura(){}
+  imprimirFactura(o:Orden){
+    this.ordenService.generarFactura(o).subscribe({
+      next:(data)=>{
+        if(data){
+          console.log('factura: ', data);
+          this.router.navigate([`/factura`], {
+            state: { data: data },
+          });
+          //this.router.navigateByUrl(, { skipLocationChange: true });
+        } else{
+          console.log('NO hay data = error');
+        }
+      }
+    });
+    
+  }
 }

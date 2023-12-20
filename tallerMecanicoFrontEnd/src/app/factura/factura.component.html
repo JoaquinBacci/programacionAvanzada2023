@@ -1,0 +1,88 @@
+<div style="width: 95%;">
+    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; ">
+        <div>
+            <h1>Taller mecánico: "Cuatro Ruedas"</h1>
+        </div>
+        <div style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+            <h3>    
+                <span style="margin-right: 20px;">Factura Nº: {{factura.id}}</span>
+                <span>Fecha: {{factura.fecha| date:'dd/MM/yyyy'}}</span>
+            </h3>
+        </div>
+    </div>
+    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: end; border-bottom: solid 1px black">
+        <div>
+            <table class="table">
+                <tr>
+                    <th class="th">Direccion: </th>
+                    <td class="td">Calle siempre viva 245, Villa María, Cordoba, Argentina</td>
+                </tr>
+                <tr>
+                    <th class="th">Telefono: </th>
+                    <td class="td">0353 - 495687</td>
+                </tr>
+                <tr>
+                    <th class="th">Email: </th>
+                    <td class="td">{{'cuatroruedas@gmail.com'}}</td>
+                </tr>
+            </table>
+        </div>
+        <div style="float: right;">
+            <h3><b>Tecnico a cargo: </b>{{orden?.tecnico?.nombre + ', '+orden?.tecnico?.apellido}}</h3>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div style="display: flex; ">
+        <div>
+            <h3>Cliente:</h3>
+            <table class="table" style="margin-top: -20px;">
+                <tr>
+                    <th class="th">Nombre y Apellido: </th>
+                    <td class="td">{{orden?.vehiculo?.cliente?.nombre + ', '+orden?.vehiculo?.cliente?.apellido}}</td>
+                </tr>
+                <tr>
+                    <th class="th">DNI: </th>
+                    <td class="td">{{orden?.vehiculo?.cliente?.dni}}</td>
+                </tr>
+                <tr>
+                    <th class="th">Telefono: </th>
+                    <td class="td">{{orden?.vehiculo?.cliente?.num_tel}}</td>
+                </tr>
+                <tr>
+                    <th class="th">Email: </th>
+                    <td class="td">{{orden?.vehiculo?.cliente?.email}}</td>
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+        
+    <mat-divider></mat-divider>
+    <div>
+        <table mat-table [dataSource]="orden.detallesOrden" class="mat-elevation-z8">
+            <ng-container matColumnDef="Servicio">
+            <th mat-header-cell *matHeaderCellDef> Servicio: </th>
+            <td mat-cell *matCellDef="let element"> {{element.servicio.nombre}} </td>
+            </ng-container>
+        
+            <ng-container matColumnDef="Precio">
+            <th mat-header-cell *matHeaderCellDef> Precio: </th>
+            <td mat-cell *matCellDef="let element"> {{element.precioIndividual}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Vacio">
+            <th mat-header-cell *matHeaderCellDef>  </th>
+            <td mat-cell *matCellDef="let element"> </td>
+            </ng-container>
+        
+        
+            <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
+        </table>
+    </div>
+    <div style="float: right;">
+        <h1>
+            Total: {{precioTotal}}
+        </h1>
+    </div>
+</div>

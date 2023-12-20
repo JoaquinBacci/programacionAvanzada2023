@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/enviroments/enviroment';
 import { Orden } from '../model/orden';
 import { OrdenSaveRq } from '../model/OrdenSaveRq';
+import { Factura } from '../model/factura';
 
 @Injectable({
   providedIn: 'root'
@@ -51,6 +52,10 @@ export class OrdenService {
 
   finalizarOrden(orden: Orden): Observable<Orden>{
     return this.http.post<Orden>(`${this.API_SERVER}/orden/finalizar`, orden, { headers: this.headers })
+  }
+
+  generarFactura(orden: Orden): Observable<Factura>{
+    return this.http.post<Factura>(`${this.API_SERVER}/factura/generate`, orden, { headers: this.headers })
   }
 
 }
