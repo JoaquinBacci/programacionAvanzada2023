@@ -1,5 +1,6 @@
 package com.TallerMecanicoSpring.TM.service;
 
+import com.TallerMecanicoSpring.TM.model.DetalleOrden;
 import com.TallerMecanicoSpring.TM.model.Orden;
 import com.TallerMecanicoSpring.TM.dao.OrdenSaveRq;
 import com.TallerMecanicoSpring.TM.model.Tecnico;
@@ -19,10 +20,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrdenService {
@@ -59,6 +65,8 @@ public class OrdenService {
         System.out.println("find By Id");
         return ordenRepository.findById(id);
     }
+
+    
 
     @Transactional
     public Orden saveOrden(OrdenSaveRq ordenRq) {

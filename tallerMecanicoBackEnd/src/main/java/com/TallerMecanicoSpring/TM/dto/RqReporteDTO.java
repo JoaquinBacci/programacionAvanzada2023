@@ -1,37 +1,42 @@
-package com.TallerMecanicoSpring.TM.model;
+package com.TallerMecanicoSpring.TM.dto;
 
 import java.util.Date;
 
-public class RqReporteTecServEntreFecha {
-    private Date fechaDesde;
-    private Date fechaHasta;
+public class RqReporteDTO {
+    private String fechaDesde;
+    private String fechaHasta;
     private Long[] idsTecnicos;
     private Long[] idsServicios;
 
-
-    public Date getFechaDesde() {
+    public String getFechaDesde() {
         return fechaDesde;
     }
-    public void setFechaDesde(Date fechaDesde) {
+
+    public void setFechaDesde(String fechaDesde) {
         this.fechaDesde = fechaDesde;
     }
-    public Date getFechaHasta() {
+
+    public String getFechaHasta() {
         return fechaHasta;
     }
-    public void setFechaHasta(Date fechaHasta) {
+
+    public void setFechaHasta(String fechaHasta) {
         this.fechaHasta = fechaHasta;
     }
+
     public Long[] getIdsTecnicos() {
         return idsTecnicos;
     }
+
     public void setIdsTecnicos(Long[] idsTecnicos) {
         this.idsTecnicos = idsTecnicos;
     }
+
     public Long[] getIdsServicios() {
         return idsServicios;
     }
+
     public void setIdsServicios(Long[] idsServicios) {
         this.idsServicios = idsServicios;
     }
 }
-

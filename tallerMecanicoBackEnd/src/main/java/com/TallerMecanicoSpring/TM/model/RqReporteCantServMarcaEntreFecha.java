@@ -2,13 +2,12 @@ package com.TallerMecanicoSpring.TM.model;
 
 import java.util.Date;
 
-public class RqReporteTecServEntreFecha {
+public class RqReporteCantServMarcaEntreFecha {
     private Date fechaDesde;
     private Date fechaHasta;
-    private Long[] idsTecnicos;
     private Long[] idsServicios;
-
-
+    private Long[] idMarcas;
+    
     public Date getFechaDesde() {
         return fechaDesde;
     }
@@ -21,17 +20,17 @@ public class RqReporteTecServEntreFecha {
     public void setFechaHasta(Date fechaHasta) {
         this.fechaHasta = fechaHasta;
     }
-    public Long[] getIdsTecnicos() {
-        return idsTecnicos;
-    }
-    public void setIdsTecnicos(Long[] idsTecnicos) {
-        this.idsTecnicos = idsTecnicos;
-    }
     public Long[] getIdsServicios() {
         return idsServicios;
     }
     public void setIdsServicios(Long[] idsServicios) {
         this.idsServicios = idsServicios;
     }
+    public Long[] getIdMarcas() {
+        return idMarcas;
+    }
+    public void setIdMarcas(Long[] idMarcas) {
+        this.idMarcas = idMarcas;
+    }
+     
 }
-
