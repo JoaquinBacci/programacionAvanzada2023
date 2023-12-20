@@ -48,21 +48,16 @@ public class TecnicoServiceTest {
     @DisplayName("Prueba Unitaria para guardar tecnico")
     @Test
     void testGuardarTecnico(){
-        //given
-         given(tecnicoRepository.save(tecnico)).willReturn(tecnico); // si no existe el mail, se devuelve el tecnico
-        //when
+         given(tecnicoRepository.save(tecnico)).willReturn(tecnico);
         Tecnico tecnicoGuardado = tecnicoService.save(tecnico);
-        //then
         assertThat(tecnicoGuardado).isNotNull();
     }
 
     @DisplayName("Prueba Unitaria para guardar técnico sin DNI")
     @Test
     void testGuardarTecnicoSinDNI() {
-        // Configuramos el técnico para que no tenga DNI
         tecnico.setDni(null);
         given(tecnicoRepository.save(tecnico)).willThrow(ConstraintViolationException.class);
-        // Verificar que se lanza la excepción esperada al intentar guardar
         assertThrows(DataIntegrityViolationException.class, () -> {
             tecnicoService.save(tecnico);
         });

@@ -29,9 +29,6 @@ public class OrdenServiceTest {
     private OrdenRepository ordenRepositoryMock;
 
     @Mock
-    private VehiculoRepository vehiculoRepositoryMock;
-
-    @Mock
     private TecnicoRepository tecnicoRepositoryMock;
 
     @Mock
@@ -111,10 +108,7 @@ public class OrdenServiceTest {
         given(detalleOrdenServiceMock.saveDetalleOrden(detalleOrden2)).willReturn(detalleOrden2);
         given(ordenRepositoryMock.save(any(Orden.class))).willAnswer(invocation -> invocation.getArgument(0));
         Orden ordenGuardada = ordenService.saveOrden(ordenRq);
-        System.out.println("en test " + ordenGuardada);
         assertThat(ordenGuardada).isNotNull();
-        // faltaria retocar para que los will return sean otro objeto pero con los id puesto para una simulación más realista
-
     }
 
     @Test

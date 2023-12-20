@@ -37,6 +37,7 @@ public class OrdenRepositoryTest {
     @BeforeEach
     void setup(){
         this.orden = new Orden();
+        // seteamos datos a la orden
         orden.setTecnico(tecnicoRepository.findById(1L).get());
         orden.setVehiculo(vehiculoRepository.findById(1L).get());
         orden.setActivo(true);
@@ -52,7 +53,7 @@ public class OrdenRepositoryTest {
         // asignamos los detalles a la orden
         orden.setDetallesOrden(detallesOrden);
         orden.crear(); // asignamos estado creada a orden
-        Date fi = new Date();
+        Date fi = new Date(); //creamos una fecha para la orden
         orden.setFechaIngreso(fi);
     }
 

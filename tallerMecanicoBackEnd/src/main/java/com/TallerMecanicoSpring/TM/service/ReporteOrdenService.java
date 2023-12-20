@@ -39,10 +39,8 @@ public class ReporteOrdenService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         try {
-            System.out.println("fecha desde antes de format " + rqdto.getFechaDesde());
             // Convertir las fechas desde String a Date
             rq.setFechaDesde(dateFormat.parse(rqdto.getFechaDesde()));
-            System.out.println("fecha desde despues de format " + dateFormat.parse(rqdto.getFechaHasta()));
             rq.setFechaHasta(dateFormat.parse(rqdto.getFechaHasta()));
             rq.setIdsTecnicos(rqdto.getIdsTecnicos());
             rq.setIdsServicios(rqdto.getIdsServicios());
@@ -54,7 +52,6 @@ public class ReporteOrdenService {
 
                 
         Date fechaDesde = rq.getFechaDesde();
-        System.out.println(fechaDesde);
         Date fechaHasta = rq.getFechaHasta();
         Long[] idsTecnicos = rq.getIdsTecnicos();
         Long[] idsServicios = rq.getIdsServicios();
@@ -63,7 +60,6 @@ public class ReporteOrdenService {
                 .filter(o -> o.getFechaIngreso() != null && fechaDesde != null && fechaHasta != null &&
                         o.getFechaIngreso().after(fechaDesde) && o.getFechaIngreso().before(fechaHasta))
                 .collect(Collectors.toList());
-        System.out.println(allOrdenes);
         for(Orden o: allOrdenes){
             for(Long i: idsTecnicos){
                 if(o.getTecnico().getId() == i){
@@ -76,7 +72,6 @@ public class ReporteOrdenService {
                             if(detalle.getServicio().getId() == j){
                                 servicioExistente=true;
                                 nombresServicios.add(detalle.getServicio().getNombre());
-                                System.out.println(detalle.getServicio().getNombre());
                                 montoTotal = montoTotal + detalle.getPrecioTotal();
                             }
                         }

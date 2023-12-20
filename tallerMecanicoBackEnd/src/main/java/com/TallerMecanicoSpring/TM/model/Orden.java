@@ -130,17 +130,5 @@ public class Orden {
         this.vehiculo = vehiculo;
     }
 
-    @Override
-    public String toString() {
-        return "Orden{" +
-                "id=" + id +
-                ", activo=" + activo +
-                ", detallesOrden=" + detallesOrden +
-                ", tecnico=" + tecnico +
-                ", vehiculo=" + vehiculo +
-                ", fechaIngreso=" + fechaIngreso +
-                ", estado='" + estado + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                '}';
-    }
+
 }

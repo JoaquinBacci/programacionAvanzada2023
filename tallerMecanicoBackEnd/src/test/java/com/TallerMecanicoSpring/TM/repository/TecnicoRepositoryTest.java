@@ -36,9 +36,7 @@ public class TecnicoRepositoryTest {
     @Test
     @DisplayName("Test para guardar un técnico")
     void testGuardarTecnico(){
-        // When
         Tecnico tecnicoGuardado=tecnicoRepository.save(tecnico);
-        // Then
         assertThat(tecnicoGuardado).isNotNull(); //verificamos que el tecnico guardado no sea null
         assertThat(tecnicoGuardado.getId()).isGreaterThan(0); //verificamos que el id sea mayor a cero
     }
