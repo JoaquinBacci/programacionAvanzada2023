@@ -23,12 +23,17 @@
       </button>
     </div>
 
+
     <mat-card style="margin-top: 20px">
       <mat-card-content *ngIf="vista == 'CONSULTAR'">
         <app-orden-edit
           [dataSourceOrdenes]="dataSourceOrdenes"
           (editarClicked)="editar($event)"
         ></app-orden-edit>
+      </mat-card-content>
+
+      <mat-card-content *ngIf="vista == 'REPORTE'">
+        <app-reporte></app-reporte>
       </mat-card-content>
 
       <mat-card-content *ngIf="vista == 'CREAR' || vista == 'EDITAR'">
