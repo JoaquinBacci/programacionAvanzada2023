@@ -441,6 +441,7 @@ export class OrdenAdmComponent implements OnInit{
       next:(data)=>{
         if(data){
           console.log('Se actualizo el estado');
+          this.getAllOrdenes();
         } else{
           console.log('NO hay data = error');
         }
@@ -453,6 +454,7 @@ export class OrdenAdmComponent implements OnInit{
       next:(data)=>{
         if(data){
           console.log('Se actualizo el estado');
+          this.getAllOrdenes();
         } else{
           console.log('NO hay data = error');
         }
@@ -465,6 +467,7 @@ export class OrdenAdmComponent implements OnInit{
       next:(data)=>{
         if(data){
           console.log('Se actualizo el estado');
+          this.getAllOrdenes();
         } else{
           console.log('NO hay data = error');
         }
@@ -472,8 +475,17 @@ export class OrdenAdmComponent implements OnInit{
     });
   }
 
-  imprimirFactura(){
-    console.log('impresion de factura')
+  imprimirFactura(o:Orden){
+    this.ordenServicio.generarFactura(o).subscribe({
+      next:(data)=>{
+        if(data){
+          console.log('facturaaaaa: ', data);
+         
+        } else{
+          console.log('NO hay data = error');
+        }
+      }
+    });
   }
 
   disabledFormField(){

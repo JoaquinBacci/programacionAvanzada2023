@@ -4,25 +4,24 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { HttpClientModule } from '@angular/common/http';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
-import {MatTableModule} from '@angular/material/table';
-import {MatIconModule} from '@angular/material/icon';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatListModule} from '@angular/material/list';
-import { MatSelectModule } from '@angular/material/select'; 
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { DatePipe } from '@angular/common';
-
 
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -37,11 +36,7 @@ import { ConfirmComponent } from './dialogs/confirm/confirm.component';
 import { ServicioAdmComponent } from './servicio-adm/servicio-adm.component';
 import { OrdenAdmComponent } from './orden-adm/orden-adm.component';
 import { OrdenEditComponent } from './orden-edit/orden-edit.component';
-//import { FacturaComponent } from './factura/factura.component';
-import { ReporteComponent } from './reporte/reporte.component';
-
-
-
+import { FacturaComponent } from './factura/factura.component';
 
 @NgModule({
   declarations: [
@@ -59,8 +54,7 @@ import { ReporteComponent } from './reporte/reporte.component';
     ServicioAdmComponent,
     OrdenAdmComponent,
     OrdenEditComponent,
-    //FacturaComponent,
-    ReporteComponent
+    FacturaComponent,
   ],
   imports: [
     BrowserModule,
@@ -84,10 +78,9 @@ import { ReporteComponent } from './reporte/reporte.component';
     MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    DatePipe
+    DatePipe,
   ],
   providers: [DatePipe],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}
