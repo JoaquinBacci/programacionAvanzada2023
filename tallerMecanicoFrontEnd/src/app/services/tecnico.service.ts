@@ -51,4 +51,10 @@ export class TecnicoService {
     return this.http.post(`${this.API_REST}/tecnico/save/`, tecnicoRq, { headers: this.headers });
   }
 
+  public getAll():Observable<any>{
+    return this.http.get(`${this.API_REST}/tecnico/`);
+  }
+
+ 
+
 }

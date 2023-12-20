@@ -19,6 +19,9 @@ import {MatListModule} from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select'; 
 import { MatOptionModule } from '@angular/material/core';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { DatePipe } from '@angular/common';
 
 
 import { HeaderComponent } from './components/header/header.component';
@@ -34,6 +37,8 @@ import { ConfirmComponent } from './dialogs/confirm/confirm.component';
 import { ServicioAdmComponent } from './servicio-adm/servicio-adm.component';
 import { OrdenAdmComponent } from './orden-adm/orden-adm.component';
 import { OrdenEditComponent } from './orden-edit/orden-edit.component';
+//import { FacturaComponent } from './factura/factura.component';
+import { ReporteComponent } from './reporte/reporte.component';
 
 
 
@@ -53,7 +58,9 @@ import { OrdenEditComponent } from './orden-edit/orden-edit.component';
     ConfirmComponent,
     ServicioAdmComponent,
     OrdenAdmComponent,
-    OrdenEditComponent
+    OrdenEditComponent,
+    //FacturaComponent,
+    ReporteComponent
   ],
   imports: [
     BrowserModule,
@@ -74,9 +81,12 @@ import { OrdenEditComponent } from './orden-edit/orden-edit.component';
     MatListModule,
     MatSelectModule,
     MatOptionModule,
-    MatDialogModule
+    MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    DatePipe
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {
