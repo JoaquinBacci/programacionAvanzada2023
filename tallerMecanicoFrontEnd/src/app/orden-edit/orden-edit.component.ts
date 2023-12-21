@@ -20,6 +20,8 @@ import { ServicioService } from '../services/servicio.service';
 import { OrdenSaveRq } from '../model/OrdenSaveRq';
 import { DetalleOrden } from '../model/detalleOrden';
 import Toastify from 'toastify-js';
+import { VehiculoService } from '../services/vehiculo.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-orden-edit',
@@ -28,16 +30,20 @@ import Toastify from 'toastify-js';
 })
 export class OrdenEditComponent implements OnInit {
   idOrden;
-  orden: Orden;
+  ordenFiltrar: Orden;
   formularioOrden: FormGroup;
   columnasServicios = ['descripcion', 'nombre', 'precio', 'acciones'];
-  dataServicios: Servicio[];
+  //dataServicios: Servicio[];
+
   total;
 
   @Input('dataSourceOrdenes') dataSourceOrdenes: any[];
+  @Input('dataTecnicos') dataTecnicos: any[];
+  @Input('dataClientes') dataClientes: any[];
   @Output() editarClicked: EventEmitter<number> = new EventEmitter<number>();
   @Output() actualizarOrdenes: EventEmitter<any> = new EventEmitter<any>();
   columnasOrdenes = [
+    'nroOrden',
     'cliente',
     'vehiculo',
     'fechaIngreso',
@@ -45,13 +51,16 @@ export class OrdenEditComponent implements OnInit {
     'estado',
     'acciones',
   ];
+  dataVehiculos: Vehiculo[];
+  estados: string[] = ['creada', 'finalizada', 'enCurso', 'cancelada'];
 
   constructor(
     private ordenService: OrdenService,
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private servicioService: ServicioService
+    private vehiculoService: VehiculoService,
+    private datePipe: DatePipe
   ) {
     this.formularioOrden = this.fb.group({
       cliente: [new Cliente(), [Validators.required]],
@@ -63,15 +72,38 @@ export class OrdenEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.ordenFiltrar = new Orden();
+    this.ordenFiltrar.vehiculo = new Vehiculo();
+
     // this.route.params.subscribe(params => {
     //this.idOrden = params['id'];
     //this.getOrden(this.idOrden);
     // Aquí puedes realizar acciones con el valor de idOrden
     // });
     // this.getServicios();
+
+    this.vehiculoService.onGetAll().subscribe({
+      next: (value) => {
+        this.dataVehiculos = value;
+      },
+      error: (e) => {
+        console.log(e);
+      },
+    });
   }
 
-  getOrden(id) {
+  onConsultar() {
+    this.ordenService.filtrar(this.ordenFiltrar).subscribe({
+      next: (value) => {
+        this.dataSourceOrdenes = value;
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
+
+  /*getOrden(id){
     this.ordenService.getOrdenById(id).subscribe(
       (data) => {
         if (data) {
@@ -84,9 +116,9 @@ export class OrdenEditComponent implements OnInit {
         console.log('error: ', error);
       }
     );
-  }
+  }*/
 
-  setFormData() {
+  /*setFormData(){
     this.formularioOrden.get('cliente').setValue(this.orden.vehiculo.cliente);
     this.formularioOrden.get('tecnico').setValue(this.orden.tecnico);
     this.formularioOrden.get('vehiculo').setValue(this.orden.vehiculo);
@@ -100,19 +132,15 @@ export class OrdenEditComponent implements OnInit {
     });
 
     this.formularioOrden.get('servicio').setValue(servicioFormArray);
-  }
+    
+  }*/
 
-  getNombreCliente(): string {
-    let nombreCliente: string =
-      this.formularioOrden.get('cliente').value.nombre +
-      ', ' +
-      this.formularioOrden.get('cliente').value.apellido;
+  /*getNombreCliente(): string{
+    let nombreCliente: string = this.formularioOrden.get('cliente').value.nombre + ", " + this.formularioOrden.get('cliente').value.apellido;
     return nombreCliente;
-  }
+  }*/
 
-  addServicio() {}
-
-  getServicios() {
+  /*getServicios(){
     this.servicioService.getAllServicio().subscribe(
       (data) => {
         this.dataServicios = data;
@@ -121,7 +149,7 @@ export class OrdenEditComponent implements OnInit {
         console.log('Error: ', error);
       }
     );
-  }
+  }*/
 
   guardarOrdentrabajo() {
     /*let rq: OrdenSaveRq = new OrdenSaveRq();

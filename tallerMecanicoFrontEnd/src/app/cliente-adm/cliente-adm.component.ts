@@ -6,6 +6,7 @@ import { VehiculoService } from '../services/vehiculo.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VehiculoXclienteComponent } from '../dialogs/vehiculoXcliente/vehiculoXcliente.component';
 import { ConfirmComponent } from '../dialogs/confirm/confirm.component';
+import { OrdenXclienteComponent } from '../orden-xcliente/orden-xcliente.component';
 import Toastify from 'toastify-js';
 
 @Component({
@@ -197,6 +198,12 @@ export class ClienteAdmComponent implements OnInit {
 
   onVerVehiculos(id: number) {
     let dialogRef = this.dialog.open(VehiculoXclienteComponent, {
+      data: id,
+    });
+  }
+
+  onVerOrdenes(id: number) {
+    let dialogRef = this.dialog.open(OrdenXclienteComponent, {
       data: id,
     });
   }

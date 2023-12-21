@@ -21,6 +21,11 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import {
+  Location,
+  LocationStrategy,
+  PathLocationStrategy,
+} from '@angular/common';
 import { DatePipe } from '@angular/common';
 
 import { HeaderComponent } from './components/header/header.component';
@@ -37,6 +42,7 @@ import { ServicioAdmComponent } from './servicio-adm/servicio-adm.component';
 import { OrdenAdmComponent } from './orden-adm/orden-adm.component';
 import { OrdenEditComponent } from './orden-edit/orden-edit.component';
 import { FacturaComponent } from './factura/factura.component';
+import { OrdenXclienteComponent } from './orden-xcliente/orden-xcliente.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +61,7 @@ import { FacturaComponent } from './factura/factura.component';
     OrdenAdmComponent,
     OrdenEditComponent,
     FacturaComponent,
+    OrdenXclienteComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,9 +85,12 @@ import { FacturaComponent } from './factura/factura.component';
     MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    DatePipe,
   ],
-  providers: [DatePipe],
+  providers: [
+    DatePipe,
+    Location,
+    { provide: LocationStrategy, useClass: PathLocationStrategy },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

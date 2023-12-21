@@ -1,34 +1,84 @@
-<mat-card-title> Ordenes de trabajo</mat-card-title>
+<mat-card-title style="margin-bottom: 20px;"> Ordenes de trabajo</mat-card-title>
 <mat-table [dataSource]="dataSourceOrdenes" class="mat-elevation-z8">
-    <!-- Columna Nombre -->
+    <ng-container matColumnDef="nroOrden">
+      <mat-header-cell *matHeaderCellDef class="td">  
+        <mat-form-field appearance="outline" floatLabel="always" >
+            <mat-label>Nro.</mat-label>
+            <input matInput [(ngModel)]="ordenFiltrar.id" [ngModelOptions]="{standalone: true}"> 
+        </mat-form-field>  
+      </mat-header-cell>
+      <mat-cell *matCellDef="let elemento"> {{ elemento.id }} </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="cliente">
-      <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> 
+        <mat-form-field appearance="outline" floatLabel="always" >
+          <mat-label> Cliente </mat-label>
+          <mat-select [(ngModel)]="ordenFiltrar.vehiculo.cliente" [ngModelOptions]="{standalone: true}">
+            <mat-option [value]="null"> Selecione un cliente </mat-option>
+            <mat-option *ngFor="let c of dataClientes" [value]="c" >{{ c.apellido + ', ' + c.nombre }}</mat-option>
+          </mat-select>
+        </mat-form-field> 
+      </mat-header-cell>
       <mat-cell *matCellDef="let elemento"> {{ elemento.vehiculo.cliente.apellido + ', ' + elemento.vehiculo.cliente.nombre }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="vehiculo">
-        <mat-header-cell *matHeaderCellDef> Vehiculo </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>
+          <mat-form-field appearance="outline" floatLabel="always" >
+            <mat-label> Vehiculo </mat-label>
+            <mat-select [(ngModel)]="ordenFiltrar.vehiculo" [ngModelOptions]="{standalone: true}">
+              <mat-option [value]="null"> Selecione un Vehiculo </mat-option>
+              <mat-option *ngFor="let v of dataVehiculos" [value]="v" >{{ v.patente + ' ' + v.marca.nombre + ', ' + v.modelo.nombre }}</mat-option>
+            </mat-select>
+          </mat-form-field> 
+        </mat-header-cell>
         <mat-cell *matCellDef="let elemento"> {{ elemento.vehiculo.patente + ' ' + elemento.vehiculo.marca.nombre + ', ' + elemento.vehiculo.modelo.nombre }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="fechaIngreso">
-        <mat-header-cell *matHeaderCellDef> Fecha Ingreso </mat-header-cell>
-        <mat-cell *matCellDef="let elemento"> {{ elemento.fechaIngreso }} </mat-cell>
+        <mat-header-cell *matHeaderCellDef>
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label> Fecha ingreso </mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="ordenFiltrar.fechaIngreso">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let elemento"> {{ elemento.fechaIngreso | date:"dd/MM/yyyy"}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="tecnico">
-        <mat-header-cell *matHeaderCellDef> Tecnico </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>
+          <mat-form-field appearance="outline" floatLabel="always" >
+            <mat-label> Tecnico </mat-label>
+            <mat-select [(ngModel)]="ordenFiltrar.tecnico" [ngModelOptions]="{standalone: true}">
+              <mat-option [value]="null"> Selecione un Tecnico </mat-option>
+              <mat-option *ngFor="let t of dataTecnicos" [value]="t" >{{ t.apellido + ', ' + t.nombre }}</mat-option>
+            </mat-select>
+          </mat-form-field> 
+        </mat-header-cell>
         <mat-cell *matCellDef="let elemento"> {{ elemento.tecnico.apellido + ', ' + elemento.tecnico.nombre }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="estado">
-        <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>
+          <mat-form-field appearance="outline" floatLabel="always" >
+            <mat-label> Estado </mat-label>
+            <mat-select [(ngModel)]="ordenFiltrar.estado" [ngModelOptions]="{standalone: true}">
+              <mat-option [value]="null"> Selecione un Estado </mat-option>
+              <mat-option *ngFor="let e of estados" [value]="e" >{{ e }}</mat-option>
+            </mat-select>
+          </mat-form-field> 
+        </mat-header-cell>
         <mat-cell *matCellDef="let elemento"> {{ elemento.estado}} </mat-cell>
       </ng-container>
   
     <!-- Columna Acciones -->
     <ng-container matColumnDef="acciones">
-      <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> 
+        <button mat-icon-button (click)="onConsultar()"><mat-icon>search</mat-icon></button>
+      </mat-header-cell>
       <mat-cell *matCellDef="let elemento">
         <button mat-icon-button *ngIf="elemento.estado != 'finalizada' && elemento.estado != 'cancelada'" matTooltip="Editar" (click)="onEditar(elemento.id)" >
           <mat-icon>edit</mat-icon>

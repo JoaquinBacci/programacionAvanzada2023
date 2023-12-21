@@ -15,6 +15,16 @@ export class TecnicoService {
     private http: HttpClient
   ) { }
 
+ /* @GetMapping
+    private ResponseEntity<List<Tecnico>> getAllTecnico(){
+        return ResponseEntity.ok(this.tecnicoService.findAll());
+    }
+*/
+
+  public getAll():Observable<any>{
+    return this.http.get(`${this.API_REST}/tecnico/`);
+  }
+
   /* @PostMapping("filtrar/")
   private ResponseEntity<List<Tecnico>> search(@RequestBody Tecnico tecnicoRq){
       return ResponseEntity.ok(this.tecnicoService.filtrarTecnicos(tecnicoRq));
