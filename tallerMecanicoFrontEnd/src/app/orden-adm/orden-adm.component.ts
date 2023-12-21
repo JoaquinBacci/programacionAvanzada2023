@@ -306,6 +306,22 @@ export class OrdenAdmComponent implements OnInit {
 
   setVista(vista: string) {
     this.vista = vista;
+    if(this.vista == 'CREAR'){
+      console.log('vista crear');
+      this.formularioOrden.reset();
+      this.formularioOrden.get('cliente').enable();
+      this.formularioOrden.get('vehiculo').enable();
+      this.clienteSeleccionado = null;
+      this.vehiculoSeleccionado = null;
+      this.tecnicoSeleccionado = null;
+      this.arrayServicios=[];
+      this.dataSourceServicios = new MatTableDataSource;
+      this.calcularTotal();
+      this.ngOnInit();
+      
+    }
+    //NECESITO REINICIALIZAR EL COMPONENTE SI LA VISTA ES 'CREAR'
+
   }
 
   addServicio() {
