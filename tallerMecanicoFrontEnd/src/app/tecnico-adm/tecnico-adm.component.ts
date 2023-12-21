@@ -1,42 +1,67 @@
 import { Component, OnInit } from '@angular/core';
 import { TecnicoService } from '../services/tecnico.service';
 import { Tecnico } from '../model/tecnico';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmComponent } from '../dialogs/confirm/confirm.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Toastify from 'toastify-js';
 
 @Component({
   selector: 'app-tecnico-adm',
   templateUrl: './tecnico-adm.component.html',
-  styleUrls: ['./tecnico-adm.component.css']
+  styleUrls: ['./tecnico-adm.component.css'],
 })
-export class TecnicoAdmComponent implements OnInit{
+export class TecnicoAdmComponent implements OnInit {
   idTecnitoUpdate: number = undefined;
   tecnicoConsultar: Tecnico;
   modoEdicion: boolean = false;
-  columnas: string[] = ['Nombre','Apellido', 'DNI','Telefono','Email', 'Direccion', 'Legajo','Acciones']
-  dataSource
-  
+  columnas: string[] = [
+    'Nombre',
+    'Apellido',
+    'DNI',
+    'Telefono',
+    'Email',
+    'Direccion',
+    'Legajo',
+    'Acciones',
+  ];
+  dataSource;
 
   form: FormGroup;
 
   constructor(
     private tecnicoService: TecnicoService,
-    private fb: FormBuilder
-  ){
+    private fb: FormBuilder,
+    private dialog: MatDialog
+  ) {
     this.form = this.fb.group({
-      dni: ['',[Validators.required, Validators.minLength(8), Validators.maxLength(8)]],
-      num_tel: ['',[Validators.required, Validators.minLength(8), Validators.maxLength(13)]],
-      legajo: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)] ],
-      nombre: ['',[Validators.required, Validators.maxLength(50)]],
-      apellido: ['',[Validators.required, Validators.maxLength(50)]],
-      direccion: ['',[Validators.maxLength(50)]],
-      email: ['',[Validators.maxLength(80),Validators.email]]
-    })
+      dni: [
+        '',
+        [Validators.required, Validators.minLength(8), Validators.maxLength(8)],
+      ],
+      num_tel: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(13),
+        ],
+      ],
+      legajo: [
+        '',
+        [Validators.required, Validators.minLength(5), Validators.maxLength(5)],
+      ],
+      nombre: ['', [Validators.required, Validators.maxLength(50)]],
+      apellido: ['', [Validators.required, Validators.maxLength(50)]],
+      direccion: ['', [Validators.maxLength(50)]],
+      email: ['', [Validators.maxLength(80), Validators.email]],
+    });
   }
 
   ngOnInit(): void {
     console.log('On init');
     this.tecnicoConsultar = new Tecnico();
-    this.tecnicoConsultar.nombre = "";
+    this.tecnicoConsultar.nombre = '';
     this.tecnicoConsultar.apellido = '';
     this.tecnicoConsultar.num_tel = '';
     this.tecnicoConsultar.email = '';
@@ -46,21 +71,19 @@ export class TecnicoAdmComponent implements OnInit{
     this.onConsultar();
   }
 
-  onConsultar(){
+  onConsultar() {
     this.tecnicoService.onConsultar(this.tecnicoConsultar).subscribe({
-      next:(data)=>{
-        console.log('Data: ', data)
-        this.dataSource = data
-      }, complete:()=>{
-
-      }, error:(error)=>{
-
-      }
+      next: (data) => {
+        console.log('Data: ', data);
+        this.dataSource = data;
+      },
+      complete: () => {},
+      error: (error) => {},
     });
   }
 
-  onGuardar(){
-    console.log('On Guardar')
+  onGuardar() {
+    console.log('On Guardar');
     let tecnicoRq: Tecnico = new Tecnico();
     tecnicoRq.activo = true;
     tecnicoRq.apellido = this.form.get('apellido').value;
@@ -71,24 +94,39 @@ export class TecnicoAdmComponent implements OnInit{
     tecnicoRq.legajo = this.form.get('legajo').value;
     tecnicoRq.email = this.form.get('email').value;
 
-    if(!this.modoEdicion){
+    if (!this.modoEdicion) {
       //guardar
       this.tecnicoService.onGuardar(tecnicoRq).subscribe({
-        next:(data)=>{
-          if(data.id!= null){
+        next: (data) => {
+          if (data.id != null) {
             console.log('dataOK: ', data);
+            Toastify({
+              text: 'Tecnico agregada',
+              duration: 3000,
+              destination: 'https://github.com/apvarun/toastify-js',
+              newWindow: true,
+              close: true,
+              gravity: 'bottom', // Cambiado a "bottom" para colocarlo en la parte inferior
+              position: 'right', // Cambiado a "right" para colocarlo en la esquina derecha
+              stopOnFocus: true,
+              style: {
+                background: 'black', // Cambiado a negro
+              },
+              onClick: function () {},
+            }).showToast();
           } else {
             console.log('dataNULL: ', data);
           }
-          
-        }, complete: ()=>{
+        },
+        complete: () => {
           this.form.reset();
           this.onConsultar();
-        }, error:(error)=>{
+        },
+        error: (error) => {
           console.log('error: ', error);
-        }
+        },
       });
-    } else{
+    } else {
       //editar
       console.log('Editar: ');
       tecnicoRq.id = this.idTecnitoUpdate;
@@ -98,29 +136,28 @@ export class TecnicoAdmComponent implements OnInit{
       tecnicoRq.num_tel = tecnico.num_tel ;
       tecnicoRq.nombre = tecnico.nombre;
       tecnicoRq.dni = tecnico.dni ;
-      tecnicoRq.legajo = tecnico.legajo; */    
+      tecnicoRq.legajo = tecnico.legajo; */
 
       this.tecnicoService.onUpdate(tecnicoRq).subscribe({
-        next:(data)=>{
-          if(data.id!= null){
+        next: (data) => {
+          if (data.id != null) {
             console.log('dataOK: ', data);
           } else {
             console.log('dataNULL: ', data);
           }
-          
-        }, complete: ()=>{
+        },
+        complete: () => {
           this.onConsultar();
           this.form.reset();
-        }, error:(error)=>{
+        },
+        error: (error) => {
           console.log('error: ', error);
-        }
+        },
       });
-
     }
-
   }
 
-  onEditar(tecnico: Tecnico){
+  onEditar(tecnico: Tecnico) {
     this.modoEdicion = true;
     this.idTecnitoUpdate = tecnico.id;
     this.form.get('apellido').setValue(tecnico.apellido);
@@ -130,32 +167,39 @@ export class TecnicoAdmComponent implements OnInit{
     this.form.get('dni').setValue(tecnico.dni);
     this.form.get('legajo').setValue(tecnico.legajo);
     this.form.get('email').setValue(tecnico.email);
-    
   }
+  s;
 
-  onEliminar(id: number){
+  onEliminar(id: number) {
     this.tecnicoService.onDeleteById(id).subscribe({
-      next:(data)=>{
-        if(data){
+      next: (data) => {
+        if (data) {
           console.log('dataOK: ', data);
         } else {
           console.log('dataNULL: ', data);
+          this.onDialogConfirm('normal', 'Se elimino el tecnico correctamente');
         }
-        
-      }, complete: ()=>{
+      },
+      complete: () => {
         this.onConsultar();
-      }, error:(error)=>{
+      },
+      error: (error) => {
         console.log('error: ', error);
-      }
+        this.onDialogConfirm('error', 'No se pudo eliminar el tecnico');
+      },
     });
   }
-  onCancelar(){
+  onCancelar() {
     this.form.reset();
     this.modoEdicion = false;
     this.idTecnitoUpdate = undefined;
   }
 
-  onValidarCampo(campo: string){
+  onValidarCampo(campo: string) {}
 
+  onDialogConfirm(tipo: string, mensaje: string, textoAceptar?: string) {
+    let dialogRef = this.dialog.open(ConfirmComponent, {
+      data: { tipo: tipo, mensaje: mensaje, textoAceptar: textoAceptar },
+    });
   }
 }
