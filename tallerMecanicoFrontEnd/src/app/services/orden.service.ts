@@ -5,6 +5,7 @@ import { environment } from 'src/enviroments/enviroment';
 import { Orden } from '../model/orden';
 import { OrdenSaveRq } from '../model/OrdenSaveRq';
 import { Factura } from '../model/factura';
+import { RqReporteCantServMarca } from '../model/RqReporteCantServMarcaEntreFecha';
 
 @Injectable({
   providedIn: 'root',
@@ -77,5 +78,13 @@ export class OrdenService {
     return this.http.post(`${this.API_SERVER}/orden/filtrar`, o, {
       headers: this.headers,
     });
+  }
+
+  reporteMarcaServ(rq: RqReporteCantServMarca): Observable<any> {
+    return this.http.post<any>(
+      `${this.API_SERVER}/reporte/ordencantserv/`,
+      rq,
+      { headers: this.headers }
+    );
   }
 }

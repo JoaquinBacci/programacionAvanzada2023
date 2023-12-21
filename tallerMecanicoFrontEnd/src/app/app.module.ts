@@ -43,6 +43,7 @@ import { OrdenAdmComponent } from './orden-adm/orden-adm.component';
 import { OrdenEditComponent } from './orden-edit/orden-edit.component';
 import { FacturaComponent } from './factura/factura.component';
 import { OrdenXclienteComponent } from './orden-xcliente/orden-xcliente.component';
+import { ReporteComponent } from './reporte/reporte.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { OrdenXclienteComponent } from './orden-xcliente/orden-xcliente.componen
     OrdenEditComponent,
     FacturaComponent,
     OrdenXclienteComponent,
+    ReporteComponent,
   ],
   imports: [
     BrowserModule,
