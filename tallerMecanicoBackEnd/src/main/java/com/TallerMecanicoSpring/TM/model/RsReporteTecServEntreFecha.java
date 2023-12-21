@@ -1,13 +1,11 @@
 package com.TallerMecanicoSpring.TM.model;
 
 import java.util.Date;
-import java.util.List;
 
 public class RsReporteTecServEntreFecha {
     private Date fechaIngreso;
     private String nombreTecnico;
-    private Long idOrden;
-    private List<String> nombreServicios;
+    private String nombreServicio;
     private double monto;
 
     public Date getFechaIngreso() {
@@ -22,22 +20,12 @@ public class RsReporteTecServEntreFecha {
     public void setNombreTecnico(String nombreTecnico) {
         this.nombreTecnico = nombreTecnico;
     }
-
-    public List<String> getNombreServicios() {
-        return nombreServicios;
+    public String getNombreServicio() {
+        return nombreServicio;
     }
-    public void setNombreServicios(List<String> nombreServicio) {
-        this.nombreServicios = nombreServicio;
+    public void setNombreServicio(String nombreServicio) {
+        this.nombreServicio = nombreServicio;
     }
-
-    public Long getIdOrden() {
-        return idOrden;
-    }
-
-    public void setIdOrden(Long idOrden) {
-        this.idOrden = idOrden;
-    }
-
     public double getMonto() {
         return monto;
     }

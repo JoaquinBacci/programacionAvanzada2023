@@ -30,7 +30,7 @@ public class ReporteOrdenService {
     private OrdenService ordenServicio;
 
     public List<RsReporteTecServEntreFecha> reporteOrdenesPeriodo(RqReporteDTO rqdto){
-        
+
         List<Orden> allOrdenes = ordenServicio.findAllOrdenes();
         List<RsReporteTecServEntreFecha> listRs = new ArrayList<RsReporteTecServEntreFecha>();
 
@@ -50,7 +50,7 @@ public class ReporteOrdenService {
         }
 
 
-                
+
         Date fechaDesde = rq.getFechaDesde();
         Date fechaHasta = rq.getFechaHasta();
         Long[] idsTecnicos = rq.getIdsTecnicos();
@@ -60,35 +60,27 @@ public class ReporteOrdenService {
                 .filter(o -> o.getFechaIngreso() != null && fechaDesde != null && fechaHasta != null &&
                         o.getFechaIngreso().after(fechaDesde) && o.getFechaIngreso().before(fechaHasta))
                 .collect(Collectors.toList());
+
         for(Orden o: allOrdenes){
             for(Long i: idsTecnicos){
                 if(o.getTecnico().getId() == i){
-                    RsReporteTecServEntreFecha rs = new RsReporteTecServEntreFecha();
-                    boolean servicioExistente = false;
-                    List<String> nombresServicios = new ArrayList<>();
-                    double montoTotal = 0;
                     for(Long j: idsServicios){
                         for(DetalleOrden detalle: o.getDetallesOrden()){
                             if(detalle.getServicio().getId() == j){
-                                servicioExistente=true;
-                                nombresServicios.add(detalle.getServicio().getNombre());
-                                montoTotal = montoTotal + detalle.getPrecioTotal();
+                                RsReporteTecServEntreFecha rs = new RsReporteTecServEntreFecha();
+                                rs.setFechaIngreso(o.getFechaIngreso());
+                                rs.setNombreServicio(detalle.getServicio().getNombre());
+                                rs.setNombreTecnico(o.getTecnico().getNombre());
+                                rs.setMonto(detalle.getPrecioTotal());
+                                listRs.add(rs);
                             }
                         }
                     }
-                    if(servicioExistente){
-                        rs.setFechaIngreso(o.getFechaIngreso());
-                        rs.setNombreTecnico(o.getTecnico().getNombre());
-                        rs.setNombreServicios(nombresServicios);
-                        rs.setMonto(montoTotal);
-                        rs.setIdOrden(o.getId());
-                        listRs.add(rs);
-                    }
                 }
             }
-        } 
-        
+        }
+
         return listRs;
     }
-    
+
 }
