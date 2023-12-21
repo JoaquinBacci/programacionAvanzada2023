@@ -39,6 +39,10 @@
         ></app-orden-edit>
       </mat-card-content>
 
+      <mat-card-content *ngIf="vista == 'REPORTE'">
+        <app-reporte></app-reporte>
+      </mat-card-content>
+
       <mat-card-content *ngIf="vista == 'CREAR' || vista == 'EDITAR'">
         <div
           style="
