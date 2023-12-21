@@ -203,6 +203,17 @@ export class ReporteComponent implements OnInit {
   imprimirReporte() {
     const encabezado = ['Marca', 'Nombre Servicio', 'Cantidad'];
 
+    const cuerpo = this.dataSourceRpMarcaServ.map((obj) => [
+      obj.marca,
+      obj.nombreServicio,
+      obj.cantidad,
+    ]);
+    this.servImprReporte.imprimir(
+      encabezado,
+      cuerpo,
+      'Listado Servicios por Marca',
+      true
+    );
     /*let rq: RqReporteCantServMarca = new RqReporteCantServMarca();
 
     rq.fechaDesde = this.datePipe.transform(this.fechaDesde, 'dd-MM-yyyy');
@@ -224,16 +235,5 @@ export class ReporteComponent implements OnInit {
       }
       
     });*/
-    const cuerpo = this.dataSourceRpMarcaServ.map((obj) => [
-      obj.marca,
-      obj.nombreServicio,
-      obj.cantidad,
-    ]);
-    this.servImprReporte.imprimir(
-      encabezado,
-      cuerpo,
-      'Listado Servicios por Marca',
-      true
-    );
   }
 }

@@ -92,8 +92,8 @@
         <button *ngIf="elemento.estado == 'enCurso'" mat-icon-button matTooltip="Finalizar" (click)="finalizarOrden(elemento)">
             <mat-icon>done_all</mat-icon>
         </button>
-        <button *ngIf="elemento.estado == 'finalizada'" mat-icon-button matTooltip="Imprimir Factura" (click)="imprimirFactura(elemento)">
-            <mat-icon>download</mat-icon>
+        <button *ngIf="elemento.estado == 'finalizada'" mat-icon-button matTooltip="Ver Factura" (click)="imprimirFactura(elemento)">
+            <mat-icon>description</mat-icon>
         </button>
       </mat-cell>
     </ng-container>
