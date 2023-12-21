@@ -2,14 +2,14 @@
     <div class="subContainer" >
        <h1>Gestionar ordenes de trabajo</h1>
        <div style="display: flex;">
-            <button mat-raised-button (click)="setVista('CREAR')" color="primary" > Crear Orden </button>
+            <button mat-raised-button *ngIf="vista != 'EDITAR'" (click)="setVista('CREAR')" color="primary" > Crear Orden </button>
             <button mat-raised-button (click)="setVista('CONSULTAR')" color="warn" style="margin-left: 10px;"> Consultar Ordenes </button> 
        </div>
 
        <mat-card style="margin-top: 20px;">
 
             <mat-card-content *ngIf=" vista == 'CONSULTAR' ">
-                <app-orden-edit  [dataSourceOrdenes]="dataSourceOrdenes"  (editarClicked)="editar($event)" (actualizarOrdenes)="getAllOrdenes()"></app-orden-edit>
+                <app-orden-edit  [dataSourceOrdenes]="dataSourceOrdenes" [dataTecnicos]="dataTecnicos" [dataClientes]="dataClientes"   (editarClicked)="editar($event)" (actualizarOrdenes)="getAllOrdenes()"></app-orden-edit>
             </mat-card-content>
 
             <mat-card-content *ngIf="vista == 'CREAR' || vista == 'EDITAR' ">
@@ -34,13 +34,21 @@
                             </mat-form-field>
                         
                             <div class="infoVehiculo" *ngIf="clienteSeleccionado!=null" style="width: 100%;">
-                                <mat-form-field style="width: 100%;" *ngIf="vista == 'CREAR'">
-                                    <mat-select placeholder="Vehiculo"  formControlName="vehiculo">
-                                    <mat-option *ngFor="let vehiculo of dataVehiculos" [value]="vehiculo" (click)="setVehiculo(vehiculo)">
-                                        {{ vehiculo.patente + ', ' + vehiculo.marca.nombre + ' ' + vehiculo.modelo.nombre }}
-                                    </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
+                                <div *ngIf="vista == 'CREAR'" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                                    <div style="width: 95%;">
+                                        <mat-form-field style="width: 100%;" >
+                                            <mat-select placeholder="Vehiculo"  formControlName="vehiculo">
+                                            <mat-option *ngFor="let vehiculo of dataVehiculos" [value]="vehiculo" (click)="setVehiculo(vehiculo)">
+                                                {{ vehiculo.patente + ', ' + vehiculo.marca.nombre + ' ' + vehiculo.modelo.nombre }}
+                                            </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div>
+                                        <button mat-icon-button (click)="aggVehiculo()"><mat-icon>add</mat-icon></button>
+                                    </div>
+                                </div>
+                                
                                 <div *ngIf="vehiculoSeleccionado != null || vehiculoSeleccionado != undefined">
                                     <div><h4>Datos del Vehiculo:</h4></div> 
                                     <div  style="display: flex; flex-direction: row;">

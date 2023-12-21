@@ -32,7 +32,7 @@
                             <button mat-raised-button (click)="onGuardar()" color="primary" [disabled]="!form.valid">Guardar</button>
                             <button mat-raised-button (click)="onCancelar()" color="warn" style="margin-left: 10px;">Cancelar</button>
                     </div>
-                    <div class="tabla" style="width: 100%;">
+                    <div class="tabla" style="width: 100%; overflow-x: scroll;">
                         <mat-card-title>Consultar clientes:</mat-card-title>
                         <!-- <div style="display: flex;">
                             <button mat-icon-button matTooltip="Buscar" (click)="onConsultar()">
@@ -110,8 +110,11 @@
                                 </button>
                               </mat-header-cell>
                               <mat-cell *matCellDef="let elemento">
+                                <button mat-icon-button matTooltip="Ver ordenes" (click)="onVerOrdenes(elemento.id)">
+                                  <mat-icon>receipt_long</mat-icon>
+                                </button>
                                 <button mat-icon-button matTooltip="Ver vehiculos" (click)="onVerVehiculos(elemento.id)">
-                                  <mat-icon>preview</mat-icon>
+                                  <mat-icon>directions_car</mat-icon>
                                 </button>
                                 <button mat-icon-button matTooltip="Editar" (click)="onEditar(elemento)">
                                   <mat-icon>edit</mat-icon>

@@ -25,6 +25,10 @@ export class OrdenService {
   public getOrdenById(id):Observable<Orden>{
     return this.http.get<Orden>(`${this.API_SERVER}/orden/get/${id}`);
   }
+  
+  public getOrdenByIdCliente(id):Observable<any>{
+    return this.http.get<any>(`${this.API_SERVER}/orden/getByCLiente/${id}`);
+  }
 
   public newOrden(orden: OrdenSaveRq): Observable<any>{
     return this.http.post(`${this.API_SERVER}/orden/save`, orden, { headers: this.headers })
@@ -56,6 +60,10 @@ export class OrdenService {
 
   generarFactura(orden: Orden): Observable<Factura>{
     return this.http.post<Factura>(`${this.API_SERVER}/factura/generate`, orden, { headers: this.headers })
+  }
+
+  filtrar(o: Orden):Observable<any>{
+    return this.http.post(`${this.API_SERVER}/orden/filtrar`, o, { headers: this.headers })
   }
 
 }

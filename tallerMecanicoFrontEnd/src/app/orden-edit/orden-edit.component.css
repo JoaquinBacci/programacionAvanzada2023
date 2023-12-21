@@ -1,0 +1,15 @@
+.table {
+    display: flex;
+    flex-direction: column;
+    border-collapse: collapse;
+    margin-left: 10px;
+}
+
+.td {
+    padding: 10px;
+}
+
+.th{
+    width: 250px;
+    text-align: start;
+}

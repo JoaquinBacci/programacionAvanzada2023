@@ -140,6 +140,16 @@ public class OrdenRest {
         }
     }
 
+    @PostMapping("/filtrar")
+    private ResponseEntity<List<Orden>> filtrar(@RequestBody Orden o){
+        try{
+            return ResponseEntity.ok(this.ordenService.filtrar(o));
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
    /* @PutMapping("/{id}")
     public ResponseEntity<?> actualizarOrden(@RequestBody Orden nuevaOrden, @PathVariable Long id){
         try{

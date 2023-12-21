@@ -27,7 +27,7 @@ export class ServicioService {
   }
 
   public updateServicio( servicio: Servicio): Observable<any> {
-    return this.http.put(`${this.API_SERVER}/servicio/update/`,servicio,{ headers: this.headers });
+    return this.http.post(`${this.API_SERVER}/servicio/update/`,servicio,{ headers: this.headers });
   }
 
   public consultarServicio(servicio: Servicio): Observable<any>{

@@ -14,6 +14,9 @@ import { ServicioService } from '../services/servicio.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { OrdenSaveRq } from '../model/OrdenSaveRq';
+import { MatDialog } from '@angular/material/dialog';
+import { VehiculoAdmComponent } from '../vehiculo-adm/vehiculo-adm.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-orden-adm',
@@ -76,7 +79,9 @@ export class OrdenAdmComponent implements OnInit{
     private tecnicoService: TecnicoService,
     private vehiculoService: VehiculoService,
     private sercicioService: ServicioService,
+    private location: Location,
     private router: Router,
+    private dialog: MatDialog,
     private fb: FormBuilder
   ){
     this.formularioOrden = this.fb.group({
@@ -486,6 +491,11 @@ export class OrdenAdmComponent implements OnInit{
         }
       }
     });
+  }
+
+  aggVehiculo(){
+    const dialog = this.dialog.open(VehiculoAdmComponent);
+    dialog.afterClosed().subscribe(result => this.getAllVehiculos());
   }
 
   disabledFormField(){

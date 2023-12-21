@@ -62,6 +62,73 @@ public class OrdenService {
         return ordenRepository.findById(id);
     }
 
+    public List<Orden> filtrar(Orden ordenRq){
+
+        
+        List<Orden> ordenesRs = this.findAllOrdenes();
+        //List<Orden> ordenRs = new ArrayList<>();
+        
+        if(ordenRq.getId() != null && ordenRq.getId() != 0 ){
+            ordenesRs = ordenesRs.stream()
+                .filter(o -> o.getId() != 0 &&  o.getId() == ordenRq.getId())
+                .collect(Collectors.toList());
+        }
+
+        if( ordenRq.getVehiculo().getCliente()!=null && ordenRq.getVehiculo().getCliente().getId() != null){
+             ordenesRs = ordenesRs.stream()
+                .filter(o -> o.getVehiculo().getCliente().getId() != null &&  o.getVehiculo().getCliente().getId() == ordenRq.getVehiculo().getCliente().getId() )
+                .collect(Collectors.toList());
+        }
+
+        if( ordenRq.getVehiculo()!=null && ordenRq.getVehiculo().getId() != null){
+             ordenesRs = ordenesRs.stream()
+                .filter(o -> o.getVehiculo().getId() != null &&  o.getVehiculo().getId() == ordenRq.getVehiculo().getId() )
+                .collect(Collectors.toList());
+        }
+
+        if( ordenRq.getTecnico() != null && ordenRq.getTecnico().getId() != null){
+             ordenesRs = ordenesRs.stream()
+                .filter(o -> o.getTecnico().getId() != null &&  o.getTecnico().getId() ==  ordenRq.getTecnico().getId() )
+                .collect(Collectors.toList());
+        }
+
+        /*ordenesRs = ordenesRs.stream()
+           .filter(o -> 
+           System.out.println("FECHA ORDEN: " + o.getFechaIngreso())
+           o.getFechaIngreso() != null &&  o.getFechaIngreso() ==  ordenRq.getFechaIngreso() )
+           .collect(Collectors.toList());*/
+        if (ordenRq.getFechaIngreso() != null) {
+            SimpleDateFormat formatoEntrada = new SimpleDateFormat("dd-MM-yyyy");
+        
+            try {
+                String fechaFormateadaRq = formatoEntrada.format(ordenRq.getFechaIngreso());
+        
+                ordenesRs = ordenesRs.stream()
+                    .filter(o -> {
+                        if (o.getFechaIngreso() != null) {
+                            System.out.println("FECHA ORDEN: " +formatoEntrada.format(o.getFechaIngreso()));
+                        }
+        
+                        String fechaOrdenFormateada = formatoEntrada.format(o.getFechaIngreso());
+        
+                        return o.getFechaIngreso() != null && fechaOrdenFormateada.equals(fechaFormateadaRq);
+                    })
+                    .collect(Collectors.toList());
+            } catch (Exception e) {
+                e.printStackTrace(); // Manejo de excepciones si ocurre un error al parsear la fecha
+            }
+        }
+        
+
+        if( ordenRq.getEstado() != null  &&  !"".equals(ordenRq.getEstado())){
+            ordenesRs = ordenesRs.stream()
+                .filter(o -> !"".equals(ordenRq.getEstado()) &&  o.getEstado().contains(ordenRq.getEstado()) )
+                .collect(Collectors.toList());
+        }
+
+        return ordenesRs;
+    }
+
     @Transactional
     public Orden saveOrden(OrdenSaveRq ordenRq) {
         System.out.println("====================================== ");
