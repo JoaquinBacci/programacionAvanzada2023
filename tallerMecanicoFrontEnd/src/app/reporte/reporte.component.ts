@@ -11,6 +11,7 @@ import { RqReporteCantServMarca } from '../model/RqReporteCantServMarcaEntreFech
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { OrdenService } from '../services/orden.service';
 import { DatePipe } from '@angular/common';
+import { ImprRpService } from '../services/impr-rp.service';
 
 @Component({
   selector: 'app-reporte',
@@ -19,15 +20,15 @@ import { DatePipe } from '@angular/common';
 })
 export class ReporteComponent implements OnInit {
 
-  columnasReporteCantServ = ['marca', 'servicio','cantidad'];
+  columnasReporteCantServ = ['marca', 'servicio', 'cantidad'];
   dataSourceRpMarcaServ: any[];
 
   dataTecnicos: Tecnico[];
   dataServicio: Servicio[];
   dataMarcas: Marca[];
 
-  fechaDesde:Date;
-  fechaHasta:Date;
+  fechaDesde: Date;
+  fechaHasta: Date;
   tecnicos: Tecnico[] = [];
   servicios: Servicio[] = [];
   marcas: Marca[] = [];
@@ -37,33 +38,34 @@ export class ReporteComponent implements OnInit {
     private ordenService: OrdenService,
     private tecnicoService: TecnicoService,
     private marcaService: MarcaService,
-    private servicioService: ServicioService
-  ){}
+    private servicioService: ServicioService,
+    private servImprReporte: ImprRpService
+  ) { }
   ngOnInit(): void {
 
-      this.servicioService.getAllServicio().subscribe({
-        next:(value)=> {
-            this.dataServicio = value;
-        }, error: (err) => {
-            console.log(err)
-        },
-      });
-
-      this.marcaService.getAllMarcas().subscribe({
-        next:(value)=> {
-          this.dataMarcas = value;
+    this.servicioService.getAllServicio().subscribe({
+      next: (value) => {
+        this.dataServicio = value;
       }, error: (err) => {
-          console.log(err)
+        console.log(err)
       },
-      });
+    });
 
-      this.tecnicoService.getAll().subscribe({
-        next:(value)=> {
-            this.dataTecnicos = value;
-        }, error: (err) => {
-            console.log(err)
-        },
-      })
+    this.marcaService.getAllMarcas().subscribe({
+      next: (value) => {
+        this.dataMarcas = value;
+      }, error: (err) => {
+        console.log(err)
+      },
+    });
+
+    this.tecnicoService.getAll().subscribe({
+      next: (value) => {
+        this.dataTecnicos = value;
+      }, error: (err) => {
+        console.log(err)
+      },
+    })
   }
 
   // Manejador de cambio de fecha de inicio
@@ -76,71 +78,99 @@ export class ReporteComponent implements OnInit {
     this.fechaHasta = event.value;
   }
 
-  addTecnico(t: Tecnico){
+  addTecnico(t: Tecnico) {
     const existeTecnico = this.tecnicos.some(tecnico => tecnico.id === t.id);
-    if(!existeTecnico){
+    if (!existeTecnico) {
       this.tecnicos.push(t);
     }
   }
 
-  removeTecnico(t:Tecnico){
+  removeTecnico(t: Tecnico) {
     const index = this.tecnicos.findIndex(tecnico => tecnico.id === t.id);
 
     if (index !== -1) {
       this.tecnicos.splice(index, 1);
-    } 
+    }
   }
 
-  addMarca(t: Marca){
+  addMarca(t: Marca) {
     const existeMarca = this.marcas.some(marca => marca.id === t.id);
-    if(!existeMarca){
+    if (!existeMarca) {
       this.marcas.push(t);
     }
   }
 
-  removeMarca(t:Marca){
+  removeMarca(t: Marca) {
     const index = this.marcas.findIndex(marca => marca.id === t.id);
 
     if (index !== -1) {
       this.marcas.splice(index, 1);
-    } 
+    }
   }
 
-  addServicio(s: Servicio){
+  addServicio(s: Servicio) {
     const servicioExistente = this.servicios.some(servicio => servicio.id === s.id);
-    if(!servicioExistente){
+    if (!servicioExistente) {
       this.servicios.push(s);
     }
   }
 
-  removeServicio(s:Servicio){
+  removeServicio(s: Servicio) {
     const index = this.servicios.findIndex(servicio => servicio.id === s.id);
 
     if (index !== -1) {
       this.servicios.splice(index, 1);
-    } 
+    }
   }
   mostrarDatos() {
-    let rq : RqReporteCantServMarca = new RqReporteCantServMarca();
-    
-    rq.fechaDesde =  this.datePipe.transform(this.fechaDesde, 'dd-MM-yyyy');
+    let rq: RqReporteCantServMarca = new RqReporteCantServMarca();
+
+    rq.fechaDesde = this.datePipe.transform(this.fechaDesde, 'dd-MM-yyyy');
     rq.fechaHasta = this.datePipe.transform(this.fechaHasta, 'dd-MM-yyyy');
     rq.idsServicios = [];
-    this.servicios.forEach((s) => {rq.idsServicios.push(s.id)});
+    this.servicios.forEach((s) => { rq.idsServicios.push(s.id) });
     rq.idsMarcas = [];
-    this.marcas.forEach((m) => {rq.idsMarcas.push(m.id)});
+    this.marcas.forEach((m) => { rq.idsMarcas.push(m.id) });
     console.log(rq);
     this.ordenService.reporteMarcaServ(rq).subscribe({
-      next:(value) => {
+      next: (value) => {
         this.dataSourceRpMarcaServ = value;
-          
-      }, error:(error) => {console.log(error)}
+
+      }, error: (error) => { console.log(error) }
     });
     /*console.log('Fecha Desde:', this.fechaDesde);
     console.log('Fecha Hasta:', this.fechaHasta);
     console.log('Tecnicos:', this.tecnicos);
     console.log('Marcas:', this.marcas);*/
   }
-  
-  
+
+  imprimirReporte() {
+    const encabezado = ["Marca", "Nombre Servicio", "Cantidad"]
+   
+    /*let rq: RqReporteCantServMarca = new RqReporteCantServMarca();
+
+    rq.fechaDesde = this.datePipe.transform(this.fechaDesde, 'dd-MM-yyyy');
+    rq.fechaHasta = this.datePipe.transform(this.fechaHasta, 'dd-MM-yyyy');
+    rq.idsServicios = [];
+    this.servicios.forEach((s) => { rq.idsServicios.push(s.id) });
+    rq.idsMarcas = [];
+    this.marcas.forEach((m) => { rq.idsMarcas.push(m.id) });
+    
+    this.ordenService.reporteMarcaServ(rq).subscribe({
+      next: (value) => {
+        const cuerpo = value.map(obj => [obj.marca, obj.nombreServicio, obj.cantidad]);
+        // Ahora puedes hacer lo que necesites con la constante 'datos'
+        console.log(cuerpo);
+        
+      },
+      error: (error) => {
+        console.log(error);
+      }
+      
+    });*/
+    const cuerpo = this.dataSourceRpMarcaServ.map(obj => [obj.marca, obj.nombreServicio, obj.cantidad]);
+    this.servImprReporte.imprimir(encabezado, cuerpo, "Listado Servicios por Marca", true);
+    
+  }
+
 }
