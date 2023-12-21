@@ -12,14 +12,14 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { OrdenService } from '../services/orden.service';
 import { DatePipe } from '@angular/common';
 import { ImprRpService } from '../services/impr-rp.service';
+declare var Chart: any;
 
 @Component({
   selector: 'app-reporte',
   templateUrl: './reporte.component.html',
-  styleUrls: ['./reporte.component.css']
+  styleUrls: ['./reporte.component.css'],
 })
 export class ReporteComponent implements OnInit {
-
   columnasReporteCantServ = ['marca', 'servicio', 'cantidad'];
   dataSourceRpMarcaServ: any[];
 
@@ -33,6 +33,9 @@ export class ReporteComponent implements OnInit {
   servicios: Servicio[] = [];
   marcas: Marca[] = [];
 
+  // Agrega esto a tu componente
+  private chartInstance: any;
+
   constructor(
     private datePipe: DatePipe,
     private ordenService: OrdenService,
@@ -40,32 +43,34 @@ export class ReporteComponent implements OnInit {
     private marcaService: MarcaService,
     private servicioService: ServicioService,
     private servImprReporte: ImprRpService
-  ) { }
+  ) {}
   ngOnInit(): void {
-
     this.servicioService.getAllServicio().subscribe({
       next: (value) => {
         this.dataServicio = value;
-      }, error: (err) => {
-        console.log(err)
+      },
+      error: (err) => {
+        console.log(err);
       },
     });
 
     this.marcaService.getAllMarcas().subscribe({
       next: (value) => {
         this.dataMarcas = value;
-      }, error: (err) => {
-        console.log(err)
+      },
+      error: (err) => {
+        console.log(err);
       },
     });
 
     this.tecnicoService.getAll().subscribe({
       next: (value) => {
         this.dataTecnicos = value;
-      }, error: (err) => {
-        console.log(err)
       },
-    })
+      error: (err) => {
+        console.log(err);
+      },
+    });
   }
 
   // Manejador de cambio de fecha de inicio
@@ -79,14 +84,14 @@ export class ReporteComponent implements OnInit {
   }
 
   addTecnico(t: Tecnico) {
-    const existeTecnico = this.tecnicos.some(tecnico => tecnico.id === t.id);
+    const existeTecnico = this.tecnicos.some((tecnico) => tecnico.id === t.id);
     if (!existeTecnico) {
       this.tecnicos.push(t);
     }
   }
 
   removeTecnico(t: Tecnico) {
-    const index = this.tecnicos.findIndex(tecnico => tecnico.id === t.id);
+    const index = this.tecnicos.findIndex((tecnico) => tecnico.id === t.id);
 
     if (index !== -1) {
       this.tecnicos.splice(index, 1);
@@ -94,14 +99,14 @@ export class ReporteComponent implements OnInit {
   }
 
   addMarca(t: Marca) {
-    const existeMarca = this.marcas.some(marca => marca.id === t.id);
+    const existeMarca = this.marcas.some((marca) => marca.id === t.id);
     if (!existeMarca) {
       this.marcas.push(t);
     }
   }
 
   removeMarca(t: Marca) {
-    const index = this.marcas.findIndex(marca => marca.id === t.id);
+    const index = this.marcas.findIndex((marca) => marca.id === t.id);
 
     if (index !== -1) {
       this.marcas.splice(index, 1);
@@ -109,14 +114,16 @@ export class ReporteComponent implements OnInit {
   }
 
   addServicio(s: Servicio) {
-    const servicioExistente = this.servicios.some(servicio => servicio.id === s.id);
+    const servicioExistente = this.servicios.some(
+      (servicio) => servicio.id === s.id
+    );
     if (!servicioExistente) {
       this.servicios.push(s);
     }
   }
 
   removeServicio(s: Servicio) {
-    const index = this.servicios.findIndex(servicio => servicio.id === s.id);
+    const index = this.servicios.findIndex((servicio) => servicio.id === s.id);
 
     if (index !== -1) {
       this.servicios.splice(index, 1);
@@ -128,15 +135,23 @@ export class ReporteComponent implements OnInit {
     rq.fechaDesde = this.datePipe.transform(this.fechaDesde, 'dd-MM-yyyy');
     rq.fechaHasta = this.datePipe.transform(this.fechaHasta, 'dd-MM-yyyy');
     rq.idsServicios = [];
-    this.servicios.forEach((s) => { rq.idsServicios.push(s.id) });
+    this.servicios.forEach((s) => {
+      rq.idsServicios.push(s.id);
+    });
     rq.idsMarcas = [];
-    this.marcas.forEach((m) => { rq.idsMarcas.push(m.id) });
+    this.marcas.forEach((m) => {
+      rq.idsMarcas.push(m.id);
+    });
     console.log(rq);
     this.ordenService.reporteMarcaServ(rq).subscribe({
       next: (value) => {
         this.dataSourceRpMarcaServ = value;
-
-      }, error: (error) => { console.log(error) }
+        // Después de obtener los datos, dibuja el gráfico
+        this.dibujarGraficoTorta();
+      },
+      error: (error) => {
+        console.log(error);
+      },
     });
     /*console.log('Fecha Desde:', this.fechaDesde);
     console.log('Fecha Hasta:', this.fechaHasta);
@@ -144,13 +159,81 @@ export class ReporteComponent implements OnInit {
     console.log('Marcas:', this.marcas);*/
   }
 
-  imprimirReporte() {
-    const encabezado = ["Marca", "Nombre Servicio", "Cantidad"]
-   
-    
-    const cuerpo = this.dataSourceRpMarcaServ.map(obj => [obj.marca, obj.nombreServicio, obj.cantidad]);
-    this.servImprReporte.imprimir(encabezado, cuerpo, "Listado Cantidad de Servicios por Marca", true);
-    
+  dibujarGraficoTorta() {
+    const datos = this.dataSourceRpMarcaServ.map((obj) => obj.cantidad);
+    const etiquetas = this.dataSourceRpMarcaServ.map(
+      (obj) => `${obj.nombreServicio} de ${obj.marca}`
+    );
+
+    // Obtén el canvas y su contexto
+    const canvas: any = document.getElementById('graficoTorta');
+    const ctx = canvas.getContext('2d');
+
+    // Destruye la instancia del gráfico anterior si existe
+    if (this.chartInstance) {
+      this.chartInstance.destroy();
+    }
+
+    // Configura y dibuja el nuevo gráfico de torta
+    this.chartInstance = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: etiquetas,
+        datasets: [
+          {
+            data: datos,
+            backgroundColor: [
+              'rgba(150, 0, 0, 0.7)', // Rojo oscuro
+              'rgba(0, 0, 150, 0.7)', // Azul oscuro
+              'rgba(150, 150, 0, 0.7)', // Amarillo oscuro
+              // ... Puedes ajustar los valores según tu preferencia
+            ],
+          },
+        ],
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Cantidad de Servicios por Marca',
+        },
+      },
+    });
   }
 
+  imprimirReporte() {
+    const encabezado = ['Marca', 'Nombre Servicio', 'Cantidad'];
+
+    /*let rq: RqReporteCantServMarca = new RqReporteCantServMarca();
+
+    rq.fechaDesde = this.datePipe.transform(this.fechaDesde, 'dd-MM-yyyy');
+    rq.fechaHasta = this.datePipe.transform(this.fechaHasta, 'dd-MM-yyyy');
+    rq.idsServicios = [];
+    this.servicios.forEach((s) => { rq.idsServicios.push(s.id) });
+    rq.idsMarcas = [];
+    this.marcas.forEach((m) => { rq.idsMarcas.push(m.id) });
+    
+    this.ordenService.reporteMarcaServ(rq).subscribe({
+      next: (value) => {
+        const cuerpo = value.map(obj => [obj.marca, obj.nombreServicio, obj.cantidad]);
+        // Ahora puedes hacer lo que necesites con la constante 'datos'
+        console.log(cuerpo);
+        
+      },
+      error: (error) => {
+        console.log(error);
+      }
+      
+    });*/
+    const cuerpo = this.dataSourceRpMarcaServ.map((obj) => [
+      obj.marca,
+      obj.nombreServicio,
+      obj.cantidad,
+    ]);
+    this.servImprReporte.imprimir(
+      encabezado,
+      cuerpo,
+      'Listado Servicios por Marca',
+      true
+    );
+  }
 }

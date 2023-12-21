@@ -1,50 +1,76 @@
 <div>
   <mat-card>
-    <mat-card-title>
-      REPORTE Cantidad de Servicios por Marca
-    </mat-card-title>
+    <mat-card-title> REPORTE Cantidad de Servicios por Marca </mat-card-title>
     <mat-card-content>
-      <div style="display: flex; flex-direction: column;">
+      <div style="display: flex; flex-direction: column">
         <div>
           <mat-form-field>
             <mat-label>Marca</mat-label>
             <mat-select>
-              <mat-option *ngFor="let marca of dataMarcas" [value]="marca"
-                (click)="addMarca(marca)">{{marca.nombre}}</mat-option>
+              <mat-option
+                *ngFor="let marca of dataMarcas"
+                [value]="marca"
+                (click)="addMarca(marca)"
+                >{{ marca.nombre }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
         </div>
-        <div *ngFor="let s of marcas" style="display: flex; flex-direction: row; align-items: center;">
-          {{s.nombre}} 
-          <button mat-icon-button (click)="removeMarca(s)"> <mat-icon>delete</mat-icon> </button>
+        <div
+          *ngFor="let s of marcas"
+          style="display: flex; flex-direction: row; align-items: center"
+        >
+          {{ s.nombre }}
+          <button mat-icon-button (click)="removeMarca(s)">
+            <mat-icon>delete</mat-icon>
+          </button>
         </div>
       </div>
-      <div style="display: flex; flex-direction: column;">
+      <div style="display: flex; flex-direction: column">
         <div>
           <mat-form-field>
             <mat-label>Servicio</mat-label>
             <mat-select>
-              <mat-option *ngFor="let servicio of dataServicio" [value]="servicio"
-                (click)="addServicio(servicio)">{{servicio.nombre}}</mat-option>
+              <mat-option
+                *ngFor="let servicio of dataServicio"
+                [value]="servicio"
+                (click)="addServicio(servicio)"
+                >{{ servicio.nombre }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
         </div>
-        <div *ngFor="let s of servicios" style="display: flex; flex-direction: row; align-items: center;">
-          {{s.nombre}}
-          <button mat-icon-button (click)="removeServicio(s)"> <mat-icon>delete</mat-icon> </button>
+        <div
+          *ngFor="let s of servicios"
+          style="display: flex; flex-direction: row; align-items: center"
+        >
+          {{ s.nombre }}
+          <button mat-icon-button (click)="removeServicio(s)">
+            <mat-icon>delete</mat-icon>
+          </button>
         </div>
       </div>
-
 
       <div>
         <mat-form-field>
           <mat-label>Ingrese el rango de fechas</mat-label>
           <mat-date-range-input [rangePicker]="picker">
-            <input matStartDate placeholder="fechaDesde" (dateChange)="onFechaDesdeChange($event)">
-            <input matEndDate placeholder="fechaHasta" (dateChange)="onFechaHastaChange($event)">
+            <input
+              matStartDate
+              placeholder="fechaDesde"
+              (dateChange)="onFechaDesdeChange($event)"
+            />
+            <input
+              matEndDate
+              placeholder="fechaHasta"
+              (dateChange)="onFechaHastaChange($event)"
+            />
           </mat-date-range-input>
           <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
           <mat-date-range-picker #picker></mat-date-range-picker>
         </mat-form-field>
       </div>
@@ -52,10 +78,7 @@
     </mat-card-content>
   </mat-card>
 
-
-
   <div>
-
     <mat-table [dataSource]="dataSourceRpMarcaServ" class="mat-elevation-z8">
       <!-- Columna Nombre -->
       <ng-container matColumnDef="marca">
@@ -65,19 +88,27 @@
 
       <ng-container matColumnDef="servicio">
         <mat-header-cell *matHeaderCellDef> Servicio </mat-header-cell>
-        <mat-cell *matCellDef="let elemento"> {{ elemento.nombreServicio }} </mat-cell>
+        <mat-cell *matCellDef="let elemento">
+          {{ elemento.nombreServicio }}
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="cantidad">
         <mat-header-cell *matHeaderCellDef> Cantidad </mat-header-cell>
-        <mat-cell *matCellDef="let elemento"> {{ elemento.cantidad }} </mat-cell>
+        <mat-cell *matCellDef="let elemento">
+          {{ elemento.cantidad }}
+        </mat-cell>
       </ng-container>
 
       <!-- Define las columnas de la tabla -->
-      <mat-header-row *matHeaderRowDef="columnasReporteCantServ"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: columnasReporteCantServ;"></mat-row>
+      <mat-header-row
+        *matHeaderRowDef="columnasReporteCantServ"
+      ></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columnasReporteCantServ"></mat-row>
     </mat-table>
-
   </div>
-  <button mat-raised-button (click)="imprimirReporte()">Imprimir Reporte</button>
+  <button mat-raised-button (click)="imprimirReporte()">
+    Imprimir Reporte
+  </button>
+  <canvas id="graficoTorta"></canvas>
 </div>
