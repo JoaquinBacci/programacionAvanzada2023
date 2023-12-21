@@ -6,6 +6,7 @@ import autoTable from 'jspdf-autotable'
 @Injectable({
   providedIn: 'root'
 })
+
 export class ImprRpService {
 
   constructor() { }
@@ -26,7 +27,11 @@ export class ImprRpService {
 
     if (guardar){
       const hoy = new Date();
-      doc.save(hoy.getTime() + hoy.getDate() + hoy.getMonth() + hoy.getFullYear()+ '.pdf');
+      const horas = hoy.getHours().toString().padStart(2, '0');
+      const minutos = hoy.getMinutes().toString().padStart(2, '0');
+      const segundos = hoy.getSeconds().toString().padStart(2, '0');
+      const horaActual = `${horas}h${minutos}m${segundos}s`;
+      doc.save(horaActual + "_" + hoy.getDate()+ "-" + hoy.getMonth()+ "-" + hoy.getFullYear()+ '.pdf');
     } else{
 
     }
