@@ -15,12 +15,14 @@ export class ImprRpService {
       unit: "px",
       format: 'letter'
     });
+
     doc.text(titulo,doc.internal.pageSize.width/2, 25, {align: 'center'});
     
     autoTable(doc, {
       head: [encabezado],
       body: cuerpo,
     })
+
 
     if (guardar){
       const hoy = new Date();

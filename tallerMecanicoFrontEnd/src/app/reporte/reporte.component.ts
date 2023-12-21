@@ -147,29 +147,9 @@ export class ReporteComponent implements OnInit {
   imprimirReporte() {
     const encabezado = ["Marca", "Nombre Servicio", "Cantidad"]
    
-    /*let rq: RqReporteCantServMarca = new RqReporteCantServMarca();
-
-    rq.fechaDesde = this.datePipe.transform(this.fechaDesde, 'dd-MM-yyyy');
-    rq.fechaHasta = this.datePipe.transform(this.fechaHasta, 'dd-MM-yyyy');
-    rq.idsServicios = [];
-    this.servicios.forEach((s) => { rq.idsServicios.push(s.id) });
-    rq.idsMarcas = [];
-    this.marcas.forEach((m) => { rq.idsMarcas.push(m.id) });
     
-    this.ordenService.reporteMarcaServ(rq).subscribe({
-      next: (value) => {
-        const cuerpo = value.map(obj => [obj.marca, obj.nombreServicio, obj.cantidad]);
-        // Ahora puedes hacer lo que necesites con la constante 'datos'
-        console.log(cuerpo);
-        
-      },
-      error: (error) => {
-        console.log(error);
-      }
-      
-    });*/
     const cuerpo = this.dataSourceRpMarcaServ.map(obj => [obj.marca, obj.nombreServicio, obj.cantidad]);
-    this.servImprReporte.imprimir(encabezado, cuerpo, "Listado Servicios por Marca", true);
+    this.servImprReporte.imprimir(encabezado, cuerpo, "Listado Cantidad de Servicios por Marca", true);
     
   }
 
