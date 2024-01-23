@@ -32,14 +32,9 @@
                             <button mat-raised-button (click)="onGuardar()" color="primary" [disabled]="!form.valid">Guardar</button>
                             <button mat-raised-button (click)="onCancelar()" color="warn" style="margin-left: 10px;">Cancelar</button>
                     </div>
-                    <div class="tabla" style="width: 100%; overflow-x: scroll;">
+                    <div class="tabla" style=" width: 90%;white-space: nowrap; overflow-x: scroll;">
                         <mat-card-title>Consultar clientes:</mat-card-title>
-                        <!-- <div style="display: flex;">
-                            <button mat-icon-button matTooltip="Buscar" (click)="onConsultar()">
-                              <mat-icon>search</mat-icon>
-                            </button>
-                        </div> -->
-                        <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                        <mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 90% !important">
                             <!-- Columna Nombre -->
                             <ng-container matColumnDef="Nombre">
                               <mat-header-cell *matHeaderCellDef> 
@@ -100,6 +95,33 @@
                                   Licencia:
                                 </mat-header-cell>
                                 <mat-cell *matCellDef="let elemento"> {{ elemento.licenciaConducir }} </mat-cell>
+                              </ng-container>
+
+                              <ng-container matColumnDef="filtroFecha">
+                                <mat-header-cell *matHeaderCellDef>
+                                  <mat-form-field appearance="outline" floatLabel="always">
+                                    <mat-label>Ingrese el rango de fechas</mat-label>
+                                    <mat-date-range-input [rangePicker]="picker">
+                                      <input
+                                        matStartDate
+                                        placeholder="fechaDesde"
+                                        (dateChange)="onFechaDesdeChange($event)"
+                                      />
+                                      <input
+                                        matEndDate
+                                        placeholder="fechaHasta"
+                                        (dateChange)="onFechaHastaChange($event)"
+                                      />
+                                    </mat-date-range-input>
+                                    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                                    <mat-datepicker-toggle
+                                      matIconSuffix
+                                      [for]="picker"
+                                    ></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker></mat-date-range-picker>
+                                  </mat-form-field>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let elemento"></mat-cell>
                               </ng-container>
                           
                             <!-- Columna Acciones -->

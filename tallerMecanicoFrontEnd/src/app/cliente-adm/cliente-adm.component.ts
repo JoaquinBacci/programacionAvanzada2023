@@ -8,6 +8,8 @@ import { VehiculoXclienteComponent } from '../dialogs/vehiculoXcliente/vehiculoX
 import { ConfirmComponent } from '../dialogs/confirm/confirm.component';
 import { OrdenXclienteComponent } from '../orden-xcliente/orden-xcliente.component';
 import Toastify from 'toastify-js';
+import { ClienteFiltrarRq } from '../model/ClienteFiltrarRq';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-cliente-adm',
@@ -18,17 +20,21 @@ export class ClienteAdmComponent implements OnInit {
   modoEdicion: boolean;
   idUpdate: number;
   form: FormGroup;
-  clienteConsultar: Cliente;
+  clienteConsultar: ClienteFiltrarRq;
   columnas: string[] = [
     'Nombre',
     'Apellido',
     'DNI',
     'Telefono',
     'CorreoElectronico',
+    'Direccion',
     'licenciaConducir',
+    'filtroFecha',
     'Acciones',
   ];
   dataSource: any;
+
+  dataDesactivados: Cliente[];
 
   constructor(
     private fb: FormBuilder,
@@ -51,7 +57,7 @@ export class ClienteAdmComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.clienteConsultar = new Cliente();
+    this.clienteConsultar = new ClienteFiltrarRq();
     this.clienteConsultar.nombre = '';
     this.clienteConsultar.apellido = '';
     this.clienteConsultar.direccion = '';
@@ -137,12 +143,48 @@ export class ClienteAdmComponent implements OnInit {
     }
   }
 
+  // Manejador de cambio de fecha de inicio
+  onFechaDesdeChange(event: MatDatepickerInputEvent<Date>) {
+    // Obtener la fecha del evento
+    const fecha: Date = event.value;
+
+    // Extraer los componentes de la fecha
+    const dia: number = fecha.getDate();
+    const mes: number = fecha.getMonth() + 1; // Los meses en JavaScript van de 0 a 11
+    const año: number = fecha.getFullYear();
+
+    // Formatear la fecha como una cadena "dd-MM-yyyy"
+    const fechaFormateada: string = `${dia}-${mes < 10 ? '0' : ''}${mes}-${año}`;
+
+    // Asignar la fecha formateada a tu propiedad clienteConsultar.fechaHasta (si es necesario)
+    this.clienteConsultar.fechaDesde = fechaFormateada;
+  }
+
+  // Manejador de cambio de fecha de finalización
+  onFechaHastaChange(event: MatDatepickerInputEvent<Date>) {
+    // Obtener la fecha del evento
+  const fecha: Date = event.value;
+
+  // Extraer los componentes de la fecha
+  const dia: number = fecha.getDate();
+  const mes: number = fecha.getMonth() + 1; // Los meses en JavaScript van de 0 a 11
+  const año: number = fecha.getFullYear();
+
+  // Formatear la fecha como una cadena "dd-MM-yyyy"
+  const fechaFormateada: string = `${dia}-${mes < 10 ? '0' : ''}${mes}-${año}`;
+
+  // Asignar la fecha formateada a tu propiedad clienteConsultar.fechaHasta (si es necesario)
+  this.clienteConsultar.fechaHasta = fechaFormateada;
+  }
+
   onConsultar() {
+    console.log('cliente Consultar: ', this.clienteConsultar);
     this.clienteService.onConsultar(this.clienteConsultar).subscribe({
       next: (data) => {
         if (data) {
           console.log('dataOK: ', data);
           this.dataSource = data;
+          this.clienteConsultar = new ClienteFiltrarRq();
         } else {
           console.log('dataNULL: ', data);
         }
@@ -152,6 +194,16 @@ export class ClienteAdmComponent implements OnInit {
       },
       error: (error) => {
         console.log('ERROR: ', error);
+      },
+    });
+  }
+
+  getDesactivados(){
+    this.clienteService.getDesactivados().subscribe({
+      next: (value)=> {
+          this.dataDesactivados = value;
+      }, error: (err)=> {
+          console.log('error: ', err);
       },
     });
   }
@@ -192,7 +244,7 @@ export class ClienteAdmComponent implements OnInit {
   onCancelar() {
     this.form.reset();
     this.modoEdicion = false;
-    this.clienteConsultar = new Cliente();
+    this.clienteConsultar = new ClienteFiltrarRq();
     this.idUpdate = undefined;
   }
 

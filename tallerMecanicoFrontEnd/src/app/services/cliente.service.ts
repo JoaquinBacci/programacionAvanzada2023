@@ -32,6 +32,10 @@ export class ClienteService {
   public onConsultar(clienteRq: Cliente): Observable<any>{ 
     return this.http.post(`${this.API_REST}/cliente/filtrar/`, clienteRq, {headers: this.headers});
   }
+
+  public getDesactivados(): Observable<Cliente[]>{
+    return this.http.get<Cliente[]>(`${this.API_REST}/cliente/deactivados/`);
+  }
   
   /* @PutMapping("update/")
   private ResponseEntity<Cliente> update(@RequestBody Cliente clienteRq){
