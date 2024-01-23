@@ -5,6 +5,7 @@
 package com.TallerMecanicoSpring.TM.service;
 
 import com.TallerMecanicoSpring.TM.model.Cliente;
+import com.TallerMecanicoSpring.TM.model.ClienteFiltrarRq;
 import com.TallerMecanicoSpring.TM.repository.ClienteRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,9 @@ import org.springframework.stereotype.Service;
 public class ClienteService implements ClienteRepository{
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private OrdenService ordenService ;
 
     @Override
     public void flush() {
@@ -93,11 +97,43 @@ public class ClienteService implements ClienteRepository{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+
+
+
     @Override
     public List<Cliente> findAll() {
         return clienteRepository.findAll();
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    public List<Cliente> findAllNOActivos() {
+        List<Cliente> clientes = new ArrayList<Cliente>();
+        clientes = this.clienteRepository.findAll();
+
+        List<Cliente> clientesActivos = new ArrayList<>();
+        for (Cliente cliente : clientes) {
+            if (!cliente.isActivo()) { 
+                clientesActivos.add(cliente);
+            }
+        }
+
+        return clientesActivos;
+    }
+
+    public List<Cliente> findAllActivos() {
+        List<Cliente> clientes = new ArrayList<Cliente>();
+        clientes = this.clienteRepository.findAll();
+
+        List<Cliente> clientesActivos = new ArrayList<>();
+        for (Cliente cliente : clientes) {
+            if (cliente.isActivo()) { 
+                clientesActivos.add(cliente);
+            }
+        }
+
+        return clientesActivos;
+    }
+
 
     @Override
     public List<Cliente> findAllById(Iterable<Long> ids) {
@@ -156,19 +192,17 @@ public class ClienteService implements ClienteRepository{
         return this.save(c);
     }
     
-    public List<Cliente> filtrar(Cliente clienteRq){
+    public List<Cliente> filtrar(ClienteFiltrarRq clienteRq){
 
-        System.out.println("nombre: " + clienteRq.getNombre());
-        System.out.println("apellido: " + clienteRq.getApellido());
-        System.out.println("dni: " + clienteRq.getDni());
+        System.out.println("FECHAS: " + clienteRq.getFechaDesde() + " " + clienteRq.getFechaHasta());
 
         List<Cliente> clientesRs = new ArrayList();
-        List<Cliente> clientes = new ArrayList();
-        clientes = this.findAll();
-        for(Cliente c : clientes){
-           if(c.isActivo()){
-               clientesRs.add(c);
-           }
+        
+        clientesRs = this.findAllActivos();
+
+        if(clienteRq.getFechaDesde() != null && !"".equals(clienteRq.getFechaDesde()) && clienteRq.getFechaHasta() != null && !"".equals(clienteRq.getFechaHasta())){
+            System.out.println("FILTRO FECHA");
+            clientesRs = this.ordenService.filtroEntreFecha(clienteRq.getFechaDesde(), clienteRq.getFechaHasta());
         }
         
         if (clienteRq.getNombre() == null || clienteRq.getNombre().trim().isEmpty()) {
@@ -239,10 +273,6 @@ public class ClienteService implements ClienteRepository{
                 .filter(c -> c.getDireccion() != null && c.getDireccion().toLowerCase().contains(clienteRq.getDireccion().toLowerCase()))
                 .collect(Collectors.toList());
         }
-        
-        
-        //TODO: filtro por vehiculos
-        
         return clientesRs;
     }
     
@@ -263,8 +293,26 @@ public class ClienteService implements ClienteRepository{
 
     @Override
     public void deleteById(Long id) {
-        this.clienteRepository.deleteById(id);
+
+        Optional<Cliente> cliente = this.findById(id);
+        if(cliente.isPresent()){
+            cliente.get().setActivo(false);
+            this.clienteRepository.save(cliente.get());
+        } else{
+            throw new UnsupportedOperationException("No se encontro el cliente a eliminar en la bd.");
+        }    
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public Cliente activar(Long id){
+        Optional<Cliente> cliente = this.findById(id);
+        if(cliente.isPresent()){
+            cliente.get().setActivo(true);
+            this.clienteRepository.save(cliente.get());
+            return cliente.get();
+        } else{
+            throw new UnsupportedOperationException("No se encontro el cliente a activar en la bd.");
+        }
     }
 
     @Override

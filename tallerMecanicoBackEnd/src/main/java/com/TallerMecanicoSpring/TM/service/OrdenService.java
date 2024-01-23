@@ -1,7 +1,10 @@
 package com.TallerMecanicoSpring.TM.service;
 
+import com.TallerMecanicoSpring.TM.model.Cliente;
 import com.TallerMecanicoSpring.TM.model.DetalleOrden;
 import com.TallerMecanicoSpring.TM.model.Orden;
+import com.TallerMecanicoSpring.TM.model.RqReporteTecServEntreFecha;
+import com.TallerMecanicoSpring.TM.model.RsReporteTecServEntreFecha;
 import com.TallerMecanicoSpring.TM.dao.OrdenSaveRq;
 import com.TallerMecanicoSpring.TM.model.Tecnico;
 import com.TallerMecanicoSpring.TM.model.Vehiculo;
@@ -64,6 +67,36 @@ public class OrdenService {
     public Optional<Orden> findByIdOrden(Long id) {
         System.out.println("find By Id");
         return ordenRepository.findById(id);
+    }
+
+    public List<Cliente> filtroEntreFecha(String fDesde, String fHasta){
+        List<Orden> allOrdenes = this.findAllOrdenes();
+        List<Cliente> clientes = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        System.out.println("fDesde" + fDesde);
+        System.out.println("fHasta" + fHasta);
+
+        try{
+            Date fechaDesde = dateFormat.parse(fDesde);
+            Date fechaHasta = dateFormat.parse(fHasta);
+
+            System.out.println("fechsDesde" + fechaDesde);
+            System.out.println("fechaHasta" + fechaHasta);
+            
+            allOrdenes = allOrdenes.stream()
+                    .filter(o -> o.getFechaIngreso() != null && fechaDesde != null && fechaHasta != null &&
+                            o.getFechaIngreso().after(fechaDesde) && o.getFechaIngreso().before(fechaHasta))
+                    .collect(Collectors.toList());
+
+            
+            for (Orden o : allOrdenes){
+                clientes.add(o.getVehiculo().getCliente());
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return clientes;
     }
 
     public List<Orden> filtrar(Orden ordenRq){

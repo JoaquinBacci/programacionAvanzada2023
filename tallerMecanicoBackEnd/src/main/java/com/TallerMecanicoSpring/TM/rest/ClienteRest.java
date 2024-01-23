@@ -5,10 +5,13 @@
 package com.TallerMecanicoSpring.TM.rest;
 
 import com.TallerMecanicoSpring.TM.model.Cliente;
+import com.TallerMecanicoSpring.TM.model.ClienteFiltrarRq;
 import com.TallerMecanicoSpring.TM.service.ClienteService;
 import java.util.List;
 
 import jakarta.validation.Valid;
+
+import org.hibernate.mapping.Any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,11 +35,21 @@ public class ClienteRest {
     
     @GetMapping
     private ResponseEntity<List<Cliente>> getAllClientes(){
-        return ResponseEntity.ok(clienteService.findAll());
+        return ResponseEntity.ok(clienteService.findAllActivos());
+    }
+
+    @GetMapping("desactivados/")
+    private ResponseEntity<List<Cliente>> getAllClientesDesactivados(){
+        return ResponseEntity.ok(clienteService.findAllNOActivos());
+    }
+
+    @GetMapping("activar/{id}")
+    private ResponseEntity<Cliente> activarCliente(Long id){
+        return ResponseEntity.ok(clienteService.activar(id));
     }
     
     @PostMapping("filtrar/")
-    private ResponseEntity<List<Cliente>> search(@RequestBody Cliente clienteRq){
+    private ResponseEntity<List<Cliente>> search(@RequestBody ClienteFiltrarRq clienteRq){
         return ResponseEntity.ok(this.clienteService.filtrar(clienteRq));
     }
     
@@ -52,7 +65,9 @@ public class ClienteRest {
     }
     
     @PostMapping("save/")
-    private ResponseEntity<Cliente> saveTecnico(@Valid @RequestBody Cliente clienteRq){
+    private ResponseEntity<Cliente> saveCliente(@Valid @RequestBody Cliente clienteRq){
         return ResponseEntity.ok(this.clienteService.save(clienteRq));
     }
+
+    
 }
