@@ -44,7 +44,8 @@ public class ClienteRest {
     }
 
     @GetMapping("activar/{id}")
-    private ResponseEntity<Cliente> activarCliente(Long id){
+    private ResponseEntity<Cliente> activarCliente(@PathVariable("id") Long id){
+        System.out.println("ID EN REST: " + id);
         return ResponseEntity.ok(clienteService.activar(id));
     }
     

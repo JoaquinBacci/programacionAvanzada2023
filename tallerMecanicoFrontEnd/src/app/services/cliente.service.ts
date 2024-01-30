@@ -65,6 +65,10 @@ export class ClienteService {
     return this.http.post(`${this.API_REST}/cliente/save/`, clienteRq, {headers: this.headers});
   }
 
+  public reactivar(id):Observable<Cliente[]>{
+    console.log('idService: ', id);
+    return this.http.get<Cliente[]>(`${this.API_REST}/cliente/activar/${id}`);
+  }
 
 
 }

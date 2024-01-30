@@ -198,7 +198,11 @@ public class ClienteService implements ClienteRepository{
 
         List<Cliente> clientesRs = new ArrayList();
         
-        clientesRs = this.findAllActivos();
+        clientesRs = this.findAll();
+
+        clientesRs = clientesRs.stream()
+                .filter(c -> c.isActivo() == clienteRq.isActivo())
+                .collect(Collectors.toList());
 
         if(clienteRq.getFechaDesde() != null && !"".equals(clienteRq.getFechaDesde()) && clienteRq.getFechaHasta() != null && !"".equals(clienteRq.getFechaHasta())){
             System.out.println("FILTRO FECHA");
@@ -305,6 +309,7 @@ public class ClienteService implements ClienteRepository{
     }
 
     public Cliente activar(Long id){
+        System.out.println("ID EN SERVICE: " + id);
         Optional<Cliente> cliente = this.findById(id);
         if(cliente.isPresent()){
             cliente.get().setActivo(true);

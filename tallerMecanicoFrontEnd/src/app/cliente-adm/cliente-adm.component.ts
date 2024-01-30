@@ -10,6 +10,7 @@ import { OrdenXclienteComponent } from '../orden-xcliente/orden-xcliente.compone
 import Toastify from 'toastify-js';
 import { ClienteFiltrarRq } from '../model/ClienteFiltrarRq';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { ReactivarClienteComponent } from '../dialogs/reactivar-cliente/reactivar-cliente.component';
 
 @Component({
   selector: 'app-cliente-adm',
@@ -68,6 +69,12 @@ export class ClienteAdmComponent implements OnInit {
     this.clienteConsultar.licenciaConducir = '';
 
     this.onConsultar();
+  }
+
+  onDialogDesactivados(){
+    let dialogRef = this.dialog.open(ReactivarClienteComponent, {});
+
+    dialogRef.afterClosed().subscribe(result => this.onConsultar());
   }
 
   onGuardar() {
@@ -178,6 +185,7 @@ export class ClienteAdmComponent implements OnInit {
   }
 
   onConsultar() {
+    this.clienteConsultar.activo=true;
     console.log('cliente Consultar: ', this.clienteConsultar);
     this.clienteService.onConsultar(this.clienteConsultar).subscribe({
       next: (data) => {

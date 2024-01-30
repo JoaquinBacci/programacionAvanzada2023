@@ -44,7 +44,11 @@ import { OrdenEditComponent } from './orden-edit/orden-edit.component';
 import { FacturaComponent } from './factura/factura.component';
 import { OrdenXclienteComponent } from './orden-xcliente/orden-xcliente.component';
 import { ReporteComponent } from './reporte/reporte.component';
-import { DesactivadoComponent } from './dialogs/desactivado/desactivado.component';
+import { ReactivarClienteComponent } from './dialogs/reactivar-cliente/reactivar-cliente.component';
+import { ReactivarVehiculoComponent } from './dialogs/reactivar-vehiculo/reactivar-vehiculo.component';
+import { ReactivarMarcaComponent } from './dialogs/reactivar-marca/reactivar-marca.component';
+import { ReactivarModeloComponent } from './dialogs/reactivar-modelo/reactivar-modelo.component';
+import { ReactivarServicioComponent } from './dialogs/reactivar-servicio/reactivar-servicio.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +69,11 @@ import { DesactivadoComponent } from './dialogs/desactivado/desactivado.componen
     FacturaComponent,
     OrdenXclienteComponent,
     ReporteComponent,
-    DesactivadoComponent
+    ReactivarClienteComponent,
+    ReactivarVehiculoComponent,
+    ReactivarMarcaComponent,
+    ReactivarModeloComponent,
+    ReactivarServicioComponent
   ],
   imports: [
     BrowserModule,

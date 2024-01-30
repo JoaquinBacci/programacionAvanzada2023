@@ -1,0 +1,17 @@
+<div>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>
+                Reactivar Vehiculo
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-table [dataSource]="data.dataSource">
+                <ng-container matColumnDef="elemento">
+                    <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
+                    <mat-cell *matCellDef="let elemento"> {{ elemento.nombre }} </mat-cell>
+                </ng-container>
+            </mat-table>
+        </mat-card-content>
+    </mat-card>
+</div>
