@@ -11,6 +11,7 @@ import { ClienteService } from '../services/cliente.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmComponent } from '../dialogs/confirm/confirm.component';
 import Toastify from 'toastify-js';
+import { ReactivarVehiculoComponent } from '../dialogs/reactivar-vehiculo/reactivar-vehiculo.component';
 
 @Component({
   selector: 'app-vehiculo-adm',
@@ -86,6 +87,7 @@ export class VehiculoAdmComponent implements OnInit, OnChanges {
   }
 
   onConsultar() {
+    this.vehiculoConsultar.activo=true;
     this.vehiculoService.onConsultar(this.vehiculoConsultar).subscribe({
       next: (data) => {
         console.log('Data: ', data);
@@ -94,6 +96,12 @@ export class VehiculoAdmComponent implements OnInit, OnChanges {
       complete: () => {},
       error: (error) => {},
     });
+  }
+
+  onDialogDesactivados(){
+    let dialogRef = this.dialog.open(ReactivarVehiculoComponent, {});
+
+    dialogRef.afterClosed().subscribe(result => this.onConsultar());
   }
 
   onGuardar() {

@@ -46,4 +46,8 @@ export class ServicioService {
   public filterServicio(servicio: Servicio): Observable<any>{
     return this.http.post(`${this.API_SERVER}/servicio/filtrar/`, servicio, { headers: this.headers })
   }
+
+  public reactivar(id: number): Observable<any>{
+    return this.http.get(`${this.API_SERVER}/servicio/activar/${id}`)
+  }
 }

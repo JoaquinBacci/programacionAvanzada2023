@@ -21,7 +21,7 @@ public class Servicio {
     @DecimalMax(value = "1000000.0") //el precio no puede ser mayor a este nro
     private double precio;
 
-    @AssertTrue(message = "La marca debe ser un booleano")
+    @NotNull(message = "La marca debe ser un booleano")
     private boolean activo;
 
 

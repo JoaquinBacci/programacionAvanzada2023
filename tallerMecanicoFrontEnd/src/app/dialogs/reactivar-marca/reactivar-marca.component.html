@@ -1,1 +1,45 @@
-<p>reactivar-marca works!</p>
+<div>
+    <mat-card>
+        <mat-card-header style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+            <mat-card-title>
+                Reactivar Marca
+            </mat-card-title>
+            <div>
+                <button mat-icon-button (click)="onNoClick()"><mat-icon>close</mat-icon></button>
+            </div>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="tabla" style=" width: 90%;white-space: nowrap; overflow-x: scroll;">
+                <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                    <!-- Columna Nombre -->
+                    <ng-container matColumnDef="nombre">
+                        <mat-header-cell *matHeaderCellDef> 
+                            <mat-form-field appearance="outline">
+                                <input matInput [(ngModel)]="nombreMarca" [ngModelOptions]="{standalone: true}" placeholder="Nombre" (keyup)="onFiltrar()"> 
+                            </mat-form-field>
+                        </mat-header-cell>
+                      <mat-cell *matCellDef="let elemento"> {{ elemento.nombre }} </mat-cell>
+                    </ng-container>
+                  
+                    <!-- Columna Acciones -->
+                    <ng-container matColumnDef="acciones">
+                        <mat-header-cell *matHeaderCellDef> 
+                          <button mat-icon-button matTooltip="Buscar" (click)="onFiltrar()">
+                            <mat-icon>search</mat-icon>
+                          </button>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let elemento">
+                          <button mat-icon-button matTooltip="Ver ordenes" (click)="onReactivar(elemento.id)">
+                            <mat-icon>undo</mat-icon>
+                          </button>
+                        </mat-cell>
+                      </ng-container>
+                  
+                    <!-- Define las columnas de la tabla -->
+                    <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+                  </mat-table>
+            </div>            
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -30,6 +30,11 @@ public class ServicioRest {
         return this.servicioService.findByIdServicio(id);
     }
 
+    @GetMapping("/activar/{id}")
+    public ResponseEntity<Optional<Servicio>> reactivar(@PathVariable Long id){
+        return ResponseEntity.ok(this.servicioService.activar(id));
+    }
+
     //Método POST
     @PostMapping("/save")
     private ResponseEntity<Servicio> saveServicio(@RequestBody Servicio servicio){

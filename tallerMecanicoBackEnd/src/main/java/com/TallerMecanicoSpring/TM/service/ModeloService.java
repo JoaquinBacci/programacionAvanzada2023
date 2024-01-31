@@ -42,24 +42,35 @@ public class ModeloService implements ModeloRepository{
         
         return modelosRs;
     }
+
+    public Modelo activar(Long id){
+        Optional<Modelo> modelo = this.findById(id);
+        if(modelo.isPresent()){
+            Modelo m = modelo.get();
+            m.setActivo(true);
+            return this.save(m);
+        } else {
+            throw new UnsupportedOperationException("El modelo no se encuentra en la BD.");
+        }
+    }
     
     public List<Modelo> filtrarModelos(Modelo modeloRq){
         List<Modelo> modeloRs = new ArrayList();
         List<Modelo> modelos = new ArrayList();
         modelos = this.findAll();
-        for(Modelo m : modelos){
-           if(m.isActivo()){
-               modeloRs.add(m);
-           }
-        }
         
-        if( (modeloRq.getNombre()!= null) || !(modeloRq.getNombre().trim().equals("") )){
+
+        modeloRs = modelos.stream()
+        .filter(m -> m.isActivo() == modeloRq.isActivo())
+        .collect(Collectors.toList());
+        
+        if( (modeloRq.getNombre()!= null) && !("".equals(modeloRq.getNombre().trim())) ){
             modeloRs = modeloRs.stream()
                 .filter(m -> m.getNombre().toLowerCase().contains(modeloRq.getNombre().toLowerCase()))
                 .collect(Collectors.toList());
         }
         
-        if(modeloRq.getMarca().getId() != null){
+        if(modeloRq.getMarca() != null && modeloRq.getMarca().getId() !=null && modeloRq.getMarca().getId() !=0 ){
             modeloRs = modeloRs.stream()
                     .filter(m -> Objects.equals(m.getId(), modeloRq.getId()))
                     .collect(Collectors.toList());
@@ -196,7 +207,15 @@ public class ModeloService implements ModeloRepository{
 
     @Override
     public void deleteById(Long id) {
-        this.modeloRepository.deleteById(id);
+        Optional<Modelo> modelo = this.findById(id);
+        if(modelo.isPresent()){
+            Modelo m = modelo.get();
+            m.setActivo(false);
+            this.save(m);
+        } else {
+            throw new UnsupportedOperationException("El modelo no se encuentra en la BD.");
+        }
+        // this.modeloRepository.deleteById(id);
     }
 
     @Override

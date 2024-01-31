@@ -155,6 +155,17 @@ public class MarcaService implements MarcaRepository{
         }
        
     }
+
+    public Marca activar(Long id){
+        Optional<Marca> marca = this.findById(id);
+        if(marca.isPresent()){
+            Marca m = marca.get();
+            m.setActivo(true);
+            return this.save(m);
+        } else {
+            throw new UnsupportedOperationException("La marca no se encuentra en la BD.");
+        }
+    }
     
     public List<Marca> findByName(String name){
 //        List<Marca> marcas = new ArrayList();
@@ -175,6 +186,24 @@ public class MarcaService implements MarcaRepository{
             .collect(Collectors.toList());
 
         return marcasRs;
+    }
+
+    public List<Marca> filtrar(Marca rq){
+        List<Marca> rs = this.findAll();
+
+        rs = rs.stream()
+                .filter(marca -> marca.isActivo() == rq.isActivo())
+                .collect(Collectors.toList());
+
+        if(!"".equals(rq.getNombre()) && rq.getNombre() != null){
+            System.out.println("filtra por nombre");
+            String nameLowerCase = rq.getNombre().toLowerCase();
+            rs = rs.stream()
+                .filter(marca -> marca.getNombre().toLowerCase().contains(nameLowerCase))
+                .collect(Collectors.toList());
+        }
+
+        return rs;
     }
 
     @Override
@@ -199,7 +228,17 @@ public class MarcaService implements MarcaRepository{
 
     @Override
     public void deleteById(Long id) {
-        this.marcaRepository.deleteById(id);
+        Optional<Marca> marca = this.findById(id);
+        System.out.println("ISPRESENT: " + marca.isPresent());
+        System.out.println("ACTIVO? "+ marca.get().isActivo());
+        if(marca.isPresent()){
+            Marca m = marca.get();
+            m.setActivo(false);
+            this.save(m);
+        } else{
+            throw new UnsupportedOperationException("La marca no esta en la BD");
+        }
+        //this.marcaRepository.deleteById(id);
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

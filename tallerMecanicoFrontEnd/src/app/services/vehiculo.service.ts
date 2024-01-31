@@ -79,6 +79,9 @@ export class VehiculoService {
     return this.http.get(`${this.API_REST}/vehiculo/getByClient/${idCliente}`);
   }
 
+  activar(id: number):Observable<any>{
+    return this.http.get(`${this.API_REST}/vehiculo/activar/${id}`);
+  }
 
 
 }

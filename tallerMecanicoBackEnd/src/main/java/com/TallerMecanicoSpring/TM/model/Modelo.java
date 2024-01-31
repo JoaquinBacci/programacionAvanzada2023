@@ -4,6 +4,7 @@ package com.TallerMecanicoSpring.TM.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name="modelo")
@@ -13,7 +14,7 @@ public class Modelo {
     private Long id;
     @NotBlank(message = "por favor ingrese un nombre")
     private String nombre;
-    @AssertTrue(message = "La marca debe ser un booleano")
+    @NotNull(message = "La marca debe ser un booleano")
     private boolean activo;
     @ManyToOne
     @JoinColumn(name="id_marca")

@@ -5,6 +5,9 @@ import { ModeloService } from '../services/modelo.service';
 import { Marca } from '../model/marca';
 import { Modelo } from '../model/modelo';
 import Toastify from 'toastify-js';
+import { ReactivarModeloComponent } from '../dialogs/reactivar-modelo/reactivar-modelo.component';
+import { DialogRef } from '@angular/cdk/dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-modelo-adm',
@@ -22,7 +25,8 @@ export class ModeloAdmComponent implements OnInit {
   constructor(
     private marcaService: MarcaService,
     private modeloService: ModeloService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialog: MatDialog
   ) {
     this.form = this.fb.group({
       nuevoNombre: ['', [Validators.required, Validators.maxLength(50)]],
@@ -136,7 +140,14 @@ export class ModeloAdmComponent implements OnInit {
     });
   }
 
+  onDialogDesactivados(){
+    let dialogRef = this.dialog.open(ReactivarModeloComponent, {});
+
+    dialogRef.afterClosed().subscribe(result => this.onConsultar());
+  }
+
   onConsultar() {
+    this.modeloConsultar.activo = true;
     this.modeloService.consultarModelo(this.modeloConsultar).subscribe({
       next: (data) => {
         console.log('modelos: ', data);

@@ -93,6 +93,17 @@ public class VehiculoService implements VehiculoRepository{
         return this.vehiculoRepository.findAll();
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    public Optional<Vehiculo> activar(Long id){
+        Optional<Vehiculo> vehiculo = this.findById(id);
+        if(vehiculo.isPresent()){
+            Vehiculo v = vehiculo.get();
+            v.setActivo(true);
+            return Optional.of(this.save(v));
+        } else {
+            throw new UnsupportedOperationException("El modelo no se encuentra en la BD.");
+        }
+    }
     
     public List<Vehiculo> getByClient(Long id){
         List<Vehiculo> vehiculos = new ArrayList();
@@ -163,11 +174,9 @@ public class VehiculoService implements VehiculoRepository{
         System.out.println("modelo: " + vehiculoRq.getModelo());
         System.out.println("cliente: " + vehiculoRq.getCliente()); */
         
-        for(Vehiculo v : vehiculos){
-            if(v.isActivo()){
-                vehiculosRs.add(v);
-            }
-        }
+        vehiculosRs = vehiculos.stream()
+            .filter(v -> v.isActivo() == vehiculoRq.isActivo())
+            .collect(Collectors.toList());
         
         //Kilometraje
         if((vehiculoRq.getKilometraje() == null) ){
@@ -193,7 +202,7 @@ public class VehiculoService implements VehiculoRepository{
         }
         
         //marca
-        if(vehiculoRq.getMarca().getId() == null){
+        if(vehiculoRq.getMarca()==null || vehiculoRq.getMarca().getId() == null){
             System.out.println("No se filtra por marca");
             
         } else{
@@ -204,7 +213,7 @@ public class VehiculoService implements VehiculoRepository{
         }
         
         //modelo
-        if(vehiculoRq.getModelo().getId() == null){
+        if(vehiculoRq.getModelo() == null || vehiculoRq.getModelo().getId() == null){
             System.out.println("No se filtra por Modelo");
             
         } else{
@@ -215,7 +224,7 @@ public class VehiculoService implements VehiculoRepository{
         }
         
         //cliente
-        if(vehiculoRq.getCliente().getId() == null){
+        if(vehiculoRq.getCliente() == null || vehiculoRq.getCliente().getId() == null){
             System.out.println("No se filtra por Cliente");
             
         } else {
@@ -250,7 +259,15 @@ public class VehiculoService implements VehiculoRepository{
 
     @Override
     public void deleteById(Long id) {
-        this.vehiculoRepository.deleteById(id);
+        Optional<Vehiculo> vehiculo = this.findById(id);
+        if(vehiculo.isPresent()){
+            Vehiculo v = vehiculo.get();
+            v.setActivo(false);
+            this.save(v);
+        } else {
+            throw new UnsupportedOperationException("El vehiculo no se encuentra en la BD.");
+        }
+        //this.vehiculoRepository.deleteById(id);
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

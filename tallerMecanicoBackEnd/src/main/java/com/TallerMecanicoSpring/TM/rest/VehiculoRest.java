@@ -44,6 +44,11 @@ public class VehiculoRest {
         return ResponseEntity.ok(this.vehiculoService.findById(id));
     }
 
+    @GetMapping("activar/{id}")
+    private ResponseEntity<Optional<Vehiculo>> reactivar(@PathVariable("id") Long id){
+        return ResponseEntity.ok(this.vehiculoService.activar(id));
+    }
+
     //GetByCliente
     @GetMapping("getByClient/{idCliente}")
     private ResponseEntity<List<Vehiculo>> getVehiculoPorCliente(@PathVariable("idCliente") Long id){

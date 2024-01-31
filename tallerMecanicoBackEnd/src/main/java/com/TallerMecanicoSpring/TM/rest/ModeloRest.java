@@ -36,6 +36,11 @@ public class ModeloRest {
         return ResponseEntity.ok(this.modeloService.findAll());
     }
     
+    @GetMapping("activar/{id}")
+    private ResponseEntity<Modelo> reactivar(@PathVariable("id") Long id){
+        return ResponseEntity.ok(this.modeloService.activar(id));
+    }
+
     @GetMapping("modeloXmarca/{id_marca}")
     private ResponseEntity<List<Modelo>> getModelosByMarca(@PathVariable("id_marca") Long id_marca){
         return ResponseEntity.ok(this.modeloService.findAllByMarca(id_marca));

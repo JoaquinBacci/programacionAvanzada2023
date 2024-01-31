@@ -43,4 +43,8 @@ export class ModeloService {
     return this.http.get(`${this.API_SERVER}/modelo/modeloXmarca/${id}`)
   }
 
+  public reactivar(id: number): Observable<any>{
+    return this.http.get(`${this.API_SERVER}/modelo/activar/${id}`)
+  } 
+
 }

@@ -38,6 +38,11 @@ public class MarcaRest {
     @GetMapping("{name}")
     private ResponseEntity<List<Marca>> getMarcasByName(@PathVariable("name") String name){
         return ResponseEntity.ok(this.marcaService.findByName(name));
+    }
+
+    @GetMapping("activar/{id}")
+    private ResponseEntity<Marca> activar(@PathVariable("id") Long id){
+        return ResponseEntity.ok(this.marcaService.activar(id));
     } 
     
     @PostMapping
@@ -45,6 +50,15 @@ public class MarcaRest {
         try{
             Marca marcaGuardado = this.marcaService.save(marca);
             return ResponseEntity.created(new URI("/marca/"+marcaGuardado.getId())).body(marcaGuardado);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PostMapping("filtrar/")
+    private ResponseEntity<List<Marca>> filtrar(@RequestBody Marca marca){
+        try{
+            return ResponseEntity.ok(this.marcaService.filtrar(marca));
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

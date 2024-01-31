@@ -28,12 +28,16 @@ export class MarcaService {
     return this.http.put(`${this.API_SERVER}/marca/`, marcaActualizada,  { headers: this.headers });
   }
 
-  consultarMarca(nombre: string): Observable<any>{
-    return this.http.get(`${this.API_SERVER}/marca/${nombre}`)
+  consultarMarca(marca: Marca): Observable<any>{
+    return this.http.post(`${this.API_SERVER}/marca/filtrar/`, marca, { headers: this.headers })
   }
 
   deleteMarca(id: number): Observable<any>{
     return this.http.delete(`${this.API_SERVER}/marca/delete/${id}`)
+  }
+
+  reactivar(id: number): Observable<any>{
+    return this.http.get(`${this.API_SERVER}/marca/activar/${id}`)
   }
 
 }

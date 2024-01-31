@@ -10,6 +10,7 @@ import { Marca } from '../model/marca';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmComponent } from '../dialogs/confirm/confirm.component';
 import Toastify from 'toastify-js';
+import { ReactivarMarcaComponent } from '../dialogs/reactivar-marca/reactivar-marca.component';
 
 @Component({
   selector: 'app-marca-adm',
@@ -35,6 +36,13 @@ export class MarcaAdmComponent implements OnInit {
 
   ngOnInit(): void {
     this.onGetAllMarcas();
+  }
+
+  onDialogDesactivados(){
+    let dialogRef = this.dialog.open(ReactivarMarcaComponent, {
+    });
+
+    dialogRef.afterClosed().subscribe(result => this.onConsultar());
   }
 
   onGuardar() {
@@ -121,7 +129,10 @@ export class MarcaAdmComponent implements OnInit {
   }
 
   onConsultar() {
-    this.marcaService.consultarMarca(this.nombreMarca).subscribe({
+    let marca: Marca = new Marca();
+    marca.nombre = this.nombreMarca;
+    marca.activo = true;
+    this.marcaService.consultarMarca(marca).subscribe({
       next: (data) => {
         console.log('marcas: ', data);
         this.dataSource = data;

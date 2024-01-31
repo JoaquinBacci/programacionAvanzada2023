@@ -1,1 +1,58 @@
-<p>reactivar-servicio works!</p>
+<div>
+    <mat-card>
+        <mat-card-header style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+            <mat-card-title>
+                Reactivar 
+            </mat-card-title>
+            <div>
+                <button mat-icon-button (click)="onNoClick()"><mat-icon>close</mat-icon></button>
+            </div>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="tabla" style=" width: 90%;white-space: nowrap; overflow-x: scroll;">
+                <mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="padding-top: 20px">
+                    <ng-container matColumnDef="descripcion">
+                        <mat-header-cell *matHeaderCellDef> 
+                          <mat-form-field placeholder="Descripción" appearance="outline">
+                            <mat-label>Descripcion</mat-label>
+                            <input matInput  [(ngModel)]="servicioConsultar.descripcion" [ngModelOptions]="{standalone: true}" (keyup)="onFiltrar()"> 
+                          </mat-form-field>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let elemento"> {{ elemento.descripcion }} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="nombre">
+                      <mat-header-cell *matHeaderCellDef> 
+                        <mat-form-field placeholder="Nombre"  appearance="outline">
+                          <mat-label>Nombre</mat-label>
+                          <input matInput  [(ngModel)]="servicioConsultar.nombre" [ngModelOptions]="{standalone: true}" (keyup)="onFiltrar()"> 
+                        </mat-form-field>
+                      </mat-header-cell>
+                        <mat-cell *matCellDef="let elemento"> {{ elemento.nombre }} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="precio">
+                        <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+                        <mat-cell *matCellDef="let elemento"> {{ elemento.precio }} </mat-cell>
+                    </ng-container>
+                  
+                    <!-- Columna Acciones -->
+                    <ng-container matColumnDef="acciones">
+                        <mat-header-cell *matHeaderCellDef> 
+                          <button mat-icon-button matTooltip="Buscar" (click)="onFiltrar()">
+                            <mat-icon>search</mat-icon>
+                          </button>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let elemento">
+                          <button mat-icon-button matTooltip="Ver ordenes" (click)="onReactivar(elemento.id)">
+                            <mat-icon>undo</mat-icon>
+                          </button>
+                        </mat-cell>
+                      </ng-container>
+                  
+                    <!-- Define las columnas de la tabla -->
+                    <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+                  </mat-table>
+            </div>            
+        </mat-card-content>
+    </mat-card>
+</div>

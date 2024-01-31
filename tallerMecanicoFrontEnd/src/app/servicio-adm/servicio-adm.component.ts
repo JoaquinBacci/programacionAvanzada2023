@@ -5,6 +5,7 @@ import { ServicioService } from 'src/app/services/servicio.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmComponent } from '../dialogs/confirm/confirm.component';
 import Toastify from 'toastify-js';
+import { ReactivarServicioComponent } from '../dialogs/reactivar-servicio/reactivar-servicio.component';
 
 @Component({
   selector: 'app-servicio-adm',
@@ -152,7 +153,14 @@ export class ServicioAdmComponent {
     });
   }
 
+  onDialogDesactivados(){
+    let dialogRef = this.dialog.open(ReactivarServicioComponent, {});
+
+    dialogRef.afterClosed().subscribe(result => this.onConsultarServicios());
+  }
+
   onConsultarServicios() {
+    this.servicioConsultar.activo = true;
     this.servicioService.filterServicio(this.servicioConsultar).subscribe({
       next: (data) => {
         console.log('servicios: ', data);

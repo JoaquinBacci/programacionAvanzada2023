@@ -23,7 +23,17 @@ public class ServicioService{
      public Optional<Servicio> findByIdServicio(Long id){
          return servicioRepository.findById(id);
      }
-
+    
+    public Optional<Servicio> activar(Long id){
+        Optional<Servicio> service = this.findByIdServicio(id);
+        if(service.isPresent()){
+            Servicio s = service.get();
+            s.setActivo(true);
+            return Optional.of(this.saveServicio(s));
+        } else {
+            throw new UnsupportedOperationException("El servicio no se encuentra en la BD.");
+        }
+    }
     
     public Servicio updateServicio(Servicio s){
         return this.saveServicio(s);
@@ -59,11 +69,22 @@ public class ServicioService{
     
 
     public void deleteById(Long id){
-        this.servicioRepository.deleteById(id);
+        Optional<Servicio> service = this.findByIdServicio(id);
+        if(service.isPresent()){
+            Servicio s = service.get();
+            s.setActivo(false);
+            Optional.of(this.saveServicio(s));
+        } else {
+            throw new UnsupportedOperationException("El servicio no se encuentra en la BD.");
+        }
     }
 
     public List<Servicio> filtrarServicio(Servicio servicioRq){
         List<Servicio> serviciosFilter = this.findAllServicios();
+
+        serviciosFilter = serviciosFilter.stream()
+                .filter(s -> s.isActivo() == servicioRq.isActivo())
+                .collect(Collectors.toList());
 
         if(servicioRq.getNombre() == null || servicioRq.getNombre().trim().equalsIgnoreCase("") ){
             System.out.println("No se filtra por nombre");
