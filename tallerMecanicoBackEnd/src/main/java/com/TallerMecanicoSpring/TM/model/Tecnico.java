@@ -30,6 +30,7 @@ public class Tecnico {
     private String direccion;
     //@NotBlank(message = "por favor ingrese un email")
     private String email;
+    @NotNull
     private boolean activo;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

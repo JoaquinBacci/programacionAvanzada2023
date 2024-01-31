@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmComponent } from '../dialogs/confirm/confirm.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Toastify from 'toastify-js';
+import { ReativarTecnicoComponent } from '../dialogs/reativar-tecnico/reativar-tecnico.component';
 
 @Component({
   selector: 'app-tecnico-adm',
@@ -72,6 +73,7 @@ export class TecnicoAdmComponent implements OnInit {
   }
 
   onConsultar() {
+    this.tecnicoConsultar.activo = true;
     this.tecnicoService.onConsultar(this.tecnicoConsultar).subscribe({
       next: (data) => {
         console.log('Data: ', data);
@@ -80,6 +82,12 @@ export class TecnicoAdmComponent implements OnInit {
       complete: () => {},
       error: (error) => {},
     });
+  }
+
+  onDialogDesactivados(){
+    let dialogRef = this.dialog.open(ReativarTecnicoComponent, {});
+
+    dialogRef.afterClosed().subscribe(result => this.onConsultar());
   }
 
   onGuardar() {

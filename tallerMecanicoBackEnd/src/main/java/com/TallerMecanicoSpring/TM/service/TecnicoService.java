@@ -79,11 +79,11 @@ public class TecnicoService implements TecnicoRepository{
         List<Tecnico> tecnicoRs = new ArrayList();
         List<Tecnico> tecnicos = new ArrayList();
         tecnicos = this.findAll();
-        for(Tecnico t : tecnicos){
-           if(t.isActivo()){
-               tecnicoRs.add(t);
-           }
-        }
+        
+        tecnicoRs = tecnicos.stream()
+            .filter(t -> t.isActivo() == tecnicoRq.isActivo())
+            .collect(Collectors.toList());
+
         
         System.out.println("Nombre: " + tecnicoRq.getNombre());
         System.out.println("Apellido: " + tecnicoRq.getApellido());
@@ -191,6 +191,17 @@ public class TecnicoService implements TecnicoRepository{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    public Tecnico activar(Long id){
+        Optional<Tecnico> tecnico = this.findById(id);
+        if(tecnico.isPresent()){
+            Tecnico t = tecnico.get();
+            t.setActivo(true);
+            return this.save(t);
+        } else {
+            throw new UnsupportedOperationException("El Tecnico no se encuentra en la BD.");
+        }
+    }
+
     @Override
     public <S extends Tecnico> S save(S entity) {
         if(entity.getId() != null){
@@ -251,7 +262,15 @@ public class TecnicoService implements TecnicoRepository{
 
     @Override
     public void deleteById(Long id) {
-        this.tecnicoRepository.deleteById(id);
+        Optional<Tecnico> tecnico = this.findById(id);
+        if(tecnico.isPresent()){
+            Tecnico t = tecnico.get();
+            t.setActivo(false);
+            this.save(t);
+        } else {
+            throw new UnsupportedOperationException("El Tecnico no se encuentra en la BD.");
+        }
+        //this.tecnicoRepository.deleteById(id);
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

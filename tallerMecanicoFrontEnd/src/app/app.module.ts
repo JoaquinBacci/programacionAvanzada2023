@@ -49,6 +49,7 @@ import { ReactivarVehiculoComponent } from './dialogs/reactivar-vehiculo/reactiv
 import { ReactivarMarcaComponent } from './dialogs/reactivar-marca/reactivar-marca.component';
 import { ReactivarModeloComponent } from './dialogs/reactivar-modelo/reactivar-modelo.component';
 import { ReactivarServicioComponent } from './dialogs/reactivar-servicio/reactivar-servicio.component';
+import { ReativarTecnicoComponent } from './dialogs/reativar-tecnico/reativar-tecnico.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { ReactivarServicioComponent } from './dialogs/reactivar-servicio/reactiv
     ReactivarVehiculoComponent,
     ReactivarMarcaComponent,
     ReactivarModeloComponent,
-    ReactivarServicioComponent
+    ReactivarServicioComponent,
+    ReativarTecnicoComponent
   ],
   imports: [
     BrowserModule,

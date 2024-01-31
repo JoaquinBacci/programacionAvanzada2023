@@ -32,6 +32,11 @@ public class TecnicoRest {
     private ResponseEntity<List<Tecnico>> getAllTecnico(){
         return ResponseEntity.ok(this.tecnicoService.findAll());
     }
+
+    @GetMapping("activar/{id}")
+    private ResponseEntity<Tecnico> reactivar(@PathVariable("id") Long id){
+        return ResponseEntity.ok(this.tecnicoService.activar(id));
+    }
     
     @PostMapping("filtrar/")
     private ResponseEntity<List<Tecnico>> search(@RequestBody Tecnico tecnicoRq){

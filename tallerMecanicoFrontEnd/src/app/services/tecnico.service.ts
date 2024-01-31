@@ -63,4 +63,8 @@ export class TecnicoService {
   public getAll(): Observable<any> {
     return this.http.get(`${this.API_REST}/tecnico/`);
   }
+
+  public reactivar(id: number): Observable<any> {
+    return this.http.get(`${this.API_REST}/tecnico/activar/${id}`);
+  }
 }
