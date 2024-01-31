@@ -98,6 +98,16 @@ export class ReporteComponent implements OnInit {
     }
   }
 
+  addAllMarcas() {
+    // Aquí asumimos que `dataMarcas` contiene todas las marcas disponibles
+    this.marcas = this.dataMarcas.slice();
+  }
+
+  // Nueva función para quitar todas las marcas
+  removeAllMarcas() {
+    this.marcas = [];
+  }
+
   addMarca(t: Marca) {
     const existeMarca = this.marcas.some((marca) => marca.id === t.id);
     if (!existeMarca) {
@@ -111,6 +121,16 @@ export class ReporteComponent implements OnInit {
     if (index !== -1) {
       this.marcas.splice(index, 1);
     }
+  }
+
+  addAllServicios() {
+    // Aquí asumimos que `dataMarcas` contiene todas las marcas disponibles
+    this.servicios = this.dataServicio.slice();
+  }
+
+  // Nueva función para quitar todas las marcas
+  removeAllServicios() {
+    this.servicios = [];
   }
 
   addServicio(s: Servicio) {
@@ -201,17 +221,27 @@ export class ReporteComponent implements OnInit {
   }
 
   imprimirReporte() {
+    
     const encabezado = ['Marca', 'Nombre Servicio', 'Cantidad'];
 
+    const marcasRp = this.marcas.map((obj) => obj.nombre);
+        
+    const serviciosRp = this.servicios.map((obj) => obj.nombre);
+        
     const cuerpo = this.dataSourceRpMarcaServ.map((obj) => [
       obj.marca,
       obj.nombreServicio,
       obj.cantidad,
     ]);
+
     this.servImprReporte.imprimir(
       encabezado,
+      marcasRp,
+      serviciosRp,
+      this.fechaDesde,
+      this.fechaHasta,
       cuerpo,
-      'Listado Servicios por Marca',
+      'Reporte de Servicios por Marca',
       true
     );
     /*let rq: RqReporteCantServMarca = new RqReporteCantServMarca();
