@@ -100,7 +100,8 @@ export class OrdenAdmComponent implements OnInit {
     id: null,
     fechaIngreso: '',
     descripcion: '',
-    estado: '',
+    estadoActual : '',
+    estadoAnterior : ''
   };
 
   vista: string = '';
@@ -591,8 +592,34 @@ export class OrdenAdmComponent implements OnInit {
     });
   }
 
+  descancelarOrden(o: Orden) {
+    this.ordenServicio.descancelarOrden(o).subscribe({
+      next: (data) => {
+        if (data) {
+          console.log('Se actualizo el estado');
+          this.getAllOrdenes();
+        } else {
+          console.log('NO hay data = error');
+        }
+      },
+    });
+  }
+
   finalizarOrden(o: Orden) {
     this.ordenServicio.finalizarOrden(o).subscribe({
+      next: (data) => {
+        if (data) {
+          console.log('Se actualizo el estado');
+          this.getAllOrdenes();
+        } else {
+          console.log('NO hay data = error');
+        }
+      },
+    });
+  }
+
+  facturarOrden(o: Orden) {
+    this.ordenServicio.facturarOrden(o).subscribe({
       next: (data) => {
         if (data) {
           console.log('Se actualizo el estado');

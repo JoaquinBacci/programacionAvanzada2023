@@ -60,6 +60,18 @@ export class OrdenService {
     });
   }
 
+  descancelarOrden(orden: Orden): Observable<Orden> {
+    return this.http.post<Orden>(`${this.API_SERVER}/orden/descancelar`, orden, {
+      headers: this.headers,
+    });
+  }
+
+  facturarOrden(orden: Orden): Observable<Orden> {
+    return this.http.post<Orden>(`${this.API_SERVER}/orden/facturar`, orden, {
+      headers: this.headers,
+    });
+  }
+
   finalizarOrden(orden: Orden): Observable<Orden> {
     return this.http.post<Orden>(`${this.API_SERVER}/orden/finalizar`, orden, {
       headers: this.headers,
