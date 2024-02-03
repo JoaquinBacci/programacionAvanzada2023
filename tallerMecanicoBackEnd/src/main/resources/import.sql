@@ -1,3 +1,4 @@
+-- encoding: UTF-8
 INSERT INTO marca (id, nombre, activo) VALUES (1, 'Ford', true), (2, 'Chevrolet', true), (3, 'Toyota', true);
 INSERT INTO modelo (nombre, activo, id_marca) VALUES ('Fiesta', true, 1), ('Mustang', true, 1), ('Camaro', true, 2), ('Corolla', true, 3);
 INSERT INTO tecnico (dni, num_tel, legajo, nombre, apellido, direccion, email, activo) VALUES (30567890, '123-456-7890', 101, 'Juan', 'Pérez', 'Calle 123', 'juan.perez@email.com', true), (40876543, '987-654-3210', 102, 'María', 'Gómez', 'Avenida 456', 'maria.gomez@email.com', true), (55555555, '555-555-5555', 103, 'Carlos', 'López', 'Ruta 789', 'carlos.lopez@email.com', true);
