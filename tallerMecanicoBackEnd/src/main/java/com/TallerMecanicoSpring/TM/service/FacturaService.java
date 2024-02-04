@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.TallerMecanicoSpring.TM.model.Factura;
 import com.TallerMecanicoSpring.TM.model.Orden;
 import com.TallerMecanicoSpring.TM.repository.FacturaRepository;
+import com.TallerMecanicoSpring.TM.repository.OrdenRepository;
 
 @Service
 public class FacturaService {
@@ -17,16 +18,16 @@ public class FacturaService {
     private FacturaRepository facturaRepository;
 
     @Autowired
-    private OrdenService ordenService;
+    private OrdenRepository ordenRepository;
 
 
     public Factura save(Long idOrden){
         Optional<Factura> f = this.findByIdOrden(idOrden);
 
         if (!f.isPresent()) { //si la factura no existe en la bs se la genera
-            Optional<Orden> ordenExistente = ordenService.findByIdOrden(idOrden);
+            Optional<Orden> ordenExistente = ordenRepository.findById(idOrden);
 
-            if (ordenExistente.isPresent() && "finalizada".equals(ordenExistente.get().getEstado())) {
+            if (ordenExistente.isPresent() && "finalizada".equals(ordenExistente.get().getEstadoActual())) {
                 Factura factura = new Factura();
                 factura.setFecha(new Date());
                 factura.setOrden(ordenExistente.get());

@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrdenService {
-
     @Autowired
     OrdenRepository ordenRepository;
 
@@ -59,6 +58,9 @@ public class OrdenService {
 
     @Autowired
     DetalleOrdenService detalleService;
+
+    @Autowired
+    FacturaService fs;
 
     public List<Orden> findAllOrdenes() {
         return ordenRepository.findAll();
@@ -157,9 +159,9 @@ public class OrdenService {
         }
         
 
-        if( ordenRq.getEstado() != null  &&  !"".equals(ordenRq.getEstado())){
+        if( ordenRq.getEstadoActual() != null  &&  !"".equals(ordenRq.getEstadoActual())){
             ordenesRs = ordenesRs.stream()
-                .filter(o -> !"".equals(ordenRq.getEstado()) &&  o.getEstado().contains(ordenRq.getEstado()) )
+                .filter(o -> !"".equals(ordenRq.getEstadoActual()) &&  o.getEstadoActual().contains(ordenRq.getEstadoActual()) )
                 .collect(Collectors.toList());
         }
 
@@ -275,7 +277,7 @@ public class OrdenService {
     }
 
     public Orden cancelar(Orden o) {
-        if ("finalizada".equals(o.getEstado())) {
+        if ("facturada".equals(o.getEstadoActual())) {
             throw new UnsupportedOperationException("No se puede cancelar la Orden");
         } else {
             o = (this.ordenRepository.findById(o.getId())).get();
@@ -285,7 +287,7 @@ public class OrdenService {
     }
 
     public Orden iniciar(Orden o) {
-        if ("creada".equals(o.getEstado())) {
+        if ("creada".equals(o.getEstadoActual()) || "cancelada".equals(o.getEstadoActual())) {
             o = (this.ordenRepository.findById(o.getId())).get();
             o.iniciar();
             return this.ordenRepository.save(o);
@@ -295,7 +297,7 @@ public class OrdenService {
     }
 
     public Orden finalizar(Orden o) {
-        if ("enCurso".equals(o.getEstado())) {
+        if ("enCurso".equals(o.getEstadoActual()) || "cancelada".equals(o.getEstadoActual())) {
             o = (this.ordenRepository.findById(o.getId())).get();
             o.finalizar();
             return this.ordenRepository.save(o); 
@@ -304,6 +306,26 @@ public class OrdenService {
         }
     }
     
+    public Orden facturar(Orden o) {
+        if ("finalizada".equals(o.getEstadoActual())) {
+            o = (this.ordenRepository.findById(o.getId())).get();
+            fs.save(o.getId());
+            o.facturar();
+            return this.ordenRepository.save(o); 
+        } else {
+            throw new UnsupportedOperationException("No se puede facturar la Orden");
+        }
+    }
+
+    public Orden descancelar(Orden o) {
+        if ("cancelada".equals(o.getEstadoActual())) {
+            o = (this.ordenRepository.findById(o.getId())).get();
+            o.descancelar();
+            return this.ordenRepository.save(o); 
+        } else {
+            throw new UnsupportedOperationException("No se puede descancelar la Orden");
+        }
+    }
 
     public List<Orden> getByIdCliente(Long id) {
         List<Orden> ordenes = this.findAllOrdenes();

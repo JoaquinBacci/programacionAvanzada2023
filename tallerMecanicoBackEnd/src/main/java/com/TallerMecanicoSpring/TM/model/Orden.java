@@ -33,30 +33,56 @@ public class Orden {
 
     private Date fechaIngreso;
 
-    private String estado; //"creada" "enCurso" "finalizada" "cancelada"
+    @Column(name = "estado_actual")
+    private String estadoActual; //"creada" "enCurso" "finalizada" "cancelada" "facturada"
 
-    public String getEstado() {
-        return estado;
+    @Column(name = "estado_anterior")
+    private String estadoAnterior;
+
+    public String getEstadoActual() {
+        return estadoActual;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setEstadoActual(String estadoActual) {
+        this.estadoActual = estadoActual;
+    }
+
+    public String getEstadoAnterior() {
+        return estadoAnterior;
+    }
+
+    public void setEstadoAnterior(String estadoAnterior) {
+        this.estadoAnterior = estadoAnterior;
     }
 
     public void crear(){
-        this.setEstado("creada");
+        this.setEstadoAnterior(null);
+        this.setEstadoActual("creada");
     }
 
     public void iniciar(){
-        this.setEstado("enCurso");
+        this.setEstadoAnterior(this.getEstadoActual());
+        this.setEstadoActual("enCurso");
     }
 
     public void finalizar(){
-        this.setEstado("finalizada");
+        this.setEstadoAnterior(this.getEstadoActual());
+        this.setEstadoActual("finalizada");
     }
 
     public void cancelar(){
-        this.setEstado("cancelada");
+        this.setEstadoAnterior(this.getEstadoActual());
+        this.setEstadoActual("cancelada");
+    }
+
+    public void descancelar(){
+        this.setEstadoActual(this.getEstadoAnterior());
+        this.setEstadoAnterior("cancelada");
+    }
+
+    public void facturar(){
+        this.setEstadoAnterior(this.getEstadoActual());
+        this.setEstadoActual("facturada");
     }
 
     public Date getFechaIngreso() {

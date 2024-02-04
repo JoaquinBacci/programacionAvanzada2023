@@ -53,10 +53,19 @@ public class OrdenRest {
     public ResponseEntity<Orden> cancelar (@RequestBody Orden orden){
         return ResponseEntity.ok(this.ordenService.cancelar(orden));
     } 
+    @PostMapping(path = "/descancelar")
+    public ResponseEntity<Orden> descancelar (@RequestBody Orden orden){
+        return ResponseEntity.ok(this.ordenService.descancelar(orden));
+    } 
 
     @PostMapping(path = "/finalizar")
     public ResponseEntity<Orden> finalizar (@RequestBody Orden orden){
         return ResponseEntity.ok(this.ordenService.finalizar(orden));
+    } 
+
+    @PostMapping(path = "/facturar")
+    public ResponseEntity<Orden> facturar (@RequestBody Orden orden){
+        return ResponseEntity.ok(this.ordenService.facturar(orden));
     } 
 
     @PostMapping(path = "/iniciar")

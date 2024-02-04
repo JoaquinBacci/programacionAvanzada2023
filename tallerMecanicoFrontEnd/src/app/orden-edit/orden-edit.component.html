@@ -93,7 +93,7 @@
         </button>
         <!-- INICIAR -->
         <button *ngIf="elemento.estadoActual == 'enCurso'" mat-icon-button matTooltip="Finalizar" (click)="finalizarOrden(elemento)">
-            <mat-icon>done_all</mat-icon>
+            <mat-icon>task_alt</mat-icon>
         </button>
         <!-- IMP FACTURA -->
         <button *ngIf="elemento.estadoActual == 'facturada'" mat-icon-button matTooltip="Ver Factura" (click)="imprimirFactura(elemento)">

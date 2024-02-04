@@ -228,7 +228,7 @@ export class OrdenEditComponent implements OnInit {
           console.log('Se actualizo el estado');
           this.actualizarOrdenes.emit();
           Toastify({
-            text: 'Orden Cancelada',
+            text: 'Orden Descancelada',
             duration: 3000,
             destination: 'https://github.com/apvarun/toastify-js',
             newWindow: true,
@@ -282,7 +282,7 @@ export class OrdenEditComponent implements OnInit {
           console.log('Se actualizo el estado');
           this.actualizarOrdenes.emit();
           Toastify({
-            text: 'Orden Cancelada',
+            text: 'Orden facturada',
             duration: 3000,
             destination: 'https://github.com/apvarun/toastify-js',
             newWindow: true,
