@@ -2,6 +2,8 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Tecnico } from 'src/app/model/tecnico';
 import { TecnicoService } from 'src/app/services/tecnico.service';
+import Toastify from 'toastify-js';
+
 
 @Component({
   selector: 'app-reativar-tecnico',
@@ -41,9 +43,39 @@ export class ReativarTecnicoComponent {
       next: (data) => {
         console.log('Data: ', data);
         this.dataSource = data;
+        Toastify({
+          text: 'Tecnico reactivado',
+          duration: 3000,
+          destination: 'https://github.com/apvarun/toastify-js',
+          newWindow: true,
+          close: true,
+          gravity: 'bottom', // Cambiado a "bottom" para colocarlo en la parte inferior
+          position: 'right', // Cambiado a "right" para colocarlo en la esquina derecha
+          stopOnFocus: true,
+          style: {
+            background: 'black', // Cambiado a negro
+          },
+          onClick: function () {},
+        }).showToast();
       },
       complete: () => {},
-      error: (error) => {},
+      error: (error) => {
+        Toastify({
+          text: 'Problema al reactivar el tecnico',
+          duration: 3000,
+          destination: 'https://github.com/apvarun/toastify-js',
+          newWindow: true,
+          close: true,
+          gravity: 'bottom', // Cambiado a "bottom" para colocarlo en la parte inferior
+          position: 'right', // Cambiado a "right" para colocarlo en la esquina derecha
+          stopOnFocus: true,
+          style: {
+            background: 'red', // Cambiado a negro
+            color: 'black'
+          },
+          onClick: function () {},
+        }).showToast();
+      },
     });
   }
 

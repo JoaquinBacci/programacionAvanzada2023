@@ -37,7 +37,7 @@ export class OrdenAdmComponent implements OnInit {
   dataSourceOrdenes: any[];
 
   // Las acciones de esta tabla van a ser: "remover servicio"
-  columnasServicios = ['nombre', 'precio', 'acciones'];
+  columnasServicios = ['nombre', 'precio', 'impuesto','acciones'];
   dataSourceServicios: MatTableDataSource<Servicio>;
   total: number = 0; // Variable para mostrar el precio total de la orden
   fechaActual: Date;
@@ -364,7 +364,7 @@ export class OrdenAdmComponent implements OnInit {
   calcularTotal() {
     this.total = 0;
     this.arrayServicios.forEach((servicio) => {
-      this.total = this.total + servicio.precio;
+      this.total = this.total + ( servicio.precio + (servicio.precio * servicio.impuesto) / 100 );
     });
   }
   getObjectOrden(): OrdenSaveRq {

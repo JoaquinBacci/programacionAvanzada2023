@@ -50,6 +50,7 @@ public class ServicioService{
                 s.setNombre(servicioRq.getNombre());
                 s.setDescripcion(servicioRq.getDescripcion());
                 s.setPrecio(servicioRq.getPrecio());
+                s.setImpuesto(servicioRq.getImpuesto());
     
                 return this.servicioRepository.save(s);
             } else {

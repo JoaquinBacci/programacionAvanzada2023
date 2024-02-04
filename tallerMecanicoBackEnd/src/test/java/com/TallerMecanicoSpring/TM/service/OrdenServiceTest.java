@@ -72,7 +72,7 @@ public class OrdenServiceTest {
         List<DetalleOrden> detallesOrden = new ArrayList<>();
         // creamos un detalle de servicio
         this.detalleOrden1 = new DetalleOrden();
-        Servicio servicio1 = new Servicio(1L,"Servicio 1",50,true,"descripción servicio 1");
+        Servicio servicio1 = new Servicio(1L,"Servicio 1",50,true,"descripción servicio 1", 21.0);
         detalleOrden1.setServicio(servicio1);
         detalleOrden1.setCantidad(2);
         detalleOrden1.setPrecioTotal(detalleOrden1.getPrecioTotal());
@@ -80,7 +80,7 @@ public class OrdenServiceTest {
         // creamos otro detalle de servicio
         this.detalleOrden2 = new DetalleOrden();
         //Servicio servicio2 = servicioRepository.findById(2L).get();
-        Servicio servicio2 = new Servicio(2L, "Servicios 2", 80,true,"Descripción servicio 2");
+        Servicio servicio2 = new Servicio(2L, "Servicios 2", 80,true,"Descripción servicio 2",25.0);
         detalleOrden2.setServicio(servicio2);
         detalleOrden2.setCantidad(1);
         detalleOrden2.setPrecioTotal(detalleOrden2.getPrecioTotal());

@@ -4,5 +4,6 @@ export class Servicio {
     precio: number;
     descripcion: string;
     activo: boolean;
+    impuesto: number;
 }
   

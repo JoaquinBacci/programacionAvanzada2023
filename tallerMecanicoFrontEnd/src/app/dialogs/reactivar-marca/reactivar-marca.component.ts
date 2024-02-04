@@ -2,6 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MarcaService } from '../../services/marca.service';
 import { Marca } from 'src/app/model/marca';
+import Toastify from 'toastify-js';
+
 
 @Component({
   selector: 'app-reactivar-marca',
@@ -48,9 +50,38 @@ export class ReactivarMarcaComponent implements OnInit{
       next:(value)=> {
           console.log('activado');
           this.onFiltrar();
+          Toastify({
+            text: 'Marca reactivada',
+            duration: 3000,
+            destination: 'https://github.com/apvarun/toastify-js',
+            newWindow: true,
+            close: true,
+            gravity: 'bottom', // Cambiado a "bottom" para colocarlo en la parte inferior
+            position: 'right', // Cambiado a "right" para colocarlo en la esquina derecha
+            stopOnFocus: true,
+            style: {
+              background: 'black', // Cambiado a negro
+            },
+            onClick: function () {},
+          }).showToast();
       
       }, error:(err)=> {
           console.log('error');
+          Toastify({
+            text: 'Problema al reactivar la marca',
+            duration: 3000,
+            destination: 'https://github.com/apvarun/toastify-js',
+            newWindow: true,
+            close: true,
+            gravity: 'bottom', // Cambiado a "bottom" para colocarlo en la parte inferior
+            position: 'right', // Cambiado a "right" para colocarlo en la esquina derecha
+            stopOnFocus: true,
+            style: {
+              background: 'red', // Cambiado a negro
+              color: 'black'
+            },
+            onClick: function () {},
+          }).showToast();
       },
     });
   }
