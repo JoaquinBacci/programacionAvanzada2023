@@ -33,6 +33,10 @@
                         <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
                         <mat-cell *matCellDef="let elemento"> {{ elemento.precio }} </mat-cell>
                     </ng-container>
+                    <ng-container matColumnDef="impuesto">
+                      <mat-header-cell *matHeaderCellDef> Impuesto </mat-header-cell>
+                      <mat-cell *matCellDef="let elemento"> {{ elemento.impuesto }} </mat-cell>
+                  </ng-container>
                   
                     <!-- Columna Acciones -->
                     <ng-container matColumnDef="acciones">

@@ -14,7 +14,7 @@ import { ReactivarServicioComponent } from '../dialogs/reactivar-servicio/reacti
 })
 export class ServicioAdmComponent {
   form: FormGroup;
-  columnas: string[] = ['descripcion', 'nombre', 'precio', 'acciones'];
+  columnas: string[] = ['descripcion', 'nombre', 'precio','impuesto', 'acciones'];
   dataSource;
   modoEdicion: boolean = false;
   servicioEdit: Servicio;
@@ -32,6 +32,10 @@ export class ServicioAdmComponent {
         0.0,
         [Validators.required, this.validarPrecio, Validators.min(1)],
       ],
+      impuesto: [
+        0.0,
+        [Validators.required, this.validarImpuesto, Validators.min(0)],
+      ],
     });
   }
 
@@ -44,6 +48,15 @@ export class ServicioAdmComponent {
     }
   }
 
+  validarImpuesto(control) {
+    const valor = parseFloat(control.value);
+    if ( valor >= 0 && valor <= 100) {
+      return null; // Válido
+    } else {
+      return { impuestoInvalido: true }; // Inválido
+    }
+  }
+
   ngOnInit(): void {
     this.servicioConsultar = new Servicio();
     this.servicioConsultar.id = null;
@@ -51,6 +64,7 @@ export class ServicioAdmComponent {
     this.servicioConsultar.descripcion = '';
     this.servicioConsultar.nombre = '';
     this.servicioConsultar.precio = 0.0;
+    this.servicioConsultar.impuesto = 0.0;
 
     this.onConsultarServicios();
   }
@@ -67,7 +81,9 @@ export class ServicioAdmComponent {
         servicioRq.nombre = this.form.get('nombre').value;
         servicioRq.descripcion = this.form.get('descripcion').value;
         let precio = parseFloat(this.form.get('precio').value).toFixed(2);
+        let impuesto = parseFloat(this.form.get('impuesto').value).toFixed(2);
         servicioRq.precio = parseFloat(precio);
+        servicioRq.impuesto = parseFloat(impuesto);
         servicioRq.activo = true;
         this.servicioService.newServicio(servicioRq).subscribe({
           next: (data) => {
@@ -109,6 +125,7 @@ export class ServicioAdmComponent {
         this.servicioEdit.descripcion = this.form.get('descripcion').value;
         this.servicioEdit.nombre = this.form.get('nombre').value;
         this.servicioEdit.precio = this.form.get('precio').value;
+        this.servicioEdit.impuesto = this.form.get('impuesto').value;
         console.log('servicioEdit: ', this.servicioEdit);
         //Editar marca
         this.servicioService.updateServicio(this.servicioEdit).subscribe({
@@ -201,6 +218,7 @@ export class ServicioAdmComponent {
     this.form.get('descripcion').setValue(servicio.descripcion);
     this.form.get('nombre').setValue(servicio.nombre);
     this.form.get('precio').setValue(servicio.precio);
+    this.form.get('impuesto').setValue(servicio.impuesto);
   }
 
   onCancelar() {

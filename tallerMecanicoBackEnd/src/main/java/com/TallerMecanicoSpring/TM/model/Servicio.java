@@ -22,6 +22,13 @@ public class Servicio {
     private double precio;
 
     @NotNull(message = "La marca debe ser un booleano")
+    // Nuevo campo para el impuesto
+    @NotNull //para que no se ingresen nulos
+    @DecimalMin(value = "0.00") //el precio debe ser mayor a este nro
+    @DecimalMax(value = "100.0") //el precio no puede ser mayor a este nro
+    private double impuesto;
+
+    @AssertTrue(message = "La marca debe ser un booleano")
     private boolean activo;
 
 
@@ -36,12 +43,13 @@ public class Servicio {
     public Servicio() {
     }
 
-    public Servicio(Long id, String nombre, double precio, boolean activo, String descripcion) {
+    public Servicio(Long id, String nombre, double precio, boolean activo, String descripcion, double impuesto) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
         this.activo = activo;
+        this.impuesto = impuesto;
     }
 
     public Long getId() {
@@ -75,6 +83,14 @@ public class Servicio {
 
     public void setPrecio(double precio) {
         this.precio = precio;
+    }
+
+    public double getImpuesto() {
+        return impuesto;
+    }
+
+    public void setImpuesto(double impuesto) {
+        this.impuesto = impuesto;
     }
 
     public boolean isActivo() {

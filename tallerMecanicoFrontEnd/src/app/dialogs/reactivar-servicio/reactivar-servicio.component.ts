@@ -10,7 +10,7 @@ import { Servicio } from 'src/app/model/servicio';
 })
 export class ReactivarServicioComponent implements OnInit {
   servicioConsultar: Servicio;
-  columnas: string[] = ['descripcion', 'nombre', 'precio', 'acciones'];
+  columnas: string[] = ['descripcion', 'nombre', 'precio','impuesto', 'acciones'];
   dataSource;
   
   constructor(
