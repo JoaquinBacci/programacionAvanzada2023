@@ -1,9 +1,5 @@
-<<<<<<< HEAD
+
 INSERT INTO marca ( nombre, activo) VALUES ( 'Ford', true), ('Chevrolet', true), ( 'Toyota', true);
-=======
--- encoding: UTF-8
-INSERT INTO marca (id, nombre, activo) VALUES (1, 'Ford', true), (2, 'Chevrolet', true), (3, 'Toyota', true);
->>>>>>> desa-mauri
 INSERT INTO modelo (nombre, activo, id_marca) VALUES ('Fiesta', true, 1), ('Mustang', true, 1), ('Camaro', true, 2), ('Corolla', true, 3);
 INSERT INTO tecnico (dni, num_tel, legajo, nombre, apellido, direccion, email, activo) VALUES (30567890, '123-456-7890', 101, 'Juan', 'Pérez', 'Calle 123', 'juan.perez@email.com', true), (40876543, '987-654-3210', 102, 'María', 'Gómez', 'Avenida 456', 'maria.gomez@email.com', true), (55555555, '555-555-5555', 103, 'Carlos', 'López', 'Ruta 789', 'carlos.lopez@email.com', true);
 INSERT INTO cliente (dni, num_tel, nombre, apellido, direccion, email, activo, licencia_conducir) VALUES (20123456, '123-456-7890', 'Luis', 'Martínez', 'Calle 567', 'luis.martinez@email.com', true, 'Licencia987654'), (30987654, '987-654-3210', 'Ana', 'Rodríguez', 'Avenida 890', 'ana.rodriguez@email.com', true, 'Licencia123987'), (42515785, '555-555-5555', 'Elena', 'Gutiérrez', 'Ruta 123', 'elena.gutierrez@email.com', true, 'Licencia555555');
