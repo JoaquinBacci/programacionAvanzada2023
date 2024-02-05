@@ -100,7 +100,8 @@ export class OrdenAdmComponent implements OnInit {
     id: null,
     fechaIngreso: '',
     descripcion: '',
-    estado: '',
+    estadoActual: '',
+    estadoAnterior:'',
   };
 
   vista: string = '';

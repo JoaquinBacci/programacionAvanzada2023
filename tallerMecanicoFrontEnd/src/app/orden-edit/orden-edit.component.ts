@@ -221,6 +221,33 @@ export class OrdenEditComponent implements OnInit {
     });
   }
 
+  descancelarOrden(o: Orden) {
+    this.ordenService.descancelarOrden(o).subscribe({
+      next: (data) => {
+        if (data) {
+          console.log('Se actualizo el estado');
+          this.actualizarOrdenes.emit();
+          Toastify({
+            text: 'Orden Descancelada',
+            duration: 3000,
+            destination: 'https://github.com/apvarun/toastify-js',
+            newWindow: true,
+            close: true,
+            gravity: 'bottom', // Cambiado a "bottom" para colocarlo en la parte inferior
+            position: 'right', // Cambiado a "right" para colocarlo en la esquina derecha
+            stopOnFocus: true,
+            style: {
+              background: 'black', // Cambiado a negro
+            },
+            onClick: function () {},
+          }).showToast();
+        } else {
+          console.log('NO hay data = error');
+        }
+      },
+    });
+  }
+
   finalizarOrden(o: Orden) {
     this.ordenService.finalizarOrden(o).subscribe({
       next: (data) => {
@@ -241,6 +268,33 @@ export class OrdenEditComponent implements OnInit {
             onClick: function () {},
           }).showToast();
           this.actualizarOrdenes.emit();
+        } else {
+          console.log('NO hay data = error');
+        }
+      },
+    });
+  }
+
+  facturarOrden(o: Orden) {
+    this.ordenService.facturarOrden(o).subscribe({
+      next: (data) => {
+        if (data) {
+          console.log('Se actualizo el estado');
+          this.actualizarOrdenes.emit();
+          Toastify({
+            text: 'Orden facturada',
+            duration: 3000,
+            destination: 'https://github.com/apvarun/toastify-js',
+            newWindow: true,
+            close: true,
+            gravity: 'bottom', // Cambiado a "bottom" para colocarlo en la parte inferior
+            position: 'right', // Cambiado a "right" para colocarlo en la esquina derecha
+            stopOnFocus: true,
+            style: {
+              background: 'black', // Cambiado a negro
+            },
+            onClick: function () {},
+          }).showToast();
         } else {
           console.log('NO hay data = error');
         }

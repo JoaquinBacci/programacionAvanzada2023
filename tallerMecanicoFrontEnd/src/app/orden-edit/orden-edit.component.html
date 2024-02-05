@@ -65,13 +65,13 @@
         <mat-header-cell *matHeaderCellDef>
           <mat-form-field appearance="outline" floatLabel="always" >
             <mat-label> Estado </mat-label>
-            <mat-select [(ngModel)]="ordenFiltrar.estado" [ngModelOptions]="{standalone: true}">
+            <mat-select [(ngModel)]="ordenFiltrar.estadoActual" [ngModelOptions]="{standalone: true}">
               <mat-option [value]="null"> Selecione un Estado </mat-option>
               <mat-option *ngFor="let e of estados" [value]="e" >{{ e }}</mat-option>
             </mat-select>
           </mat-form-field> 
         </mat-header-cell>
-        <mat-cell *matCellDef="let elemento"> {{ elemento.estado}} </mat-cell>
+        <mat-cell *matCellDef="let elemento"> {{ elemento.estadoActual}} </mat-cell>
       </ng-container>
   
     <!-- Columna Acciones -->
@@ -80,21 +80,33 @@
         <button mat-icon-button (click)="onConsultar()"><mat-icon>search</mat-icon></button>
       </mat-header-cell>
       <mat-cell *matCellDef="let elemento">
-        <button mat-icon-button *ngIf="elemento.estado != 'finalizada' && elemento.estado != 'cancelada'" matTooltip="Editar" (click)="onEditar(elemento.id)" >
+        <button mat-icon-button *ngIf="elemento.estadoActual=='creada' || elemento.estadoActual=='enCurso'" matTooltip="Editar" (click)="onEditar(elemento.id)" >
           <mat-icon>edit</mat-icon>
         </button>
-        <button *ngIf="elemento.estado == 'creada'" mat-icon-button matTooltip="Iniciar" (click)="iniciarOrden(elemento)">
+        <!-- EDITAR -->
+        <button *ngIf="elemento.estadoActual == 'creada'" mat-icon-button matTooltip="Iniciar" (click)="iniciarOrden(elemento)">
           <mat-icon>start</mat-icon>
         </button>
-        <button *ngIf="elemento.estado != 'finalizada' && elemento.estado != 'cancelada'" mat-icon-button matTooltip="Cancelar" (click)="cancelarOrden(elemento)">
+        <!-- CANCELAR -->
+        <button *ngIf="elemento.estadoActual != 'facturada' && elemento.estadoActual != 'cancelada'" mat-icon-button matTooltip="Cancelar" (click)="cancelarOrden(elemento)">
             <mat-icon>cancel</mat-icon>
         </button>
-        <button *ngIf="elemento.estado == 'enCurso'" mat-icon-button matTooltip="Finalizar" (click)="finalizarOrden(elemento)">
-            <mat-icon>done_all</mat-icon>
+        <!-- INICIAR -->
+        <button *ngIf="elemento.estadoActual == 'enCurso'" mat-icon-button matTooltip="Finalizar" (click)="finalizarOrden(elemento)">
+            <mat-icon>task_alt</mat-icon>
         </button>
-        <button *ngIf="elemento.estado == 'finalizada'" mat-icon-button matTooltip="Ver Factura" (click)="imprimirFactura(elemento)">
+        <!-- IMP FACTURA -->
+        <button *ngIf="elemento.estadoActual == 'facturada'" mat-icon-button matTooltip="Ver Factura" (click)="imprimirFactura(elemento)">
             <mat-icon>description</mat-icon>
         </button>
+        <!-- FACTURAR -->
+        <button *ngIf="elemento.estadoActual == 'finalizada'" mat-icon-button matTooltip="Facturar" (click)="facturarOrden(elemento)">
+          <mat-icon>article</mat-icon>
+        </button>
+        <!-- DESCANCELAR -->
+      <button *ngIf="elemento.estadoActual == 'cancelada'" mat-icon-button matTooltip="Descancelar" (click)="descancelarOrden(elemento)">
+        <mat-icon>undo</mat-icon>
+    </button>
       </mat-cell>
     </ng-container>
   

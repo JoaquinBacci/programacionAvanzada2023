@@ -70,3 +70,4 @@ httpd.conf
 
 
 **/application.properties
+tallerMecanicoBackEnd/src/main/resources/application-dev.properties
