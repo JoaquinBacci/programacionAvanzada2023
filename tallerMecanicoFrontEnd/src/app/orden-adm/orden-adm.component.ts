@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Orden } from '../model/orden';
 import { DetalleOrden } from '../model/detalleOrden';
 import { OrdenService } from '../services/orden.service';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Cliente } from '../model/cliente';
 import { Tecnico } from '../model/tecnico';
 import { Vehiculo } from '../model/vehiculo';
@@ -82,7 +82,7 @@ export class OrdenAdmComponent implements OnInit {
     licenciaConducir: '',
   };
   filtroTecnico: Tecnico = {
-    activo: null,
+    activo: true,
     apellido: '',
     direccion: '',
     dni: null,
@@ -122,11 +122,11 @@ export class OrdenAdmComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.formularioOrden = this.fb.group({
-      cliente: [new Cliente(), [Validators.required]],
-      tecnico: [new Tecnico(), [Validators.required]],
-      vehiculo: [new Vehiculo(), [Validators.required]],
-      servicio: [this.fb.array([]), [Validators.required]],
-      descripcion: ['', [Validators.required, Validators.maxLength(50)]],
+      cliente: new FormControl(new Cliente(), Validators.required),
+      tecnico: new FormControl("", Validators.required),
+      vehiculo: new FormControl(new Vehiculo(), Validators.required),
+      servicio: new FormControl([this.fb.array([]), [Validators.required]]),
+      descripcion: new FormControl('', [Validators.required, Validators.maxLength(50)]),
     });
   }
 
@@ -257,6 +257,7 @@ export class OrdenAdmComponent implements OnInit {
     this.tecnicoService.onConsultar(this.filtroTecnico).subscribe({
       next: (data) => {
         if (data) {
+          console.log("Tecnicos: ",data)
           this.dataTecnicos = data;
         } else {
           if (this.debug) {
@@ -563,6 +564,9 @@ export class OrdenAdmComponent implements OnInit {
   }
 
   setTecnico(t: Tecnico) {
+    let tec = this.dataTecnicos.find(value => value.id == t.id );
+    this.formularioOrden.get('tecnico').setValue(tec);
+    this.formularioOrden.get('tecnico').updateValueAndValidity();
     this.tecnicoSeleccionado = t;
   }
 

@@ -135,7 +135,7 @@
               <div>
                 <mat-form-field style="width: 100%">
                   <mat-select placeholder="Tecnico" formControlName="tecnico">
-                    <mat-option *ngFor="let tecnico of dataTecnicos" [value]="tecnico" (click)="setTecnico(tecnico)">
+                    <mat-option [value]="tecnico" *ngFor="let tecnico of dataTecnicos"  (click)="setTecnico(tecnico)">
                       {{ tecnico.apellido + ", " + tecnico.nombre }}
                     </mat-option>
                   </mat-select>
