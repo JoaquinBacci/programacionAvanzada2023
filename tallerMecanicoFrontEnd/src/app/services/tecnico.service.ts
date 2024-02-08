@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Tecnico } from '../model/tecnico';
 import { Observable } from 'rxjs';
 import { environment } from 'src/enviroments/enviroment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { PaginatedResponse } from '../model/PaginatedResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -66,5 +67,12 @@ export class TecnicoService {
 
   public reactivar(id: number): Observable<any> {
     return this.http.get(`${this.API_REST}/tecnico/activar/${id}`);
+  }
+
+  listarTecnicos(tecnicoRq: any, page: number, size: number): Observable<any> {
+    const params = new HttpParams()
+    .set('page', page.toString())
+    .set('size', size.toString());
+    return this.http.post<PaginatedResponse<Tecnico>>(`${this.API_REST}/tecnico/listar/`, tecnicoRq, { params, headers: this.headers });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TecnicoService } from '../services/tecnico.service';
 import { Tecnico } from '../model/tecnico';
 import { MatDialog } from '@angular/material/dialog';
@@ -6,6 +6,8 @@ import { ConfirmComponent } from '../dialogs/confirm/confirm.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Toastify from 'toastify-js';
 import { ReativarTecnicoComponent } from '../dialogs/reativar-tecnico/reativar-tecnico.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-tecnico-adm',
@@ -16,7 +18,7 @@ export class TecnicoAdmComponent implements OnInit {
   idTecnitoUpdate: number = undefined;
   tecnicoConsultar: Tecnico;
   modoEdicion: boolean = false;
-  columnas: string[] = [
+  columnasTecnicos: string[] = [
     'Nombre',
     'Apellido',
     'DNI',
@@ -26,7 +28,7 @@ export class TecnicoAdmComponent implements OnInit {
     'Legajo',
     'Acciones',
   ];
-  dataSource;
+  dataSourceTecnico: MatTableDataSource<Tecnico> = new MatTableDataSource<Tecnico>();
 
   form: FormGroup;
 
@@ -69,25 +71,27 @@ export class TecnicoAdmComponent implements OnInit {
     this.tecnicoConsultar.direccion = '';
     this.tecnicoConsultar.dni = null;
     this.tecnicoConsultar.legajo = null;
-    this.onConsultar();
+    //this.onConsultar();
+
+    this.loadEntidades(0, 5);
   }
 
-  onConsultar() {
-    this.tecnicoConsultar.activo = true;
-    this.tecnicoService.onConsultar(this.tecnicoConsultar).subscribe({
-      next: (data) => {
-        console.log('Data: ', data);
-        this.dataSource = data;
-      },
-      complete: () => {},
-      error: (error) => {},
-    });
-  }
+  // onConsultar() {
+  //   this.tecnicoConsultar.activo = true;
+  //   this.tecnicoService.onConsultar(this.tecnicoConsultar).subscribe({
+  //     next: (data) => {
+  //       console.log('Data: ', data);
+  //       this.dataSource = data;
+  //     },
+  //     complete: () => {},
+  //     error: (error) => {},
+  //   });
+  // }
 
   onDialogDesactivados(){
     let dialogRef = this.dialog.open(ReativarTecnicoComponent, {});
 
-    dialogRef.afterClosed().subscribe(result => this.onConsultar());
+    dialogRef.afterClosed().subscribe(result => this.loadEntidades(this.currentPage, 5));
   }
 
   onGuardar() {
@@ -128,7 +132,7 @@ export class TecnicoAdmComponent implements OnInit {
         },
         complete: () => {
           this.form.reset();
-          this.onConsultar();
+          this.loadEntidades(this.currentPage, 5);
         },
         error: (error) => {
           console.log('error: ', error);
@@ -155,7 +159,7 @@ export class TecnicoAdmComponent implements OnInit {
           }
         },
         complete: () => {
-          this.onConsultar();
+          this.loadEntidades(this.currentPage, 5);
           this.form.reset();
         },
         error: (error) => {
@@ -189,7 +193,7 @@ export class TecnicoAdmComponent implements OnInit {
         }
       },
       complete: () => {
-        this.onConsultar();
+        this.loadEntidades(this.currentPage, 5);
       },
       error: (error) => {
         console.log('error: ', error);
@@ -209,5 +213,29 @@ export class TecnicoAdmComponent implements OnInit {
     let dialogRef = this.dialog.open(ConfirmComponent, {
       data: { tipo: tipo, mensaje: mensaje, textoAceptar: textoAceptar },
     });
+  }
+
+  totalPages: number = 0;
+  currentPage: number = 0;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  
+  loadEntidades(page: number, size: number): void {
+    this.tecnicoConsultar.activo = true;
+    this.tecnicoService.listarTecnicos(this.tecnicoConsultar, page, size)
+      .subscribe(response => {
+        this.dataSourceTecnico.data = response.content;
+        this.totalPages = response.totalPages;
+        this.currentPage = page;
+        this.paginator.pageIndex = page;
+   
+        this.paginator.length = response.totalElements;
+      });
+  }
+
+  onPageChange(event): void {
+    const page = event.pageIndex;
+    const size = event.pageSize;
+    this.loadEntidades(page, size);
   }
 }

@@ -4,10 +4,14 @@
  */
 package com.TallerMecanicoSpring.TM.rest;
 
+import com.TallerMecanicoSpring.TM.model.Cliente;
+import com.TallerMecanicoSpring.TM.model.ClienteFiltrarRq;
 import com.TallerMecanicoSpring.TM.model.Tecnico;
 import com.TallerMecanicoSpring.TM.service.TecnicoService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +41,13 @@ public class TecnicoRest {
     private ResponseEntity<Tecnico> reactivar(@PathVariable("id") Long id){
         return ResponseEntity.ok(this.tecnicoService.activar(id));
     }
-    
+
+    @PostMapping("listar/")
+    public ResponseEntity<Page<Tecnico>> listarTecnicos( Pageable pageable, @RequestBody Tecnico tecnicoRq) {
+        Page<Tecnico> page = tecnicoService.listarTecnicosPaginados(pageable, tecnicoRq);
+        return ResponseEntity.ok(page);
+    }
+     
     @PostMapping("filtrar/")
     private ResponseEntity<List<Tecnico>> search(@RequestBody Tecnico tecnicoRq){
         return ResponseEntity.ok(this.tecnicoService.filtrarTecnicos(tecnicoRq));

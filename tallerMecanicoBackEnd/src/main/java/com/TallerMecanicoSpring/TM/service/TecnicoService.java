@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
@@ -74,7 +75,108 @@ public class TecnicoService implements TecnicoRepository{
     public Tecnico getById(Long id) {
        return this.tecnicoRepository.getById(id);
     }
-    
+
+    public Page<Tecnico> listarTecnicosPaginados(Pageable pageable, Tecnico tecnicoRq) {
+
+        List<Tecnico> tecnicoRs = tecnicoRepository.findAll();
+
+        tecnicoRs = this.findAll();
+
+        tecnicoRs = tecnicoRs.stream()
+                .filter(c -> c.isActivo() == tecnicoRq.isActivo())
+                .collect(Collectors.toList());
+
+        System.out.println("Nombre: " + tecnicoRq.getNombre());
+        System.out.println("Apellido: " + tecnicoRq.getApellido());
+        System.out.println("DNI: " + tecnicoRq.getDni());
+        System.out.println("direccion: " + tecnicoRq.getDireccion());
+        System.out.println("mail: " + tecnicoRq.getEmail());
+        System.out.println("tel: " + tecnicoRq.getNum_tel());
+        System.out.println("legajo: " + tecnicoRq.getLegajo());
+
+        if (tecnicoRq.getNombre() == null || tecnicoRq.getNombre().trim().isEmpty()) {
+            System.out.println("No se filtra por Nombre");
+        } else {
+            System.out.println("Filtro Nombre");
+            tecnicoRs = tecnicoRs.stream()
+                    .filter(t -> t.getNombre() != null
+                            && t.getNombre().toLowerCase().contains(tecnicoRq.getNombre().toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        if (tecnicoRq.getApellido() == null || tecnicoRq.getApellido().trim().isEmpty()) {
+            System.out.println("No se filtra por Apellido");
+        } else {
+            System.out.println("Filtro Apellido");
+            tecnicoRs = tecnicoRs.stream()
+                    .filter(t -> t.getApellido() != null
+                            && t.getApellido().toLowerCase().contains(tecnicoRq.getApellido().toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        if (tecnicoRq.getDni() == null) {
+            System.out.println("No se filtra por DNI");
+        } else {
+            System.out.println("Filtro DNI");
+            tecnicoRs = tecnicoRs.stream()
+                    .filter(t -> t.getDni() != null && t.getDni().toString().contains(tecnicoRq.getDni().toString()))
+                    .collect(Collectors.toList());
+        }
+
+        if (tecnicoRq.getNum_tel() == null || tecnicoRq.getNum_tel().trim().isEmpty()) {
+            System.out.println("No se filtra por Teléfono");
+        } else {
+            System.out.println("Filtro Teléfono");
+            tecnicoRs = tecnicoRs.stream()
+                    .filter(t -> t.getNum_tel() != null && t.getNum_tel().contains(tecnicoRq.getNum_tel().trim()))
+                    .collect(Collectors.toList());
+        }
+
+        if (tecnicoRq.getEmail() == null || tecnicoRq.getEmail().trim().isEmpty()) {
+            System.out.println("No se filtra por Correo");
+        } else {
+            System.out.println("Filtro Correo");
+            tecnicoRs = tecnicoRs.stream()
+                    .filter(t -> t.getEmail() != null
+                            && t.getEmail().toLowerCase().contains(tecnicoRq.getEmail().toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        if (tecnicoRq.getDireccion() == null || tecnicoRq.getDireccion().trim().isEmpty()) {
+            System.out.println("No se filtra por Dirección");
+        } else {
+            System.out.println("Filtro Dirección");
+            tecnicoRs = tecnicoRs.stream()
+                    .filter(t -> t.getDireccion() != null
+                            && t.getDireccion().toLowerCase().contains(tecnicoRq.getDireccion().toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        if (tecnicoRq.getLegajo() == null) {
+            System.out.println("No se filtra por Legajo");
+        } else {
+            System.out.println("Filtro Legajo");
+            tecnicoRs = tecnicoRs.stream()
+                    .filter(t -> t.getLegajo() != null
+                            && t.getLegajo().toString().contains(tecnicoRq.getLegajo().toString()))
+                    .collect(Collectors.toList());
+        }
+        // Create a Page<Tecnico> from the filtered list
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<Tecnico> pageTecnicos;
+
+        if (tecnicoRs.size() < startItem) {
+            pageTecnicos = List.of(); // Return an empty list if the startItem is beyond the filtered list's size
+        } else {
+            int toIndex = Math.min(startItem + pageSize, tecnicoRs.size());
+            pageTecnicos = tecnicoRs.subList(startItem, toIndex);
+        }
+
+        return new PageImpl<>(pageTecnicos, pageable, tecnicoRs.size());
+    }
+
     public List<Tecnico> filtrarTecnicos(Tecnico tecnicoRq){
         List<Tecnico> tecnicoRs = new ArrayList();
         List<Tecnico> tecnicos = new ArrayList();

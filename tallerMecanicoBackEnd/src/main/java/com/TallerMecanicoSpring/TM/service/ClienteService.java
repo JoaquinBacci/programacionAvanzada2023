@@ -195,7 +195,7 @@ public class ClienteService implements ClienteRepository{
 
         
     public Page<Cliente> listarClientesPaginados(Pageable pageable, ClienteFiltrarRq clienteRq) {
-// Retrieve all clients
+
         // Retrieve all clients
         List<Cliente> clientesRs = clienteRepository.findAll();
 

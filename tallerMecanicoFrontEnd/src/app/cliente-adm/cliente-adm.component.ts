@@ -285,6 +285,7 @@ export class ClienteAdmComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   
   loadEntidades(page: number, size: number): void {
+    this.clienteConsultar.activo=true;
     this.clienteService.listarClientes(this.clienteConsultar, page, size)
       .subscribe(response => {
         this.dataSourceCliente.data = response.content;
