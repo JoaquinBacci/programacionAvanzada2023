@@ -50,5 +50,7 @@ export class AppComponent {
     this.router.navigate(['/servicio']);
   }
   
-
+  openReporte() {
+    this.router.navigate(['/reporte']);
+  }
 }

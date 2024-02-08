@@ -10,6 +10,7 @@ import { HomeComponent } from './components/home/home.component';
 import { OrdenAdmComponent } from './orden-adm/orden-adm.component';
 import { OrdenEditComponent } from './orden-edit/orden-edit.component';
 import { FacturaComponent } from './factura/factura.component';
+import { ReporteComponent } from './reporte/reporte.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'orden', component: OrdenAdmComponent},
   { path: 'orden/:id', component: OrdenEditComponent},
   { path: 'factura', component: FacturaComponent},
+  { path: 'reporte', component: ReporteComponent},
 ];
 
 @NgModule({

@@ -8,9 +8,9 @@
       <button mat-raised-button (click)="setVista('CONSULTAR')" color="warn" style="margin-left: 10px">
         Consultar Ordenes
       </button>
-      <button mat-raised-button (click)="setVista('REPORTE')" color="white" style="margin-left: 10px">
+      <!--<button mat-raised-button (click)="setVista('REPORTE')" color="white" style="margin-left: 10px">
         Reporte 1
-      </button>
+      </button>-->
     </div>
 
     <mat-card style="margin-top: 20px">
@@ -20,9 +20,9 @@
           (actualizarOrdenes)="getAllOrdenes()"></app-orden-edit>
       </mat-card-content>
 
-      <mat-card-content *ngIf="vista == 'REPORTE'">
+      <!--<mat-card-content *ngIf="vista == 'REPORTE'">
         <app-reporte></app-reporte>
-      </mat-card-content>
+      </mat-card-content>-->
 
       <mat-card-content *ngIf="vista == 'CREAR' || vista == 'EDITAR'">
         <div style="
@@ -135,7 +135,7 @@
               <div>
                 <mat-form-field style="width: 100%">
                   <mat-select placeholder="Tecnico" formControlName="tecnico">
-                    <mat-option *ngFor="let tecnico of dataTecnicos" [value]="tecnico" (click)="setTecnico(tecnico)">
+                    <mat-option [value]="tecnico" *ngFor="let tecnico of dataTecnicos"  (click)="setTecnico(tecnico)">
                       {{ tecnico.apellido + ", " + tecnico.nombre }}
                     </mat-option>
                   </mat-select>

@@ -7,23 +7,28 @@
           <mat-form-field>
             <mat-label>Marca</mat-label>
             <mat-select>
-              <mat-option
-                *ngFor="let marca of dataMarcas"
-                [value]="marca"
-                (click)="addMarca(marca)"
-                >{{ marca.nombre }}</mat-option
-              >
+              <!-- Opción: Agregar Todas las Marcas -->
+              <mat-option (click)="addAllMarcas()" style="color: navy; font-style: italic;">
+                Agregar Todas
+              </mat-option>
+              <!-- Opción: Quitar Todas las Marcas -->
+              <mat-option (click)="removeAllMarcas()" style="color: red; font-style: italic;">
+                Quitar Todas
+              </mat-option>
+              <!-- Opciones de marcas individuales -->
+              <mat-option *ngFor="let marca of dataMarcas" [value]="marca" (click)="addMarca(marca)">{{ marca.nombre
+                }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
-        <div
-          *ngFor="let s of marcas"
-          style="display: flex; flex-direction: row; align-items: center"
-        >
-          {{ s.nombre }}
-          <button mat-icon-button (click)="removeMarca(s)">
-            <mat-icon>delete</mat-icon>
-          </button>
+        <!-- Utilizando CSS Grid para mostrar las marcas agregadas en una cuadrícula -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;">
+          <div *ngFor="let s of marcas" style="display: flex; align-items: center;">
+            {{ s.nombre }}
+            <button mat-icon-button (click)="removeMarca(s)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
         </div>
       </div>
       <div style="display: flex; flex-direction: column">
@@ -31,46 +36,39 @@
           <mat-form-field>
             <mat-label>Servicio</mat-label>
             <mat-select>
-              <mat-option
-                *ngFor="let servicio of dataServicio"
-                [value]="servicio"
-                (click)="addServicio(servicio)"
-                >{{ servicio.nombre }}</mat-option
-              >
+              <!-- Opción: Agregar Todos los Servicios -->
+              <mat-option (click)="addAllServicios()" style="color: navy; font-style: italic;">
+                Agregar Todos
+              </mat-option>
+              <!-- Opción: Quitar Todos los Servicios -->
+              <mat-option (click)="removeAllServicios()" style="color: red; font-style: italic;">
+                Quitar Todos
+              </mat-option>
+              <!-- Opciones de servicios individuales -->
+              <mat-option *ngFor="let servicio of dataServicio" [value]="servicio" (click)="addServicio(servicio)">{{
+                servicio.nombre }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
-        <div
-          *ngFor="let s of servicios"
-          style="display: flex; flex-direction: row; align-items: center"
-        >
+        <!-- Utilizando CSS Grid para mostrar los servicios agregados en una cuadrícula -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;">
+        <div *ngFor="let s of servicios" style="display: flex; flex-direction: row; align-items: center">
           {{ s.nombre }}
           <button mat-icon-button (click)="removeServicio(s)">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
       </div>
-
+      </div>
       <div>
         <mat-form-field>
           <mat-label>Ingrese el rango de fechas</mat-label>
           <mat-date-range-input [rangePicker]="picker">
-            <input
-              matStartDate
-              placeholder="fechaDesde"
-              (dateChange)="onFechaDesdeChange($event)"
-            />
-            <input
-              matEndDate
-              placeholder="fechaHasta"
-              (dateChange)="onFechaHastaChange($event)"
-            />
+            <input matStartDate placeholder="fechaDesde" (dateChange)="onFechaDesdeChange($event)" />
+            <input matEndDate placeholder="fechaHasta" (dateChange)="onFechaHastaChange($event)" />
           </mat-date-range-input>
           <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle
-            matIconSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-date-range-picker #picker></mat-date-range-picker>
         </mat-form-field>
       </div>
@@ -101,9 +99,7 @@
       </ng-container>
 
       <!-- Define las columnas de la tabla -->
-      <mat-header-row
-        *matHeaderRowDef="columnasReporteCantServ"
-      ></mat-header-row>
+      <mat-header-row *matHeaderRowDef="columnasReporteCantServ"></mat-header-row>
       <mat-row *matRowDef="let row; columns: columnasReporteCantServ"></mat-row>
     </mat-table>
   </div>
