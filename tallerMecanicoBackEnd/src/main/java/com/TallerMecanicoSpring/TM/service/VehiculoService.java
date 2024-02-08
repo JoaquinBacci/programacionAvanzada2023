@@ -4,6 +4,8 @@
  */
 package com.TallerMecanicoSpring.TM.service;
 
+import com.TallerMecanicoSpring.TM.model.Cliente;
+import com.TallerMecanicoSpring.TM.model.ClienteFiltrarRq;
 import com.TallerMecanicoSpring.TM.model.Vehiculo;
 import com.TallerMecanicoSpring.TM.repository.VehiculoRepository;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
@@ -163,6 +166,94 @@ public class VehiculoService implements VehiculoRepository{
     public Vehiculo updateVehiculo(Vehiculo vehiculoRq){
         return this.save(vehiculoRq);
     }
+
+    public Page<Vehiculo> listarVehiculosPaginados(Pageable pageable, Vehiculo vehiculoRq) {
+        
+        List<Vehiculo> vehiculosRs = vehiculoRepository.findAll();
+
+        vehiculosRs = this.findAll();
+
+        vehiculosRs = vehiculosRs.stream()
+                .filter(c -> c.isActivo() == vehiculoRq.isActivo())
+                .collect(Collectors.toList());
+
+
+
+        //Kilometraje
+        if((vehiculoRq.getKilometraje() == null) ){
+            System.out.println("No se filtra por Km");
+        } else{
+            String kmString = String.valueOf(vehiculoRq.getKilometraje());
+            if (kmString != null || !kmString.equals("")) {
+                System.out.println("Filtro KM");
+                vehiculosRs = vehiculosRs.stream()
+                    .filter(v -> String.valueOf(v.getKilometraje()).contains(kmString))
+                    .collect(Collectors.toList());
+            }
+        }
+        
+        //patente
+        if (vehiculoRq.getPatente() == null || vehiculoRq.getPatente().trim().equals("")) {
+            System.out.println("No se filtra por Patente");
+        } else{
+            System.out.println("Filtro Patente");
+            vehiculosRs = vehiculosRs.stream()
+                .filter(v -> v.getPatente().contains(vehiculoRq.getPatente()))
+                .collect(Collectors.toList());
+        }
+        
+        //marca
+        if(vehiculoRq.getMarca()==null || vehiculoRq.getMarca().getId() == null){
+            System.out.println("No se filtra por marca");
+            
+        } else{
+            System.out.println("Filtro Marca");
+            vehiculosRs = vehiculosRs.stream()
+                    .filter(v -> v.getMarca().getId() == vehiculoRq.getMarca().getId())
+                    .collect(Collectors.toList());
+        }
+        
+        //modelo
+        if(vehiculoRq.getModelo() == null || vehiculoRq.getModelo().getId() == null){
+            System.out.println("No se filtra por Modelo");
+            
+        } else{
+            System.out.println("Fitro Modelo");
+            vehiculosRs = vehiculosRs.stream()
+                    .filter(v -> v.getModelo().getId() == vehiculoRq.getModelo().getId())
+                    .collect(Collectors.toList());
+        }
+        
+        //cliente
+        if(vehiculoRq.getCliente() == null || vehiculoRq.getCliente().getId() == null){
+            System.out.println("No se filtra por Cliente");
+            
+        } else {
+            System.out.println("Filtro Cliente");
+            String dniClienteStr = String.valueOf(vehiculoRq.getCliente().getDni());
+            vehiculosRs = vehiculosRs.stream()
+                    .filter(v -> v.getCliente().getNombre().toLowerCase().contains(vehiculoRq.getCliente().getNombre().toLowerCase())
+                        || v.getCliente().getApellido().toLowerCase().contains(vehiculoRq.getCliente().getApellido().toLowerCase())
+                        || String.valueOf(v.getCliente().getDni()).contains(dniClienteStr))
+                    .collect(Collectors.toList());
+        }
+        
+                // Create a Page<Cliente> from the filtered list
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<Vehiculo> pageVehiculos;
+
+        if (vehiculosRs.size() < startItem) {
+            pageVehiculos = List.of(); // Return an empty list if the startItem is beyond the filtered list's size
+        } else {
+            int toIndex = Math.min(startItem + pageSize, vehiculosRs.size());
+            pageVehiculos = vehiculosRs.subList(startItem, toIndex);
+        }
+
+        return new PageImpl<>(pageVehiculos, pageable, vehiculosRs.size());
+    }
+
     
     public List<Vehiculo> filtarVehiculos(Vehiculo vehiculoRq){
         List<Vehiculo> vehiculos = new ArrayList();

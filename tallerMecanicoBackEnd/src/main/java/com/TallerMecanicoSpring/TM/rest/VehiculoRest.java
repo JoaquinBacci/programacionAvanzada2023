@@ -4,6 +4,8 @@
  */
 package com.TallerMecanicoSpring.TM.rest;
 
+import com.TallerMecanicoSpring.TM.model.Cliente;
+import com.TallerMecanicoSpring.TM.model.ClienteFiltrarRq;
 import com.TallerMecanicoSpring.TM.model.Servicio;
 import com.TallerMecanicoSpring.TM.model.Vehiculo;
 import com.TallerMecanicoSpring.TM.service.VehiculoService;
@@ -13,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -53,6 +57,12 @@ public class VehiculoRest {
     @GetMapping("getByClient/{idCliente}")
     private ResponseEntity<List<Vehiculo>> getVehiculoPorCliente(@PathVariable("idCliente") Long id){
         return ResponseEntity.ok(this.vehiculoService.getByClient(id));
+    }
+
+    @PostMapping("listar/")
+    public ResponseEntity<Page<Vehiculo>> listarClientes( Pageable pageable, @RequestBody Vehiculo vehiculoRq) {
+        Page<Vehiculo> page = vehiculoService.listarVehiculosPaginados(pageable, vehiculoRq);
+        return ResponseEntity.ok(page);
     }
     
     @PostMapping("filtrar/")

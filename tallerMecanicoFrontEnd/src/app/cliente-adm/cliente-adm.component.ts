@@ -73,7 +73,7 @@ export class ClienteAdmComponent implements OnInit {
 
     //this.onConsultar();
 
-    this.loadEntidades(0, 5); // Puedes ajustar el tamaño de página según tus necesidades
+    this.loadEntidades(0, 5);
   }
 
   onDialogDesactivados(){
@@ -232,7 +232,7 @@ export class ClienteAdmComponent implements OnInit {
         }
       },
       complete: () => {
-        this.loadEntidades(this.currentPage, 5)
+        this.loadEntidades(this.currentPage, 5);
       },
       error: (error) => {
         console.log('ERROR: ', error);

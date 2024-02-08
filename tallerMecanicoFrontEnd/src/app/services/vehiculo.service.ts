@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Vehiculo } from '../model/vehiculo';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/enviroments/enviroment';
+import { PaginatedResponse } from '../model/PaginatedResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -83,5 +84,11 @@ export class VehiculoService {
     return this.http.get(`${this.API_REST}/vehiculo/activar/${id}`);
   }
 
+  listarVehiculos(vehiculoRq: any, page: number, size: number): Observable<any> {
+    const params = new HttpParams()
+    .set('page', page.toString())
+    .set('size', size.toString());
+    return this.http.post<PaginatedResponse<Vehiculo>>(`${this.API_REST}/vehiculo/listar/`, vehiculoRq, { params, headers: this.headers });
+  }
 
 }

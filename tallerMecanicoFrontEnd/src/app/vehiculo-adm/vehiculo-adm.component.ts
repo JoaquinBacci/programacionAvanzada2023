@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Vehiculo } from '../model/vehiculo';
 import { Marca } from '../model/marca';
@@ -12,6 +12,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmComponent } from '../dialogs/confirm/confirm.component';
 import Toastify from 'toastify-js';
 import { ReactivarVehiculoComponent } from '../dialogs/reactivar-vehiculo/reactivar-vehiculo.component';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-vehiculo-adm',
@@ -22,7 +24,7 @@ export class VehiculoAdmComponent implements OnInit, OnChanges {
   idVehiculoUpdate: number = undefined;
   vehiculoConsultar: Vehiculo;
   modoEdicion: boolean = false;
-  columnas: string[] = [
+  columnasVehiculo: string[] = [
     'Patente',
     'Marca',
     'Modelo',
@@ -30,7 +32,7 @@ export class VehiculoAdmComponent implements OnInit, OnChanges {
     'Cliente',
     'Acciones',
   ];
-  dataSource;
+  dataSourceVehiculo: MatTableDataSource<Vehiculo> = new MatTableDataSource<Vehiculo>();
   idMarcaSelect: number = undefined;
   marcas: Marca[] = [];
   modelos: Modelo[] = [];
@@ -79,29 +81,31 @@ export class VehiculoAdmComponent implements OnInit, OnChanges {
       .getAllModelo()
       .subscribe((data) => (this.modelosConsult = data));
 
-    this.onConsultar();
+    // this.onConsultar();
+
+    this.loadEntidades(0, 5);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log('Form.valid: ', this.form.valid);
   }
 
-  onConsultar() {
-    this.vehiculoConsultar.activo=true;
-    this.vehiculoService.onConsultar(this.vehiculoConsultar).subscribe({
-      next: (data) => {
-        console.log('Data: ', data);
-        this.dataSource = data;
-      },
-      complete: () => {},
-      error: (error) => {},
-    });
-  }
+  // onConsultar() {
+  //   this.vehiculoConsultar.activo=true;
+  //   this.vehiculoService.onConsultar(this.vehiculoConsultar).subscribe({
+  //     next: (data) => {
+  //       console.log('Data: ', data);
+  //       this.dataSource = data;
+  //     },
+  //     complete: () => {},
+  //     error: (error) => {},
+  //   });
+  // }
 
   onDialogDesactivados(){
     let dialogRef = this.dialog.open(ReactivarVehiculoComponent, {});
 
-    dialogRef.afterClosed().subscribe(result => this.onConsultar());
+    dialogRef.afterClosed().subscribe(result => this.loadEntidades(this.currentPage, 5));
   }
 
   onGuardar() {
@@ -148,7 +152,7 @@ export class VehiculoAdmComponent implements OnInit, OnChanges {
         },
         complete: () => {
           this.form.reset();
-          this.onConsultar();
+          this.loadEntidades(this.currentPage, 5);
         },
         error: (error) => {
           console.log('error: ', error);
@@ -168,7 +172,7 @@ export class VehiculoAdmComponent implements OnInit, OnChanges {
           }
         },
         complete: () => {
-          this.onConsultar();
+          this.loadEntidades(this.currentPage, 5);
           this.form.reset();
         },
         error: (error) => {
@@ -204,7 +208,7 @@ export class VehiculoAdmComponent implements OnInit, OnChanges {
         }
       },
       complete: () => {
-        this.onConsultar();
+        this.loadEntidades(this.currentPage, 5);
       },
       error: (error) => {
         console.log('error: ', error);
@@ -233,5 +237,29 @@ export class VehiculoAdmComponent implements OnInit, OnChanges {
     let dialogRef = this.dialog.open(ConfirmComponent, {
       data: { tipo: tipo, mensaje: mensaje, textoAceptar: textoAceptar },
     });
+  }
+
+  totalPages: number = 0;
+  currentPage: number = 0;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  
+  loadEntidades(page: number, size: number): void {
+    this.vehiculoConsultar.activo=true;
+    this.vehiculoService.listarVehiculos(this.vehiculoConsultar, page, size)
+      .subscribe(response => {
+        this.dataSourceVehiculo.data = response.content;
+        this.totalPages = response.totalPages;
+        this.currentPage = page;
+        this.paginator.pageIndex = page;
+   
+        this.paginator.length = response.totalElements;
+      });
+  }
+
+  onPageChange(event): void {
+    const page = event.pageIndex;
+    const size = event.pageSize;
+    this.loadEntidades(page, size);
   }
 }
