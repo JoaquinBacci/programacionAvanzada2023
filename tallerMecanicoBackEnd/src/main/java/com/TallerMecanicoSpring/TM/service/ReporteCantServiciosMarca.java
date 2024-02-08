@@ -68,8 +68,8 @@ public class ReporteCantServiciosMarca {
              "INNER JOIN servicio ON (detalle_orden.id_servicio = servicio.id) " +
              "INNER JOIN tecnico ON (orden.tecnico_id = tecnico.id) " +
              "INNER JOIN vehiculo ON (orden.vehiculo_id = vehiculo.id) " +
-             "INNER JOIN modelo ON (vehiculo.id_modelo = modelo.id) " +
-             "INNER JOIN marca ON (modelo.id_marca = marca.id) " +
+             //"INNER JOIN modelo ON (vehiculo.id_modelo = modelo.id) " +
+             "INNER JOIN marca ON (vehiculo.id_marca = marca.id) " +
              "WHERE marca.id IN :idMarcas AND servicio.id IN :idServicios AND DATE(orden.fecha_ingreso) BETWEEN :fechaDesde AND :fechaHasta " +
              "GROUP BY servicio.nombre, marca.nombre " +
              "ORDER BY marca.nombre";
