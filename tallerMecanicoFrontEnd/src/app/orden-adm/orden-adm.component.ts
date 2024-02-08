@@ -383,7 +383,7 @@ export class OrdenAdmComponent implements OnInit {
         const detalle: DetalleOrden = new DetalleOrden();
         detalle.servicio = servicio;
         detalle.cantidad = 1; //por defecto es 1 y se pueden agregar varias veces el mismo servicio, creando la cantidad de detalles como servicios se añadan
-        detalle.precioIndividual = servicio.precio;
+        detalle.precioIndividual = servicio.precio + (servicio.precio * servicio.impuesto) / 100 ;
         return detalle;
       });
     } else if (this.vista == 'EDITAR') {

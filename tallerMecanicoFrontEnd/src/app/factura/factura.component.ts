@@ -90,7 +90,7 @@ export class FacturaComponent implements OnInit {
 factura: Factura;
 
 
-displayColumns = ['Servicio', 'Precio','cantidad','Vacio'];
+displayColumns = ['Servicio', 'Precio','cantidad','Impuesto','Vacio'];
 
   constructor(
     private route: ActivatedRoute,
@@ -148,10 +148,11 @@ displayColumns = ['Servicio', 'Precio','cantidad','Vacio'];
     doc.text(``,,);
     
     */
-    const columnas = ['Servicio: ', 'Precio individual: ', 'Cantidad'];
+    const columnas = ['Servicio: ', 'Precio individual: ','Impuesto', 'Cantidad'];
     const cuerpo = this.orden.detallesOrden.map((obj) => [
       obj.servicio.nombre,
       obj.precioIndividual,
+      obj.servicio.impuesto,
       obj.cantidad,
     ]);
 

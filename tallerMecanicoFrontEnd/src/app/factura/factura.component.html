@@ -76,6 +76,11 @@
             <td mat-cell *matCellDef="let element"> {{element.cantidad}} </td>
             </ng-container>
 
+            <ng-container matColumnDef="Impuesto">
+                <th mat-header-cell *matHeaderCellDef> Impuesto: </th>
+                <td mat-cell *matCellDef="let element"> {{element.servicio.impuesto}} </td>
+            </ng-container>
+
             <ng-container matColumnDef="Vacio">
             <th mat-header-cell *matHeaderCellDef>  </th>
             <td mat-cell *matCellDef="let element"> </td>

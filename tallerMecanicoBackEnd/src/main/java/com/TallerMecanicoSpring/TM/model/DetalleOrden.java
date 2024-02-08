@@ -61,9 +61,11 @@ public class DetalleOrden {
     }
 
     public double getPrecioTotal() {
-        precioTotal = (this.getPrecioIndividual() * this.getCantidad());
+        precioTotal = ((this.getPrecioIndividual() + (this.getPrecioIndividual() * servicio.getImpuesto()) / 100)* this.getCantidad());
         return precioTotal;
     }
+
+    //     this.total = this.total + ( servicio.precio + (servicio.precio * servicio.impuesto) / 100 );
 
     public void setPrecioTotal(double precioTotal) {
         this.precioTotal = precioTotal;
