@@ -52,7 +52,7 @@ export class OrdenEditComponent implements OnInit {
     'acciones',
   ];
   dataVehiculos: Vehiculo[];
-  estados: string[] = ['creada', 'finalizada', 'enCurso', 'cancelada'];
+  estados: string[] = ['creada', 'finalizada', 'enCurso', 'cancelada','facturada'];
 
   constructor(
     private ordenService: OrdenService,

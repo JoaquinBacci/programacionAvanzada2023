@@ -67,11 +67,11 @@
             <mat-label> Estado </mat-label>
             <mat-select [(ngModel)]="ordenFiltrar.estadoActual" [ngModelOptions]="{standalone: true}">
               <mat-option [value]="null"> Selecione un Estado </mat-option>
-              <mat-option *ngFor="let e of estados" [value]="e" >{{ e }}</mat-option>
+              <mat-option *ngFor="let e of estados" [value]="e" >{{ e | titlecase}}</mat-option>
             </mat-select>
           </mat-form-field> 
         </mat-header-cell>
-        <mat-cell *matCellDef="let elemento"> {{ elemento.estadoActual}} </mat-cell>
+        <mat-cell *matCellDef="let elemento"> {{ elemento.estadoActual | titlecase}} </mat-cell>
       </ng-container>
   
     <!-- Columna Acciones -->
