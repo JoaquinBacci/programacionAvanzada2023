@@ -1,8 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/enviroments/enviroment';
 import { Cliente } from '../model/cliente';
+import { PaginatedResponse } from '../model/PaginatedResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -70,5 +71,11 @@ export class ClienteService {
     return this.http.get<Cliente[]>(`${this.API_REST}/cliente/activar/${id}`);
   }
 
+  listarClientes(clienteRq: any, page: number, size: number): Observable<any> {
+    const params = new HttpParams()
+    .set('page', page.toString())
+    .set('size', size.toString());
+    return this.http.post<PaginatedResponse<Cliente>>(`${this.API_REST}/cliente/listar/`, clienteRq, { params, headers: this.headers });
+  }
 
 }

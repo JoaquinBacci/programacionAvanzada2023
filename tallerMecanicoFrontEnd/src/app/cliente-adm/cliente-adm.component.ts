@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Cliente } from '../model/cliente';
 import { ClienteService } from '../services/cliente.service';
@@ -11,6 +11,8 @@ import Toastify from 'toastify-js';
 import { ClienteFiltrarRq } from '../model/ClienteFiltrarRq';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { ReactivarClienteComponent } from '../dialogs/reactivar-cliente/reactivar-cliente.component';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-cliente-adm',
@@ -22,7 +24,7 @@ export class ClienteAdmComponent implements OnInit {
   idUpdate: number;
   form: FormGroup;
   clienteConsultar: ClienteFiltrarRq;
-  columnas: string[] = [
+  columnasCliente: string[] = [
     'Nombre',
     'Apellido',
     'DNI',
@@ -33,7 +35,8 @@ export class ClienteAdmComponent implements OnInit {
     'filtroFecha',
     'Acciones',
   ];
-  dataSource: any;
+
+  dataSourceCliente: MatTableDataSource<Cliente> = new MatTableDataSource<Cliente>();
 
   dataDesactivados: Cliente[];
 
@@ -68,13 +71,15 @@ export class ClienteAdmComponent implements OnInit {
     this.clienteConsultar.num_tel = '';
     this.clienteConsultar.licenciaConducir = '';
 
-    this.onConsultar();
+    //this.onConsultar();
+
+    this.loadEntidades(0, 5); // Puedes ajustar el tamaño de página según tus necesidades
   }
 
   onDialogDesactivados(){
     let dialogRef = this.dialog.open(ReactivarClienteComponent, {});
 
-    dialogRef.afterClosed().subscribe(result => this.onConsultar());
+    dialogRef.afterClosed().subscribe(result => this.loadEntidades(this.currentPage, 5));
   }
 
   onGuardar() {
@@ -113,7 +118,7 @@ export class ClienteAdmComponent implements OnInit {
         },
         complete: () => {
           this.form.reset();
-          this.onConsultar();
+          this.loadEntidades(this.currentPage, 5)
         },
         error: (error) => {
           console.log('ERROR: ', error);
@@ -137,7 +142,7 @@ export class ClienteAdmComponent implements OnInit {
         complete: () => {
           this.form.reset();
           this.modoEdicion = false;
-          this.onConsultar();
+          this.loadEntidades(this.currentPage, 5)
         },
         error: (error) => {
           console.log('ERROR: ', error);
@@ -184,27 +189,27 @@ export class ClienteAdmComponent implements OnInit {
   this.clienteConsultar.fechaHasta = fechaFormateada;
   }
 
-  onConsultar() {
-    this.clienteConsultar.activo=true;
-    console.log('cliente Consultar: ', this.clienteConsultar);
-    this.clienteService.onConsultar(this.clienteConsultar).subscribe({
-      next: (data) => {
-        if (data) {
-          console.log('dataOK: ', data);
-          this.dataSource = data;
-          this.clienteConsultar = new ClienteFiltrarRq();
-        } else {
-          console.log('dataNULL: ', data);
-        }
-      },
-      complete: () => {
-        //this.onConsultar();
-      },
-      error: (error) => {
-        console.log('ERROR: ', error);
-      },
-    });
-  }
+  // onConsultar() {
+  //   this.clienteConsultar.activo=true;
+  //   console.log('cliente Consultar: ', this.clienteConsultar);
+  //   this.clienteService.onConsultar(this.clienteConsultar).subscribe({
+  //     next: (data) => {
+  //       if (data) {
+  //         console.log('dataOK: ', data);
+  //         this.dataSourceCliente.data = data;
+  //         //this.clienteConsultar = new ClienteFiltrarRq();
+  //       } else {
+  //         console.log('dataNULL: ', data);
+  //       }
+  //     },
+  //     complete: () => {
+  //       //this.onConsultar();
+  //     },
+  //     error: (error) => {
+  //       console.log('ERROR: ', error);
+  //     },
+  //   });
+  // }
 
   getDesactivados(){
     this.clienteService.getDesactivados().subscribe({
@@ -227,7 +232,7 @@ export class ClienteAdmComponent implements OnInit {
         }
       },
       complete: () => {
-        this.onConsultar();
+        this.loadEntidades(this.currentPage, 5)
       },
       error: (error) => {
         console.log('ERROR: ', error);
@@ -272,5 +277,28 @@ export class ClienteAdmComponent implements OnInit {
     let dialogRef = this.dialog.open(ConfirmComponent, {
       data: { tipo: tipo, mensaje: mensaje, textoAceptar: textoAceptar },
     });
+  }
+
+  totalPages: number = 0;
+  currentPage: number = 0;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  
+  loadEntidades(page: number, size: number): void {
+    this.clienteService.listarClientes(this.clienteConsultar, page, size)
+      .subscribe(response => {
+        this.dataSourceCliente.data = response.content;
+        this.totalPages = response.totalPages;
+        this.currentPage = page;
+        this.paginator.pageIndex = page;
+   
+        this.paginator.length = response.totalElements;
+      });
+  }
+
+  onPageChange(event): void {
+    const page = event.pageIndex;
+    const size = event.pageSize;
+    this.loadEntidades(page, size);
   }
 }

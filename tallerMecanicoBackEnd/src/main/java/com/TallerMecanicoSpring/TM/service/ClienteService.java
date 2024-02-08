@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.PageImpl;
 
 /**
  *
@@ -191,6 +192,109 @@ public class ClienteService implements ClienteRepository{
     public Cliente update(Cliente c){
         return this.save(c);
     }
+
+        
+    public Page<Cliente> listarClientesPaginados(Pageable pageable, ClienteFiltrarRq clienteRq) {
+// Retrieve all clients
+        // Retrieve all clients
+        List<Cliente> clientesRs = clienteRepository.findAll();
+
+
+        clientesRs = this.findAll();
+
+        clientesRs = clientesRs.stream()
+                .filter(c -> c.isActivo() == clienteRq.isActivo())
+                .collect(Collectors.toList());
+
+        if(clienteRq.getFechaDesde() != null && !"".equals(clienteRq.getFechaDesde()) && clienteRq.getFechaHasta() != null && !"".equals(clienteRq.getFechaHasta())){
+            System.out.println("FILTRO FECHA");
+            clientesRs = this.ordenService.filtroEntreFecha(clienteRq.getFechaDesde(), clienteRq.getFechaHasta());
+        }
+        
+        if (clienteRq.getNombre() == null || clienteRq.getNombre().trim().isEmpty()) {
+            System.out.println("No se filtra por Nombre");
+        } else {
+            System.out.println("Filtro Nombre");
+            clientesRs = clientesRs.stream()
+                .filter(c -> c.getNombre() != null && c.getNombre().toLowerCase().contains(clienteRq.getNombre().toLowerCase()))
+                .collect(Collectors.toList());
+        }
+        
+        if (clienteRq.getApellido() == null || clienteRq.getApellido().trim().isEmpty()) {
+            System.out.println("No se filtra por Apellido");
+        } else {
+            System.out.println("Filtro Apellido");
+            clientesRs = clientesRs.stream()
+                .filter(c -> c.getApellido() != null && c.getApellido().toLowerCase().contains(clienteRq.getApellido().toLowerCase()))
+                .collect(Collectors.toList());
+        }
+        
+        /* String dniString = String.valueOf(clienteRq.getDni());
+        System.out.println("DNIStr: " + dniString); */
+
+        if((clienteRq.getDni() == null)){
+            System.out.println("No se filtra por DNI");
+        } else {
+            System.out.println("Filtro DNI");
+            String dniString = String.valueOf(clienteRq.getDni());
+            clientesRs = clientesRs.stream()
+                .filter(c -> c.getDni() != null && c.getDni().toString().equals(dniString))
+                .collect(Collectors.toList());
+
+        }
+
+
+        /* if (dniString == null || dniString.isEmpty()) {
+            System.out.println("No se filtra por DNI");
+        } else {
+            System.out.println("Filtro DNI");
+            clientesRs = clientesRs.stream()
+                .filter(c -> c.getDni() != null && c.getDni().toString().equals(dniString))
+                .collect(Collectors.toList());
+        } */
+        
+        if (clienteRq.getNum_tel() == null || clienteRq.getNum_tel().trim().isEmpty()) {
+            System.out.println("No se filtra por Teléfono");
+        } else {
+            System.out.println("Filtro Teléfono");
+            clientesRs = clientesRs.stream()
+                .filter(c -> c.getNum_tel().contains(clienteRq.getNum_tel()))
+                .collect(Collectors.toList());
+        }
+        
+        if (clienteRq.getEmail() == null || clienteRq.getEmail().trim().isEmpty()) {
+            System.out.println("No se filtra por Email");
+        } else {
+            System.out.println("Filtro Email");
+            clientesRs = clientesRs.stream()
+                .filter(c -> c.getEmail() != null && c.getEmail().toLowerCase().contains(clienteRq.getEmail().toLowerCase()))
+                .collect(Collectors.toList());
+        }
+        
+        if (clienteRq.getDireccion() == null || clienteRq.getDireccion().trim().isEmpty()) {
+            System.out.println("No se filtra por Dirección");
+        } else {
+            System.out.println("Filtro Dirección");
+            clientesRs = clientesRs.stream()
+                .filter(c -> c.getDireccion() != null && c.getDireccion().toLowerCase().contains(clienteRq.getDireccion().toLowerCase()))
+                .collect(Collectors.toList());
+        }
+
+        // Create a Page<Cliente> from the filtered list
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<Cliente> pageClientes;
+
+        if (clientesRs.size() < startItem) {
+            pageClientes = List.of(); // Return an empty list if the startItem is beyond the filtered list's size
+        } else {
+            int toIndex = Math.min(startItem + pageSize, clientesRs.size());
+            pageClientes = clientesRs.subList(startItem, toIndex);
+        }
+
+        return new PageImpl<>(pageClientes, pageable, clientesRs.size());
+    }
     
     public List<Cliente> filtrar(ClienteFiltrarRq clienteRq){
 
@@ -348,7 +452,7 @@ public class ClienteService implements ClienteRepository{
 
     @Override
     public Page<Cliente> findAll(Pageable pageable) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.clienteRepository.findAll(pageable);
     }
 
     @Override

@@ -4,6 +4,7 @@
  */
 package com.TallerMecanicoSpring.TM.rest;
 
+import com.TallerMecanicoSpring.TM.dto.PaginatedResponse;
 import com.TallerMecanicoSpring.TM.model.Cliente;
 import com.TallerMecanicoSpring.TM.model.ClienteFiltrarRq;
 import com.TallerMecanicoSpring.TM.service.ClienteService;
@@ -13,6 +14,8 @@ import jakarta.validation.Valid;
 
 import org.hibernate.mapping.Any;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +50,12 @@ public class ClienteRest {
     private ResponseEntity<Cliente> activarCliente(@PathVariable("id") Long id){
         System.out.println("ID EN REST: " + id);
         return ResponseEntity.ok(clienteService.activar(id));
+    }
+
+    @PostMapping("listar/")
+    public ResponseEntity<Page<Cliente>> listarClientes(@RequestBody ClienteFiltrarRq clienteRq, Pageable pageable) {
+        Page<Cliente> page = clienteService.listarClientesPaginados(pageable, clienteRq);
+        return ResponseEntity.ok(page);
     }
     
     @PostMapping("filtrar/")

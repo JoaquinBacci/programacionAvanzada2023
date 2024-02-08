@@ -50,6 +50,7 @@ import { ReactivarMarcaComponent } from './dialogs/reactivar-marca/reactivar-mar
 import { ReactivarModeloComponent } from './dialogs/reactivar-modelo/reactivar-modelo.component';
 import { ReactivarServicioComponent } from './dialogs/reactivar-servicio/reactivar-servicio.component';
 import { ReativarTecnicoComponent } from './dialogs/reativar-tecnico/reativar-tecnico.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -99,6 +100,7 @@ import { ReativarTecnicoComponent } from './dialogs/reativar-tecnico/reativar-te
     MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatPaginatorModule
   ],
   providers: [
     DatePipe,
